@@ -31,13 +31,11 @@
 
 ## Notes
 
-- All 16 validation items passed.
-- Updated following Project Brain review corrections:
-  - SC-001 bounded to prepared-demo target (<60s); unsupported comparative percentage claims removed.
-  - Price override workflow removed from MVP; operator adjustments strictly bounded to field corrections, SKU selection, line removal, or draft rejection.
-  - Delivery address/billing account conflict checks removed (out of vertical slice scope).
-  - Tax calculation removed; deterministic arithmetic bounded to quantities, unit prices, line totals, tier/contract rates, and grand total.
-  - Discrepancy detection strictly bounded to the 4 supported MVP categories.
-  - Explicit failure and visible badging required for replay/fixture mode; silent fallback prohibited.
-  - Unnecessary header dates (document date, delivery date) removed from mandatory extraction.
-- Specification is verified and ready for implementation planning when triggered.
+- All 16 validation items passed (16/16).
+- Final reconciliation updates applied:
+  - Bounded quantity corrections strictly to fixing mis-extracted values against the source document; prohibited manual alterations to circumvent MOQ or packaging rules.
+  - Eliminated "accept calculated totals" as a resolution path; arithmetic mismatches must be resolved by source correction, line removal, or draft rejection, and continue to strictly block Ready for Approval.
+  - Replaced legacy "applied contract discount" terminology with "applied contract/tier price".
+  - Reframed failure rejection in User Story 3 around missing/unresolvable mandatory customer identity or critical unresolvable errors, preserving the closed set of 4 discrepancy categories.
+  - Validated complete mutual consistency across Clarifications, acceptance scenarios, FR-010, FR-012, FR-013, Key Entities, and Ready-for-Approval invariants.
+- Specification is verified, complete, and frozen. Stopped before `/speckit-plan`.
