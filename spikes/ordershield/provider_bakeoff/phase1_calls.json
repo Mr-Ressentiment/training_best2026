@@ -1,0 +1,3984 @@
+{
+  "scope": "PHASE_1_ONLY",
+  "calls": [
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h01_paper",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:03.014863+00:00",
+      "source_sha256": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+      "request_body_sha256": "a4e9e8be377dadc39ea07526e1d224b5b7e4a59d1588ec856579915da331ed21",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 377.79,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:52:03.401949+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h02_large",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:03.620669+00:00",
+      "source_sha256": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+      "request_body_sha256": "8bc7111417d862bd84810c5e1792b219a851fc79d3ee66d9f935c37d5a4eea16",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 322.88,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:52:03.951519+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h03_alias",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:04.181267+00:00",
+      "source_sha256": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+      "request_body_sha256": "0369bd8d534d0cafa42d6f5343df962bd70a23336e0ad95d65881fc0a93d7c7e",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 339.31,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:52:04.520961+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h04_tape",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:04.772447+00:00",
+      "source_sha256": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+      "request_body_sha256": "1ae12ae443599fbb02290dd7202cee85e50e62f25e642fa327a0875ed83fb082",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 353.81,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:52:05.133519+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h05_no_size",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:05.354316+00:00",
+      "source_sha256": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+      "request_body_sha256": "88dfa73ad4109e31acf626ddbaa10d6378ffcd4d9cabcc21aed91f128e7b7959",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 331.29,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": null,
+      "ambiguity_review_correctness": false,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:52:05.687649+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h06_no_pack",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:05.924157+00:00",
+      "source_sha256": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+      "request_body_sha256": "6f63bf37343cf9bb8a76963bd6646fee3ff2afe54c59cb26b9679f30bdaaaedc",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 346.7,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": null,
+      "ambiguity_review_correctness": false,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:52:06.281961+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h07_not_medium",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:06.521117+00:00",
+      "source_sha256": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+      "request_body_sha256": "0b1f40423233e1237f6780ab9ca160f2c4d75f691443e27d39cb6b76d7251122",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 329.32,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:52:06.862532+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h08_not_large",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:07.099609+00:00",
+      "source_sha256": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+      "request_body_sha256": "0003b06acbf5513a316392361bb9c04439d4884f95cf070dba1d23a93cb016a7",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 368.53,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:52:07.481865+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h09_latex",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:07.711415+00:00",
+      "source_sha256": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+      "request_body_sha256": "ca2cb08a8ecaecf4701ed76b7de442afa151b1d9db66159d8a40f122a8f4387e",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 352.46,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": null,
+      "ambiguity_review_correctness": false,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:52:08.075023+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h10_damaged",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:08.309273+00:00",
+      "source_sha256": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+      "request_body_sha256": "c35ba2f33ce53c47f76b3aea36dc50e0679401019fbefd1b18269de4652523b7",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 331.25,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 4,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:52:08.652997+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h01_paper",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:08.894514+00:00",
+      "source_sha256": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+      "request_body_sha256": "b4c6e5cd24b4db05a639c0c6b257973362fed36a1e5421595f0abbe474edde65",
+      "http_status": 200,
+      "provider_outcome": "HTTP_SUCCESS",
+      "finish_reason": "stop",
+      "schema_valid": false,
+      "json_parsed": true,
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": \"Alder Office Supplies\",\n    \"quote\": \"Account billed: Alder Office Supplies\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-201\",\n    \"quote\": \"purchase-order reference HX-201\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"Money unit EUR\"\n  },\n  \"declared_total\": {\n    \"value\": \"35.00\",\n    \"quote\": \"Amount before taxes: 35.00\"\n  },\n  \"extraction_issues\": [],\n  \"lines\": [\n    {\n      \"description\": {\n       \"PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream\": null,\n       \"value\": \"PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream\",\n       \"quote\": \"Requested article: PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream\"\n      },\n      \"quantity\": {\n       \"value\": \"7\",\n       \"quote\": \"Number ordered: 7\"\n      },\n      \"sale_unit\": {\n       \"value\": \"ream\",\n       \"quote\": \"Selling unit: ream\"\n      },\n      \"unit_price\": {\n       \"value\": \"5.00\",\n       \"quote\": \"Rate for one selling unit: 5.00\"\n      },\n      \"candidates\": [\n       {\n       \"scores\": 1.0,\n       \"reason\": \"Exact match on SKU identifier and description details (A4, 80gsm, 500 sheets/leaves).\",\n       \"sku\": \"PAPER-A4-80\"\n       }\n      ],\n      \"ambiguous\": false,\n      \"uncertainty\": \"\"\n    }\n  ]\n}",
+      "evidence_grounding": null,
+      "token_usage": {
+        "prompt_tokens": 1449,
+        "total_tokens": 1917,
+        "completion_tokens": 468,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "text_tokens": 1449
+        }
+      },
+      "wall_clock_ms": 6702.22,
+      "error_class": "SCHEMA_INVALID",
+      "error_classes": [
+        "SCHEMA_INVALID"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response.lines[0].description: missing or extra keys"
+      },
+      "completed_utc": "2026-09-29T22:52:15.608828+00:00",
+      "raw_quote_audit": {
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "checks": [
+          {
+            "field_path": "response.customer",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.po_number",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.currency",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.declared_total",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].description",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].quantity",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].sale_unit",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].unit_price",
+            "verbatim_in_source": true
+          }
+        ],
+        "schema_rejection_still_earns_zero_scoring_credit": true
+      }
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h02_large",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:15.828057+00:00",
+      "source_sha256": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+      "request_body_sha256": "37fc6a6f97ed30b9be4de5578c1d84086d155f05a3dff785a91fd2b3975ddf8f",
+      "http_status": 200,
+      "provider_outcome": "HTTP_SUCCESS",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "json_parsed": true,
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": \"Cedar Care\",\n    \"quote\": \"issued by Cedar Care\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-202\",\n    \"quote\": \"Order HX-202\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"Settlement currency EUR\"\n  },\n  \"declared_total\": {\n    \"value\": \"48.00\",\n    \"quote\": \"net amount = 48.00\"\n  },\n  \"extraction_issues\": [],\n  \"lines\": [\n    {\n      \"description\": {\n       \"value\": \"Blue powder-free nitrile exam gloves, large, box of 100\",\n       \"quote\": \"Blue powder-free nitrile exam gloves, large, box of 100\"\n      },\n      \"quantity\": {\n       \"value\": \"6\",\n       \"quote\": \"requested quantity = 6\"\n      },\n      \"sale_unit\": {\n       \"value\": \"box\",\n       \"quote\": \"Selling unit = box\"\n      },\n      \"unit_price\": {\n       \"value\": \"8.00\",\n       \"quote\": \"each selling unit costs 8.00\"\n      },\n      \"candidates\": [\n       {\"sku\": \"GLOVE-N-L\", \"score\": 1.0, \"reason\": \"Exact match on description, size (large), pack count (box of 100), and sale unit.\"},\n       {\"sku\": \"GLOVE-N-M\", \"score\": 0.1, \"reason\": \"Same product type but different size (medium).\"}\n      ],\n      \"ambiguous\": false,\n      \"uncertainty\": \"\"\n    }\n  ]\n}",
+      "evidence_grounding": {
+        "fields": [
+          {
+            "field": "customer",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "po_number",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "currency",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "declared_total",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.description",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.quantity",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.sale_unit",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.unit_price",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          }
+        ],
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "all_returned_fields_grounded": true
+      },
+      "token_usage": {
+        "prompt_tokens": 1415,
+        "total_tokens": 1828,
+        "completion_tokens": 413,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "text_tokens": 1415
+        }
+      },
+      "wall_clock_ms": 7782.18,
+      "error_class": null,
+      "error_classes": [],
+      "mandatory_field_correctness": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "determinate_sku_correctness": true,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": true,
+        "field_correct": 8,
+        "field_expected": 8,
+        "field_checks": {
+          "customer": true,
+          "po_number": true,
+          "currency": true,
+          "declared_total": true,
+          "line.description": true,
+          "line.quantity": true,
+          "line.sale_unit": true,
+          "line.unit_price": true
+        },
+        "all_fields_correct": true,
+        "provenance_valid": 8,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 8,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": true,
+        "proposed_sku": "GLOVE-N-L",
+        "sku_correct": true,
+        "confident_proposal": true,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": "CLEAN_DRAFT",
+        "core_error": null,
+        "core_result": {
+          "status": "CLEAN_DRAFT",
+          "customer": "Cedar Care",
+          "po_number": "HX-202",
+          "currency": "EUR",
+          "lines": [
+            {
+              "line": 1,
+              "description": "Blue powder-free nitrile exam gloves, large, box of 100",
+              "quantity": 6,
+              "sale_unit": "box",
+              "unit_price": "8.00",
+              "match": {
+                "status": "PROPOSED",
+                "sku": "GLOVE-N-L",
+                "confidence": 1.0,
+                "margin": 0.9,
+                "confidence_kind": "uncalibrated_model_score",
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-L",
+                    "score": 1.0,
+                    "reason": "Exact match on description, size (large), pack count (box of 100), and sale unit."
+                  },
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 0.1,
+                    "reason": "Same product type but different size (medium)."
+                  }
+                ],
+                "uncertainty": ""
+              },
+              "unit_valid": true,
+              "quoted_line_total": "48.00",
+              "tier_quantity": 6,
+              "tier_min_quantity": 1,
+              "expected_unit_price": "8.00",
+              "expected_line_total": "48.00",
+              "price_delta": "0.00",
+              "price_status": "PASS"
+            }
+          ],
+          "issues": [],
+          "totals": {
+            "declared": "48.00",
+            "quoted_computed": "48.00",
+            "contract_expected": "48.00",
+            "quoted_minus_declared": "0.00"
+          },
+          "extraction": {
+            "customer": {
+              "value": "Cedar Care",
+              "quote": "issued by Cedar Care"
+            },
+            "po_number": {
+              "value": "HX-202",
+              "quote": "Order HX-202"
+            },
+            "currency": {
+              "value": "EUR",
+              "quote": "Settlement currency EUR"
+            },
+            "declared_total": {
+              "value": "48.00",
+              "quote": "net amount = 48.00"
+            },
+            "extraction_issues": [],
+            "lines": [
+              {
+                "description": {
+                  "value": "Blue powder-free nitrile exam gloves, large, box of 100",
+                  "quote": "Blue powder-free nitrile exam gloves, large, box of 100"
+                },
+                "quantity": {
+                  "value": "6",
+                  "quote": "requested quantity = 6"
+                },
+                "sale_unit": {
+                  "value": "box",
+                  "quote": "Selling unit = box"
+                },
+                "unit_price": {
+                  "value": "8.00",
+                  "quote": "each selling unit costs 8.00"
+                },
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-L",
+                    "score": 1.0,
+                    "reason": "Exact match on description, size (large), pack count (box of 100), and sale unit."
+                  },
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 0.1,
+                    "reason": "Same product type but different size (medium)."
+                  }
+                ],
+                "ambiguous": false,
+                "uncertainty": ""
+              }
+            ]
+          },
+          "human_confirmation_required": true,
+          "action": "RECONCILIATION_DRAFT_ONLY"
+        }
+      },
+      "completed_utc": "2026-09-29T22:52:23.625662+00:00",
+      "raw_quote_audit": {
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "checks": [
+          {
+            "field_path": "response.customer",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.po_number",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.currency",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.declared_total",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].description",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].quantity",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].sale_unit",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].unit_price",
+            "verbatim_in_source": true
+          }
+        ],
+        "schema_rejection_still_earns_zero_scoring_credit": true
+      }
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h03_alias",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:23.846326+00:00",
+      "source_sha256": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+      "request_body_sha256": "6165449ad3df83e01b3610f6bbe2a6bd65b01993c196d0ba4e10c2ba5e4dd481",
+      "http_status": 200,
+      "provider_outcome": "HTTP_SUCCESS",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "json_parsed": true,
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": \"Cedar Care\",\n    \"quote\": \"Purchaser Cedar Care\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-203\",\n    \"quote\": \"reference HX-203\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"currency EUR\"\n  },\n  \"declared_total\": {\n    \"value\": \"64.00\",\n    \"quote\": \"Net payable: 64.00\"\n  },\n  \"extraction_issues\": [],\n  \"lines\": [\n    {\n      \"description\": {\n       \"value\": \"Nitrile patient-examination handwear, blue, no powder, medium; 100 gloves per box\",\n       \"quote\": \"Nitrile patient-examination handwear, blue, no powder, medium; 100 gloves per box\"\n      },\n      \"quantity\": {\n       \"value\": \"8\",\n       \"quote\": \"We require 8 selling units\"\n      },\n      \"sale_unit\": {\n       \"value\": \"box\",\n       \"quote\": \"Selling unit: box\"\n      },\n      \"unit_price\": {\n       \"value\": \"8.00\",\n       \"quote\": \"Agreed amount per selling unit: 8.00\"\n      },\n      \"candidates\": [\n       {\n       \"sku\": \"GLOVE-N-M\",\n       \"score\": 1.0,\n       \"reason\": \"Exact match for material (nitrile), type (exam gloves), color (blue), finish (powder-free), size (medium), and pack quantity (box of 100).\"\n       }\n      ],\n      \"ambiguous\": false,\n      \"uncertainty\": \"\"\n    }\n  ]\n}",
+      "evidence_grounding": {
+        "fields": [
+          {
+            "field": "customer",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "po_number",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "currency",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "declared_total",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.description",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.quantity",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.sale_unit",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.unit_price",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          }
+        ],
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "all_returned_fields_grounded": true
+      },
+      "token_usage": {
+        "prompt_tokens": 1432,
+        "total_tokens": 1851,
+        "completion_tokens": 419,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "text_tokens": 1432
+        }
+      },
+      "wall_clock_ms": 7204.51,
+      "error_class": null,
+      "error_classes": [],
+      "mandatory_field_correctness": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "determinate_sku_correctness": true,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": true,
+        "field_correct": 8,
+        "field_expected": 8,
+        "field_checks": {
+          "customer": true,
+          "po_number": true,
+          "currency": true,
+          "declared_total": true,
+          "line.description": true,
+          "line.quantity": true,
+          "line.sale_unit": true,
+          "line.unit_price": true
+        },
+        "all_fields_correct": true,
+        "provenance_valid": 8,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 8,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": true,
+        "proposed_sku": "GLOVE-N-M",
+        "sku_correct": true,
+        "confident_proposal": true,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": "CLEAN_DRAFT",
+        "core_error": null,
+        "core_result": {
+          "status": "CLEAN_DRAFT",
+          "customer": "Cedar Care",
+          "po_number": "HX-203",
+          "currency": "EUR",
+          "lines": [
+            {
+              "line": 1,
+              "description": "Nitrile patient-examination handwear, blue, no powder, medium; 100 gloves per box",
+              "quantity": 8,
+              "sale_unit": "box",
+              "unit_price": "8.00",
+              "match": {
+                "status": "PROPOSED",
+                "sku": "GLOVE-N-M",
+                "confidence": 1.0,
+                "margin": 1.0,
+                "confidence_kind": "uncalibrated_model_score",
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 1.0,
+                    "reason": "Exact match for material (nitrile), type (exam gloves), color (blue), finish (powder-free), size (medium), and pack quantity (box of 100)."
+                  }
+                ],
+                "uncertainty": ""
+              },
+              "unit_valid": true,
+              "quoted_line_total": "64.00",
+              "tier_quantity": 8,
+              "tier_min_quantity": 1,
+              "expected_unit_price": "8.00",
+              "expected_line_total": "64.00",
+              "price_delta": "0.00",
+              "price_status": "PASS"
+            }
+          ],
+          "issues": [],
+          "totals": {
+            "declared": "64.00",
+            "quoted_computed": "64.00",
+            "contract_expected": "64.00",
+            "quoted_minus_declared": "0.00"
+          },
+          "extraction": {
+            "customer": {
+              "value": "Cedar Care",
+              "quote": "Purchaser Cedar Care"
+            },
+            "po_number": {
+              "value": "HX-203",
+              "quote": "reference HX-203"
+            },
+            "currency": {
+              "value": "EUR",
+              "quote": "currency EUR"
+            },
+            "declared_total": {
+              "value": "64.00",
+              "quote": "Net payable: 64.00"
+            },
+            "extraction_issues": [],
+            "lines": [
+              {
+                "description": {
+                  "value": "Nitrile patient-examination handwear, blue, no powder, medium; 100 gloves per box",
+                  "quote": "Nitrile patient-examination handwear, blue, no powder, medium; 100 gloves per box"
+                },
+                "quantity": {
+                  "value": "8",
+                  "quote": "We require 8 selling units"
+                },
+                "sale_unit": {
+                  "value": "box",
+                  "quote": "Selling unit: box"
+                },
+                "unit_price": {
+                  "value": "8.00",
+                  "quote": "Agreed amount per selling unit: 8.00"
+                },
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 1.0,
+                    "reason": "Exact match for material (nitrile), type (exam gloves), color (blue), finish (powder-free), size (medium), and pack quantity (box of 100)."
+                  }
+                ],
+                "ambiguous": false,
+                "uncertainty": ""
+              }
+            ]
+          },
+          "human_confirmation_required": true,
+          "action": "RECONCILIATION_DRAFT_ONLY"
+        }
+      },
+      "completed_utc": "2026-09-29T22:52:31.064023+00:00",
+      "raw_quote_audit": {
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "checks": [
+          {
+            "field_path": "response.customer",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.po_number",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.currency",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.declared_total",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].description",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].quantity",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].sale_unit",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].unit_price",
+            "verbatim_in_source": true
+          }
+        ],
+        "schema_rejection_still_earns_zero_scoring_credit": true
+      }
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h04_tape",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:31.292564+00:00",
+      "source_sha256": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+      "request_body_sha256": "a69fa0d0aca5282a765499bffc80f216edad780dabf7d468342c42086747af4b",
+      "http_status": 200,
+      "provider_outcome": "HTTP_SUCCESS",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "json_parsed": true,
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": \"Harbor Logistics\",\n    \"quote\": \"Harbor Logistics / Purchasing\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-204\",\n    \"quote\": \"PO REF HX-204\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"Currency EUR\"\n  },\n  \"declared_total\": {\n    \"value\": \"21.60\",\n    \"quote\": \"Net merchandise amount: 21.60\"\n  },\n  \"extraction_issues\": [],\n  \"lines\": [\n    {\n      \"description\": {\n       \"value\": \"See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m\",\n       \"quote\": \"See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m\"\n      },\n      \"quantity\": {\n       \"value\": \"12\",\n       \"quote\": \"Units needed: 12\"\n      },\n      \"sale_unit\": {\n       \"value\": \"roll\",\n       \"quote\": \"Selling unit: roll\"\n      },\n      \"unit_price\": {\n       \"value\": \"1.80\",\n       \"quote\": \"Price per selling unit: 1.80\"\n      },\n      \"candidates\": [\n       {\n       \"sku\": \"TAPE-48\",\n       \"score\": 0.95,\n       \"reason\": \"Description matches 'Transparent polypropylene packing tape' (PP is polypropylene, see-through is transparent) and dimensions match exactly (48 mm x 66 m). Customer contract includes this SKU.\"\n       }\n      ],\n      \"ambiguous\": false,\n      \"uncertainty\": \"\"\n    }\n  ]\n}",
+      "evidence_grounding": {
+        "fields": [
+          {
+            "field": "customer",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "po_number",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "currency",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "declared_total",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.description",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.quantity",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.sale_unit",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.unit_price",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          }
+        ],
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "all_returned_fields_grounded": true
+      },
+      "token_usage": {
+        "prompt_tokens": 1422,
+        "total_tokens": 1841,
+        "completion_tokens": 419,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "text_tokens": 1422
+        }
+      },
+      "wall_clock_ms": 7877.94,
+      "error_class": null,
+      "error_classes": [],
+      "mandatory_field_correctness": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "determinate_sku_correctness": true,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": true,
+        "field_correct": 8,
+        "field_expected": 8,
+        "field_checks": {
+          "customer": true,
+          "po_number": true,
+          "currency": true,
+          "declared_total": true,
+          "line.description": true,
+          "line.quantity": true,
+          "line.sale_unit": true,
+          "line.unit_price": true
+        },
+        "all_fields_correct": true,
+        "provenance_valid": 8,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 8,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": true,
+        "proposed_sku": "TAPE-48",
+        "sku_correct": true,
+        "confident_proposal": true,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": "CLEAN_DRAFT",
+        "core_error": null,
+        "core_result": {
+          "status": "CLEAN_DRAFT",
+          "customer": "Harbor Logistics",
+          "po_number": "HX-204",
+          "currency": "EUR",
+          "lines": [
+            {
+              "line": 1,
+              "description": "See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m",
+              "quantity": 12,
+              "sale_unit": "roll",
+              "unit_price": "1.80",
+              "match": {
+                "status": "PROPOSED",
+                "sku": "TAPE-48",
+                "confidence": 0.95,
+                "margin": 0.95,
+                "confidence_kind": "uncalibrated_model_score",
+                "candidates": [
+                  {
+                    "sku": "TAPE-48",
+                    "score": 0.95,
+                    "reason": "Description matches 'Transparent polypropylene packing tape' (PP is polypropylene, see-through is transparent) and dimensions match exactly (48 mm x 66 m). Customer contract includes this SKU."
+                  }
+                ],
+                "uncertainty": ""
+              },
+              "unit_valid": true,
+              "quoted_line_total": "21.60",
+              "tier_quantity": 12,
+              "tier_min_quantity": 10,
+              "expected_unit_price": "1.80",
+              "expected_line_total": "21.60",
+              "price_delta": "0.00",
+              "price_status": "PASS"
+            }
+          ],
+          "issues": [],
+          "totals": {
+            "declared": "21.60",
+            "quoted_computed": "21.60",
+            "contract_expected": "21.60",
+            "quoted_minus_declared": "0.00"
+          },
+          "extraction": {
+            "customer": {
+              "value": "Harbor Logistics",
+              "quote": "Harbor Logistics / Purchasing"
+            },
+            "po_number": {
+              "value": "HX-204",
+              "quote": "PO REF HX-204"
+            },
+            "currency": {
+              "value": "EUR",
+              "quote": "Currency EUR"
+            },
+            "declared_total": {
+              "value": "21.60",
+              "quote": "Net merchandise amount: 21.60"
+            },
+            "extraction_issues": [],
+            "lines": [
+              {
+                "description": {
+                  "value": "See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m",
+                  "quote": "See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m"
+                },
+                "quantity": {
+                  "value": "12",
+                  "quote": "Units needed: 12"
+                },
+                "sale_unit": {
+                  "value": "roll",
+                  "quote": "Selling unit: roll"
+                },
+                "unit_price": {
+                  "value": "1.80",
+                  "quote": "Price per selling unit: 1.80"
+                },
+                "candidates": [
+                  {
+                    "sku": "TAPE-48",
+                    "score": 0.95,
+                    "reason": "Description matches 'Transparent polypropylene packing tape' (PP is polypropylene, see-through is transparent) and dimensions match exactly (48 mm x 66 m). Customer contract includes this SKU."
+                  }
+                ],
+                "ambiguous": false,
+                "uncertainty": ""
+              }
+            ]
+          },
+          "human_confirmation_required": true,
+          "action": "RECONCILIATION_DRAFT_ONLY"
+        }
+      },
+      "completed_utc": "2026-09-29T22:52:39.185720+00:00",
+      "raw_quote_audit": {
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "checks": [
+          {
+            "field_path": "response.customer",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.po_number",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.currency",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.declared_total",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].description",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].quantity",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].sale_unit",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].unit_price",
+            "verbatim_in_source": true
+          }
+        ],
+        "schema_rejection_still_earns_zero_scoring_credit": true
+      }
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h05_no_size",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:39.449458+00:00",
+      "source_sha256": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+      "request_body_sha256": "797942c3ca137d232fdf9c2aefaf9db88c91d86753779d1ced41f4f60d20e1ae",
+      "http_status": 200,
+      "provider_outcome": "HTTP_SUCCESS",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "json_parsed": true,
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": \"Cedar Care\",\n    \"quote\": \"SYNTHETIC request from Cedar Care\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-205\",\n    \"quote\": \"Document HX-205; EUR amounts only.\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"Document HX-205; EUR amounts only.\"\n  },\n  \"declared_total\": {\n    \"value\": \"40.00\",\n    \"quote\": \"Total excluding taxes: 40.00\"\n  },\n  \"extraction_issues\": [],\n  \"lines\": [\n    {\n      \"description\": {\n       \"value\": \"Blue powderless nitrile examination handwear, 100 pieces per box\\nSize selection was left blank by the purchaser.\",\n       \"quote\": \"Requested goods: Blue powderless nitrile examination handwear, 100 pieces per box\\nSize selection was left blank by the purchaser.\"\n      },\n      \"quantity\": {\n       \"value\": \"5\",\n       \"quote\": \"Quantity requested: 5\"\n      },\n      \"sale_unit\": {\n       \"value\": \"box\",\n       \"quote\": \"Selling unit: box\"\n      },\n      \"unit_price\": {\n       \"value\": \"8.00\",\n       \"quote\": \"Unit charge: 8.00\"\n      },\n      \"candidates\": [\n       {\n       \"sku\": \"GLOVE-N-M\",\n       \"score\": 0.5,\n       \"reason\": \"Matches description 'Blue powder-free nitrile exam gloves... box of 100' but size is unspecified in order.\"\n       },\n       {\n       \"sku\": \"GLOVE-N-L\",\n       \"score\": 0.5,\n       \"reason\": \"Matches description 'Blue powder-free nitrile exam gloves... box of 100' but size is unspecified in order.\"\n       }\n      ],\n      \"ambiguous\": true,\n      \"uncertainty\": \"The order explicitly states that size selection was left blank. The catalog contains distinct SKUs for Medium (GLOVE-N-M) and Large (GLOVE-N-L). It is impossible to determine which specific SKU corresponds to this line item without further information.\"\n    }\n  ]\n}",
+      "evidence_grounding": {
+        "fields": [
+          {
+            "field": "customer",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "po_number",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "currency",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "declared_total",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.description",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.quantity",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.sale_unit",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.unit_price",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          }
+        ],
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "all_returned_fields_grounded": true
+      },
+      "token_usage": {
+        "prompt_tokens": 1421,
+        "total_tokens": 1961,
+        "completion_tokens": 540,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "text_tokens": 1421
+        }
+      },
+      "wall_clock_ms": 8955.06,
+      "error_class": "SEMANTIC_WRONG",
+      "error_classes": [
+        "SEMANTIC_WRONG"
+      ],
+      "mandatory_field_correctness": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": false,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "determinate_sku_correctness": null,
+      "ambiguity_review_correctness": true,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": true,
+        "field_correct": 7,
+        "field_expected": 8,
+        "field_checks": {
+          "customer": true,
+          "po_number": true,
+          "currency": true,
+          "declared_total": true,
+          "line.description": false,
+          "line.quantity": true,
+          "line.sale_unit": true,
+          "line.unit_price": true
+        },
+        "all_fields_correct": false,
+        "provenance_valid": 8,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 8,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": true,
+        "proposed_sku": null,
+        "sku_correct": true,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": true,
+        "ambiguous_clean": false,
+        "core_status": "HUMAN_REVIEW",
+        "core_error": null,
+        "core_result": {
+          "status": "HUMAN_REVIEW",
+          "customer": "Cedar Care",
+          "po_number": "HX-205",
+          "currency": "EUR",
+          "lines": [
+            {
+              "line": 1,
+              "description": "Blue powderless nitrile examination handwear, 100 pieces per box\nSize selection was left blank by the purchaser.",
+              "quantity": 5,
+              "sale_unit": "box",
+              "unit_price": "8.00",
+              "match": {
+                "status": "HUMAN_REVIEW",
+                "sku": null,
+                "confidence": 0.5,
+                "margin": 0.0,
+                "confidence_kind": "uncalibrated_model_score",
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 0.5,
+                    "reason": "Matches description 'Blue powder-free nitrile exam gloves... box of 100' but size is unspecified in order."
+                  },
+                  {
+                    "sku": "GLOVE-N-L",
+                    "score": 0.5,
+                    "reason": "Matches description 'Blue powder-free nitrile exam gloves... box of 100' but size is unspecified in order."
+                  }
+                ],
+                "uncertainty": "The order explicitly states that size selection was left blank. The catalog contains distinct SKUs for Medium (GLOVE-N-M) and Large (GLOVE-N-L). It is impossible to determine which specific SKU corresponds to this line item without further information."
+              },
+              "unit_valid": false,
+              "quoted_line_total": "40.00",
+              "tier_quantity": null,
+              "tier_min_quantity": null,
+              "expected_unit_price": null,
+              "expected_line_total": null,
+              "price_delta": null,
+              "price_status": "NOT_CHECKED"
+            }
+          ],
+          "issues": [
+            {
+              "code": "SKU_REVIEW",
+              "line": 1,
+              "detail": "The order explicitly states that size selection was left blank. The catalog contains distinct SKUs for Medium (GLOVE-N-M) and Large (GLOVE-N-L). It is impossible to determine which specific SKU corresponds to this line item without further information."
+            }
+          ],
+          "totals": {
+            "declared": "40.00",
+            "quoted_computed": "40.00",
+            "contract_expected": null,
+            "quoted_minus_declared": "0.00"
+          },
+          "extraction": {
+            "customer": {
+              "value": "Cedar Care",
+              "quote": "SYNTHETIC request from Cedar Care"
+            },
+            "po_number": {
+              "value": "HX-205",
+              "quote": "Document HX-205; EUR amounts only."
+            },
+            "currency": {
+              "value": "EUR",
+              "quote": "Document HX-205; EUR amounts only."
+            },
+            "declared_total": {
+              "value": "40.00",
+              "quote": "Total excluding taxes: 40.00"
+            },
+            "extraction_issues": [],
+            "lines": [
+              {
+                "description": {
+                  "value": "Blue powderless nitrile examination handwear, 100 pieces per box\nSize selection was left blank by the purchaser.",
+                  "quote": "Requested goods: Blue powderless nitrile examination handwear, 100 pieces per box\nSize selection was left blank by the purchaser."
+                },
+                "quantity": {
+                  "value": "5",
+                  "quote": "Quantity requested: 5"
+                },
+                "sale_unit": {
+                  "value": "box",
+                  "quote": "Selling unit: box"
+                },
+                "unit_price": {
+                  "value": "8.00",
+                  "quote": "Unit charge: 8.00"
+                },
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 0.5,
+                    "reason": "Matches description 'Blue powder-free nitrile exam gloves... box of 100' but size is unspecified in order."
+                  },
+                  {
+                    "sku": "GLOVE-N-L",
+                    "score": 0.5,
+                    "reason": "Matches description 'Blue powder-free nitrile exam gloves... box of 100' but size is unspecified in order."
+                  }
+                ],
+                "ambiguous": true,
+                "uncertainty": "The order explicitly states that size selection was left blank. The catalog contains distinct SKUs for Medium (GLOVE-N-M) and Large (GLOVE-N-L). It is impossible to determine which specific SKU corresponds to this line item without further information."
+              }
+            ]
+          },
+          "human_confirmation_required": true,
+          "action": "RECONCILIATION_DRAFT_ONLY"
+        }
+      },
+      "completed_utc": "2026-09-29T22:52:48.421233+00:00",
+      "raw_quote_audit": {
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "checks": [
+          {
+            "field_path": "response.customer",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.po_number",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.currency",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.declared_total",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].description",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].quantity",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].sale_unit",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].unit_price",
+            "verbatim_in_source": true
+          }
+        ],
+        "schema_rejection_still_earns_zero_scoring_credit": true
+      }
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h06_no_pack",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:48.770914+00:00",
+      "source_sha256": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+      "request_body_sha256": "79d7a1fc11ec32dd30b74c3a7cd67202bdd9efc15eea64f7b9d9b7b3a52393aa",
+      "http_status": 200,
+      "provider_outcome": "HTTP_SUCCESS",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "json_parsed": true,
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": \"Cedar Care\",\n    \"quote\": \"Customer account Cedar Care\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-206\",\n    \"quote\": \"FICTIONAL requisition HX-206\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"currency EUR\"\n  },\n  \"declared_total\": {\n    \"value\": \"16.00\",\n    \"quote\": \"Net amount on requisition: 16.00\"\n  },\n  \"extraction_issues\": [],\n  \"lines\": [\n    {\n      \"description\": {\n       \"value\": \"Medium blue powder-free nitrile exam handwear\",\n       \"quote\": \"Product wanted: Medium blue powder-free nitrile exam handwear\"\n      },\n      \"quantity\": {\n       \"value\": \"2\",\n       \"quote\": \"Order quantity: 2\"\n      },\n      \"sale_unit\": {\n       \"value\": \"box\",\n       \"quote\": \"Selling unit: box\"\n      },\n      \"unit_price\": {\n       \"value\": \"8.00\",\n       \"quote\": \"Price per box: 8.00\"\n      },\n      \"candidates\": [\n       {\"sku\": \"GLOVE-N-M\", \"score\": 0.9, \"reason\": \"Matches 'Medium', 'blue', 'powder-free', 'nitrile', and 'exam' descriptors.\"},\n       {\"sku\": \"GLOVE-N-L\", \"score\": 0.1, \"reason\": \"Same product type but different size (Large).\"}\n      ],\n      \"ambiguous\": true,\n      \"uncertainty\": \"The document explicitly states that the number of gloves inside each box is unspecified. The catalog items GLOVE-N-M and GLOVE-N-L are defined as 'box of 100'. Without confirmation of the pack count, it is uncertain if the requested item corresponds exactly to the catalog SKU or a different pack size variant not listed.\"\n    }\n  ]\n}",
+      "evidence_grounding": {
+        "fields": [
+          {
+            "field": "customer",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "po_number",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "currency",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "declared_total",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.description",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.quantity",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.sale_unit",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.unit_price",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          }
+        ],
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "all_returned_fields_grounded": true
+      },
+      "token_usage": {
+        "prompt_tokens": 1423,
+        "total_tokens": 1899,
+        "completion_tokens": 476,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "text_tokens": 1423
+        }
+      },
+      "wall_clock_ms": 8128.05,
+      "error_class": null,
+      "error_classes": [],
+      "mandatory_field_correctness": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "determinate_sku_correctness": null,
+      "ambiguity_review_correctness": true,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": true,
+        "field_correct": 8,
+        "field_expected": 8,
+        "field_checks": {
+          "customer": true,
+          "po_number": true,
+          "currency": true,
+          "declared_total": true,
+          "line.description": true,
+          "line.quantity": true,
+          "line.sale_unit": true,
+          "line.unit_price": true
+        },
+        "all_fields_correct": true,
+        "provenance_valid": 8,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 8,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": true,
+        "proposed_sku": null,
+        "sku_correct": true,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": true,
+        "ambiguous_clean": false,
+        "core_status": "HUMAN_REVIEW",
+        "core_error": null,
+        "core_result": {
+          "status": "HUMAN_REVIEW",
+          "customer": "Cedar Care",
+          "po_number": "HX-206",
+          "currency": "EUR",
+          "lines": [
+            {
+              "line": 1,
+              "description": "Medium blue powder-free nitrile exam handwear",
+              "quantity": 2,
+              "sale_unit": "box",
+              "unit_price": "8.00",
+              "match": {
+                "status": "HUMAN_REVIEW",
+                "sku": null,
+                "confidence": 0.9,
+                "margin": 0.8,
+                "confidence_kind": "uncalibrated_model_score",
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 0.9,
+                    "reason": "Matches 'Medium', 'blue', 'powder-free', 'nitrile', and 'exam' descriptors."
+                  },
+                  {
+                    "sku": "GLOVE-N-L",
+                    "score": 0.1,
+                    "reason": "Same product type but different size (Large)."
+                  }
+                ],
+                "uncertainty": "The document explicitly states that the number of gloves inside each box is unspecified. The catalog items GLOVE-N-M and GLOVE-N-L are defined as 'box of 100'. Without confirmation of the pack count, it is uncertain if the requested item corresponds exactly to the catalog SKU or a different pack size variant not listed."
+              },
+              "unit_valid": false,
+              "quoted_line_total": "16.00",
+              "tier_quantity": null,
+              "tier_min_quantity": null,
+              "expected_unit_price": null,
+              "expected_line_total": null,
+              "price_delta": null,
+              "price_status": "NOT_CHECKED"
+            }
+          ],
+          "issues": [
+            {
+              "code": "SKU_REVIEW",
+              "line": 1,
+              "detail": "The document explicitly states that the number of gloves inside each box is unspecified. The catalog items GLOVE-N-M and GLOVE-N-L are defined as 'box of 100'. Without confirmation of the pack count, it is uncertain if the requested item corresponds exactly to the catalog SKU or a different pack size variant not listed."
+            }
+          ],
+          "totals": {
+            "declared": "16.00",
+            "quoted_computed": "16.00",
+            "contract_expected": null,
+            "quoted_minus_declared": "0.00"
+          },
+          "extraction": {
+            "customer": {
+              "value": "Cedar Care",
+              "quote": "Customer account Cedar Care"
+            },
+            "po_number": {
+              "value": "HX-206",
+              "quote": "FICTIONAL requisition HX-206"
+            },
+            "currency": {
+              "value": "EUR",
+              "quote": "currency EUR"
+            },
+            "declared_total": {
+              "value": "16.00",
+              "quote": "Net amount on requisition: 16.00"
+            },
+            "extraction_issues": [],
+            "lines": [
+              {
+                "description": {
+                  "value": "Medium blue powder-free nitrile exam handwear",
+                  "quote": "Product wanted: Medium blue powder-free nitrile exam handwear"
+                },
+                "quantity": {
+                  "value": "2",
+                  "quote": "Order quantity: 2"
+                },
+                "sale_unit": {
+                  "value": "box",
+                  "quote": "Selling unit: box"
+                },
+                "unit_price": {
+                  "value": "8.00",
+                  "quote": "Price per box: 8.00"
+                },
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 0.9,
+                    "reason": "Matches 'Medium', 'blue', 'powder-free', 'nitrile', and 'exam' descriptors."
+                  },
+                  {
+                    "sku": "GLOVE-N-L",
+                    "score": 0.1,
+                    "reason": "Same product type but different size (Large)."
+                  }
+                ],
+                "ambiguous": true,
+                "uncertainty": "The document explicitly states that the number of gloves inside each box is unspecified. The catalog items GLOVE-N-M and GLOVE-N-L are defined as 'box of 100'. Without confirmation of the pack count, it is uncertain if the requested item corresponds exactly to the catalog SKU or a different pack size variant not listed."
+              }
+            ]
+          },
+          "human_confirmation_required": true,
+          "action": "RECONCILIATION_DRAFT_ONLY"
+        }
+      },
+      "completed_utc": "2026-09-29T22:52:56.916170+00:00",
+      "raw_quote_audit": {
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "checks": [
+          {
+            "field_path": "response.customer",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.po_number",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.currency",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.declared_total",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].description",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].quantity",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].sale_unit",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].unit_price",
+            "verbatim_in_source": true
+          }
+        ],
+        "schema_rejection_still_earns_zero_scoring_credit": true
+      }
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h07_not_medium",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:52:57.151275+00:00",
+      "source_sha256": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+      "request_body_sha256": "d60cce507ee9c3c72855ec74ecf16062698b46293db06bb223755a97c69d7667",
+      "http_status": 200,
+      "provider_outcome": "HTTP_SUCCESS",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "json_parsed": true,
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": \"Cedar Care\",\n    \"quote\": \"SYNTHETIC order amendment for Cedar Care\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-207\",\n    \"quote\": \"Purchase order HX-207.\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"Currency EUR.\"\n  },\n  \"declared_total\": {\n    \"value\": \"16.00\",\n    \"quote\": \"Net order value: 16.00.\"\n  },\n  \"extraction_issues\": [],\n  \"lines\": [\n    {\n      \"description\": {\n       \"value\": \"Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium\",\n       \"quote\": \"Requested item: Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium\"\n      },\n      \"quantity\": {\n       \"value\": \"2\",\n       \"quote\": \"Quantity ordered: 2.\"\n      },\n      \"sale_unit\": {\n       \"value\": \"box\",\n       \"quote\": \"Selling unit: box.\"\n      },\n      \"unit_price\": {\n       \"value\": \"8.00\",\n       \"quote\": \"Unit cost: 8.00.\"\n      },\n      \"candidates\": [\n       {\n       \"sku\": \"GLOVE-N-L\",\n       \"score\": 0.95,\n       \"reason\": \"Description matches 'Blue powder-free nitrile exam gloves, large, box of 100'. The term 'clinical' is a synonym for 'exam' in this context, and size L matches explicitly.\"\n       },\n       {\n       \"sku\": \"GLOVE-N-M\",\n       \"score\": 0.05,\n       \"reason\": \"Matches material and pack size but wrong size (Medium vs Large). Explicitly excluded by text 'NOT medium'.\"\n       }\n      ],\n      \"ambiguous\": false,\n      \"uncertainty\": \"\"\n    }\n  ]\n}",
+      "evidence_grounding": {
+        "fields": [
+          {
+            "field": "customer",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "po_number",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "currency",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "declared_total",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.description",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.quantity",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.sale_unit",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.unit_price",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          }
+        ],
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "all_returned_fields_grounded": true
+      },
+      "token_usage": {
+        "prompt_tokens": 1432,
+        "total_tokens": 1913,
+        "completion_tokens": 481,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "text_tokens": 1432
+        }
+      },
+      "wall_clock_ms": 7470.9,
+      "error_class": null,
+      "error_classes": [],
+      "mandatory_field_correctness": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "determinate_sku_correctness": true,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": true,
+        "field_correct": 8,
+        "field_expected": 8,
+        "field_checks": {
+          "customer": true,
+          "po_number": true,
+          "currency": true,
+          "declared_total": true,
+          "line.description": true,
+          "line.quantity": true,
+          "line.sale_unit": true,
+          "line.unit_price": true
+        },
+        "all_fields_correct": true,
+        "provenance_valid": 8,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 8,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": true,
+        "proposed_sku": "GLOVE-N-L",
+        "sku_correct": true,
+        "confident_proposal": true,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": "CLEAN_DRAFT",
+        "core_error": null,
+        "core_result": {
+          "status": "CLEAN_DRAFT",
+          "customer": "Cedar Care",
+          "po_number": "HX-207",
+          "currency": "EUR",
+          "lines": [
+            {
+              "line": 1,
+              "description": "Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium",
+              "quantity": 2,
+              "sale_unit": "box",
+              "unit_price": "8.00",
+              "match": {
+                "status": "PROPOSED",
+                "sku": "GLOVE-N-L",
+                "confidence": 0.95,
+                "margin": 0.9,
+                "confidence_kind": "uncalibrated_model_score",
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-L",
+                    "score": 0.95,
+                    "reason": "Description matches 'Blue powder-free nitrile exam gloves, large, box of 100'. The term 'clinical' is a synonym for 'exam' in this context, and size L matches explicitly."
+                  },
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 0.05,
+                    "reason": "Matches material and pack size but wrong size (Medium vs Large). Explicitly excluded by text 'NOT medium'."
+                  }
+                ],
+                "uncertainty": ""
+              },
+              "unit_valid": true,
+              "quoted_line_total": "16.00",
+              "tier_quantity": 2,
+              "tier_min_quantity": 1,
+              "expected_unit_price": "8.00",
+              "expected_line_total": "16.00",
+              "price_delta": "0.00",
+              "price_status": "PASS"
+            }
+          ],
+          "issues": [],
+          "totals": {
+            "declared": "16.00",
+            "quoted_computed": "16.00",
+            "contract_expected": "16.00",
+            "quoted_minus_declared": "0.00"
+          },
+          "extraction": {
+            "customer": {
+              "value": "Cedar Care",
+              "quote": "SYNTHETIC order amendment for Cedar Care"
+            },
+            "po_number": {
+              "value": "HX-207",
+              "quote": "Purchase order HX-207."
+            },
+            "currency": {
+              "value": "EUR",
+              "quote": "Currency EUR."
+            },
+            "declared_total": {
+              "value": "16.00",
+              "quote": "Net order value: 16.00."
+            },
+            "extraction_issues": [],
+            "lines": [
+              {
+                "description": {
+                  "value": "Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium",
+                  "quote": "Requested item: Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium"
+                },
+                "quantity": {
+                  "value": "2",
+                  "quote": "Quantity ordered: 2."
+                },
+                "sale_unit": {
+                  "value": "box",
+                  "quote": "Selling unit: box."
+                },
+                "unit_price": {
+                  "value": "8.00",
+                  "quote": "Unit cost: 8.00."
+                },
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-L",
+                    "score": 0.95,
+                    "reason": "Description matches 'Blue powder-free nitrile exam gloves, large, box of 100'. The term 'clinical' is a synonym for 'exam' in this context, and size L matches explicitly."
+                  },
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 0.05,
+                    "reason": "Matches material and pack size but wrong size (Medium vs Large). Explicitly excluded by text 'NOT medium'."
+                  }
+                ],
+                "ambiguous": false,
+                "uncertainty": ""
+              }
+            ]
+          },
+          "human_confirmation_required": true,
+          "action": "RECONCILIATION_DRAFT_ONLY"
+        }
+      },
+      "completed_utc": "2026-09-29T22:53:04.633317+00:00",
+      "raw_quote_audit": {
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "checks": [
+          {
+            "field_path": "response.customer",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.po_number",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.currency",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.declared_total",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].description",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].quantity",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].sale_unit",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].unit_price",
+            "verbatim_in_source": true
+          }
+        ],
+        "schema_rejection_still_earns_zero_scoring_credit": true
+      }
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h08_not_large",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:04.885509+00:00",
+      "source_sha256": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+      "request_body_sha256": "f58c2ce2fd512a1be79bda77ab2ff60f404d01f251f9963ab4e947312dd8d701",
+      "http_status": 200,
+      "provider_outcome": "HTTP_SUCCESS",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "json_parsed": true,
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": \"Cedar Care\",\n    \"quote\": \"Buyer Cedar Care\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-208\",\n    \"quote\": \"PO HX-208\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"currency EUR\"\n  },\n  \"declared_total\": {\n    \"value\": \"24.00\",\n    \"quote\": \"Net order amount: 24.00\"\n  },\n  \"extraction_issues\": [],\n  \"lines\": [\n    {\n      \"description\": {\n       \"value\": \"MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large\",\n       \"quote\": \"MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large\"\n      },\n      \"quantity\": {\n       \"value\": \"3\",\n       \"quote\": \"Count ordered: 3\"\n      },\n      \"sale_unit\": {\n       \"value\": \"box\",\n       \"quote\": \"Selling unit: box\"\n      },\n      \"unit_price\": {\n       \"value\": \"8.00\",\n       \"quote\": \"Each box: 8.00\"\n      },\n      \"candidates\": [\n       {\n       \"sku\": \"GLOVE-N-M\",\n       \"score\": 0.95,\n       \"reason\": \"Description matches 'Blue powder-free nitrile exam gloves, medium, box of 100'. The explicit instruction 'NOT large' and 'MEDIUM' confirms size M.\"\n       }\n      ],\n      \"ambiguous\": false,\n      \"uncertainty\": \"\"\n    }\n  ]\n}",
+      "evidence_grounding": {
+        "fields": [
+          {
+            "field": "customer",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "po_number",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "currency",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "declared_total",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.description",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.quantity",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.sale_unit",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.unit_price",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          }
+        ],
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "all_returned_fields_grounded": true
+      },
+      "token_usage": {
+        "prompt_tokens": 1435,
+        "total_tokens": 1848,
+        "completion_tokens": 413,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "text_tokens": 1435
+        }
+      },
+      "wall_clock_ms": 7318.02,
+      "error_class": null,
+      "error_classes": [],
+      "mandatory_field_correctness": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "determinate_sku_correctness": true,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": true,
+        "field_correct": 8,
+        "field_expected": 8,
+        "field_checks": {
+          "customer": true,
+          "po_number": true,
+          "currency": true,
+          "declared_total": true,
+          "line.description": true,
+          "line.quantity": true,
+          "line.sale_unit": true,
+          "line.unit_price": true
+        },
+        "all_fields_correct": true,
+        "provenance_valid": 8,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 8,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": true,
+        "proposed_sku": "GLOVE-N-M",
+        "sku_correct": true,
+        "confident_proposal": true,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": "CLEAN_DRAFT",
+        "core_error": null,
+        "core_result": {
+          "status": "CLEAN_DRAFT",
+          "customer": "Cedar Care",
+          "po_number": "HX-208",
+          "currency": "EUR",
+          "lines": [
+            {
+              "line": 1,
+              "description": "MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large",
+              "quantity": 3,
+              "sale_unit": "box",
+              "unit_price": "8.00",
+              "match": {
+                "status": "PROPOSED",
+                "sku": "GLOVE-N-M",
+                "confidence": 0.95,
+                "margin": 0.95,
+                "confidence_kind": "uncalibrated_model_score",
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 0.95,
+                    "reason": "Description matches 'Blue powder-free nitrile exam gloves, medium, box of 100'. The explicit instruction 'NOT large' and 'MEDIUM' confirms size M."
+                  }
+                ],
+                "uncertainty": ""
+              },
+              "unit_valid": true,
+              "quoted_line_total": "24.00",
+              "tier_quantity": 3,
+              "tier_min_quantity": 1,
+              "expected_unit_price": "8.00",
+              "expected_line_total": "24.00",
+              "price_delta": "0.00",
+              "price_status": "PASS"
+            }
+          ],
+          "issues": [],
+          "totals": {
+            "declared": "24.00",
+            "quoted_computed": "24.00",
+            "contract_expected": "24.00",
+            "quoted_minus_declared": "0.00"
+          },
+          "extraction": {
+            "customer": {
+              "value": "Cedar Care",
+              "quote": "Buyer Cedar Care"
+            },
+            "po_number": {
+              "value": "HX-208",
+              "quote": "PO HX-208"
+            },
+            "currency": {
+              "value": "EUR",
+              "quote": "currency EUR"
+            },
+            "declared_total": {
+              "value": "24.00",
+              "quote": "Net order amount: 24.00"
+            },
+            "extraction_issues": [],
+            "lines": [
+              {
+                "description": {
+                  "value": "MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large",
+                  "quote": "MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large"
+                },
+                "quantity": {
+                  "value": "3",
+                  "quote": "Count ordered: 3"
+                },
+                "sale_unit": {
+                  "value": "box",
+                  "quote": "Selling unit: box"
+                },
+                "unit_price": {
+                  "value": "8.00",
+                  "quote": "Each box: 8.00"
+                },
+                "candidates": [
+                  {
+                    "sku": "GLOVE-N-M",
+                    "score": 0.95,
+                    "reason": "Description matches 'Blue powder-free nitrile exam gloves, medium, box of 100'. The explicit instruction 'NOT large' and 'MEDIUM' confirms size M."
+                  }
+                ],
+                "ambiguous": false,
+                "uncertainty": ""
+              }
+            ]
+          },
+          "human_confirmation_required": true,
+          "action": "RECONCILIATION_DRAFT_ONLY"
+        }
+      },
+      "completed_utc": "2026-09-29T22:53:12.220801+00:00",
+      "raw_quote_audit": {
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "checks": [
+          {
+            "field_path": "response.customer",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.po_number",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.currency",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.declared_total",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].description",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].quantity",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].sale_unit",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].unit_price",
+            "verbatim_in_source": true
+          }
+        ],
+        "schema_rejection_still_earns_zero_scoring_credit": true
+      }
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h09_latex",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:12.452142+00:00",
+      "source_sha256": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+      "request_body_sha256": "0bf328bd50223151336f61b17c6ea15d7b7741c9f02cf842354fb05f8679e2c2",
+      "http_status": 200,
+      "provider_outcome": "HTTP_SUCCESS",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "json_parsed": true,
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": \"Cedar Care\",\n    \"quote\": \"customer Cedar Care\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-209\",\n    \"quote\": \"SYNTHETIC order HX-209\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"currency EUR\"\n  },\n  \"declared_total\": {\n    \"value\": \"32.00\",\n    \"quote\": \"Net amount: 32.00\"\n  },\n  \"extraction_issues\": [],\n  \"lines\": [\n    {\n      \"description\": {\n       \"value\": \"Medium blue LATEX examination gloves without powder, 100 per box\",\n       \"quote\": \"Medium blue LATEX examination gloves without powder, 100 per box\"\n      },\n      \"quantity\": {\n       \"value\": \"4\",\n       \"quote\": \"Quantity: 4\"\n      },\n      \"sale_unit\": {\n       \"value\": \"box\",\n       \"quote\": \"Selling unit: box\"\n      },\n      \"unit_price\": {\n       \"value\": \"8.00\",\n       \"quote\": \"Cost per selling unit: 8.00\"\n      },\n      \"candidates\": [],\n      \"ambiguous\": true,\n      \"uncertainty\": \"The requested material is explicitly 'LATEX' and the document states 'nitrile substitution is not permitted'. The catalog only contains nitrile gloves (GLOVE-N-M, GLOVE-N-L). No latex products exist in the supplied catalog.\"\n    }\n  ]\n}",
+      "evidence_grounding": {
+        "fields": [
+          {
+            "field": "customer",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "po_number",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "currency",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "declared_total",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.description",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.quantity",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.sale_unit",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.unit_price",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          }
+        ],
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "all_returned_fields_grounded": true
+      },
+      "token_usage": {
+        "prompt_tokens": 1421,
+        "total_tokens": 1802,
+        "completion_tokens": 381,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "text_tokens": 1421
+        }
+      },
+      "wall_clock_ms": 5690.24,
+      "error_class": null,
+      "error_classes": [],
+      "mandatory_field_correctness": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "determinate_sku_correctness": null,
+      "ambiguity_review_correctness": true,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": true,
+        "field_correct": 8,
+        "field_expected": 8,
+        "field_checks": {
+          "customer": true,
+          "po_number": true,
+          "currency": true,
+          "declared_total": true,
+          "line.description": true,
+          "line.quantity": true,
+          "line.sale_unit": true,
+          "line.unit_price": true
+        },
+        "all_fields_correct": true,
+        "provenance_valid": 8,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 8,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": true,
+        "proposed_sku": null,
+        "sku_correct": true,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": true,
+        "ambiguous_clean": false,
+        "core_status": "HUMAN_REVIEW",
+        "core_error": null,
+        "core_result": {
+          "status": "HUMAN_REVIEW",
+          "customer": "Cedar Care",
+          "po_number": "HX-209",
+          "currency": "EUR",
+          "lines": [
+            {
+              "line": 1,
+              "description": "Medium blue LATEX examination gloves without powder, 100 per box",
+              "quantity": 4,
+              "sale_unit": "box",
+              "unit_price": "8.00",
+              "match": {
+                "status": "HUMAN_REVIEW",
+                "sku": null,
+                "confidence": null,
+                "margin": null,
+                "confidence_kind": "uncalibrated_model_score",
+                "candidates": [],
+                "uncertainty": "The requested material is explicitly 'LATEX' and the document states 'nitrile substitution is not permitted'. The catalog only contains nitrile gloves (GLOVE-N-M, GLOVE-N-L). No latex products exist in the supplied catalog."
+              },
+              "unit_valid": false,
+              "quoted_line_total": "32.00",
+              "tier_quantity": null,
+              "tier_min_quantity": null,
+              "expected_unit_price": null,
+              "expected_line_total": null,
+              "price_delta": null,
+              "price_status": "NOT_CHECKED"
+            }
+          ],
+          "issues": [
+            {
+              "code": "SKU_REVIEW",
+              "line": 1,
+              "detail": "The requested material is explicitly 'LATEX' and the document states 'nitrile substitution is not permitted'. The catalog only contains nitrile gloves (GLOVE-N-M, GLOVE-N-L). No latex products exist in the supplied catalog."
+            }
+          ],
+          "totals": {
+            "declared": "32.00",
+            "quoted_computed": "32.00",
+            "contract_expected": null,
+            "quoted_minus_declared": "0.00"
+          },
+          "extraction": {
+            "customer": {
+              "value": "Cedar Care",
+              "quote": "customer Cedar Care"
+            },
+            "po_number": {
+              "value": "HX-209",
+              "quote": "SYNTHETIC order HX-209"
+            },
+            "currency": {
+              "value": "EUR",
+              "quote": "currency EUR"
+            },
+            "declared_total": {
+              "value": "32.00",
+              "quote": "Net amount: 32.00"
+            },
+            "extraction_issues": [],
+            "lines": [
+              {
+                "description": {
+                  "value": "Medium blue LATEX examination gloves without powder, 100 per box",
+                  "quote": "Medium blue LATEX examination gloves without powder, 100 per box"
+                },
+                "quantity": {
+                  "value": "4",
+                  "quote": "Quantity: 4"
+                },
+                "sale_unit": {
+                  "value": "box",
+                  "quote": "Selling unit: box"
+                },
+                "unit_price": {
+                  "value": "8.00",
+                  "quote": "Cost per selling unit: 8.00"
+                },
+                "candidates": [],
+                "ambiguous": true,
+                "uncertainty": "The requested material is explicitly 'LATEX' and the document states 'nitrile substitution is not permitted'. The catalog only contains nitrile gloves (GLOVE-N-M, GLOVE-N-L). No latex products exist in the supplied catalog."
+              }
+            ]
+          },
+          "human_confirmation_required": true,
+          "action": "RECONCILIATION_DRAFT_ONLY"
+        }
+      },
+      "completed_utc": "2026-09-29T22:53:18.153316+00:00",
+      "raw_quote_audit": {
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "checks": [
+          {
+            "field_path": "response.customer",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.po_number",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.currency",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.declared_total",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].description",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].quantity",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].sale_unit",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].unit_price",
+            "verbatim_in_source": true
+          }
+        ],
+        "schema_rejection_still_earns_zero_scoring_credit": true
+      }
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h10_damaged",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:18.382500+00:00",
+      "source_sha256": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+      "request_body_sha256": "c19e03614394540fd5c3377c67b982bc5583ae4650a0433a79247e559de97898",
+      "http_status": 200,
+      "provider_outcome": "HTTP_SUCCESS",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "json_parsed": true,
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": null,\n    \"quote\": \"\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-210\",\n    \"quote\": \"Purchase order HX-210\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"CURRENCY EUR\"\n  },\n  \"declared_total\": {\n    \"value\": null,\n    \"quote\": \"\"\n  },\n  \"extraction_issues\": [\n    \"Customer name section is torn away.\",\n    \"Quantity field is unreadable.\",\n    \"Unit price field is unreadable.\",\n    \"Net amount/total is missing from bottom of page.\"\n  ],\n  \"lines\": [\n    {\n      \"description\": {\n       \"value\": \"White A4 printer sheets; 80 gsm; sealed ream of 500\",\n       \"quote\": \"ARTICLE: White A4 printer sheets; 80 gsm; sealed ream of 500\"\n      },\n      \"quantity\": {\n       \"value\": null,\n       \"quote\": \"\"\n      },\n      \"sale_unit\": {\n       \"value\": \"ream\",\n       \"quote\": \"Selling unit: ream\"\n      },\n      \"unit_price\": {\n       \"value\": null,\n       \"quote\": \"\"\n      },\n      \"candidates\": [\n       {\n       \"sku\": \"PAPER-A4-80\",\n       \"score\": 0.95,\n       \"reason\": \"Description matches 'A4 copier paper 80 gsm' and pack size '500 sheets' (ream). Sale unit 'ream' matches catalog.\"\n       }\n      ],\n      \"ambiguous\": false,\n      \"uncertainty\": \"\"\n    }\n  ]\n}",
+      "evidence_grounding": {
+        "fields": [
+          {
+            "field": "customer",
+            "quote_present_verbatim": false,
+            "has_quote": false,
+            "value_supported": true
+          },
+          {
+            "field": "po_number",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "currency",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "declared_total",
+            "quote_present_verbatim": false,
+            "has_quote": false,
+            "value_supported": true
+          },
+          {
+            "field": "line1.description",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.quantity",
+            "quote_present_verbatim": false,
+            "has_quote": false,
+            "value_supported": true
+          },
+          {
+            "field": "line1.sale_unit",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.unit_price",
+            "quote_present_verbatim": false,
+            "has_quote": false,
+            "value_supported": true
+          }
+        ],
+        "returned_snippets": 4,
+        "verbatim_snippets": 4,
+        "all_returned_snippets_verbatim": true,
+        "all_returned_fields_grounded": true
+      },
+      "token_usage": {
+        "prompt_tokens": 1428,
+        "total_tokens": 1842,
+        "completion_tokens": 414,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "text_tokens": 1428
+        }
+      },
+      "wall_clock_ms": 8401.95,
+      "error_class": null,
+      "error_classes": [],
+      "mandatory_field_correctness": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "determinate_sku_correctness": true,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": true,
+        "field_correct": 8,
+        "field_expected": 8,
+        "field_checks": {
+          "customer": true,
+          "po_number": true,
+          "currency": true,
+          "declared_total": true,
+          "line.description": true,
+          "line.quantity": true,
+          "line.sale_unit": true,
+          "line.unit_price": true
+        },
+        "all_fields_correct": true,
+        "provenance_valid": 8,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 4,
+        "nonnull_evidence_expected": 4,
+        "all_provenance_valid": true,
+        "proposed_sku": "PAPER-A4-80",
+        "sku_correct": true,
+        "confident_proposal": true,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": "HUMAN_REVIEW",
+        "core_error": null,
+        "core_result": {
+          "status": "HUMAN_REVIEW",
+          "customer": null,
+          "po_number": "HX-210",
+          "currency": "EUR",
+          "lines": [
+            {
+              "line": 1,
+              "description": "White A4 printer sheets; 80 gsm; sealed ream of 500",
+              "quantity": null,
+              "sale_unit": "ream",
+              "unit_price": null,
+              "match": {
+                "status": "PROPOSED",
+                "sku": "PAPER-A4-80",
+                "confidence": 0.95,
+                "margin": 0.95,
+                "confidence_kind": "uncalibrated_model_score",
+                "candidates": [
+                  {
+                    "sku": "PAPER-A4-80",
+                    "score": 0.95,
+                    "reason": "Description matches 'A4 copier paper 80 gsm' and pack size '500 sheets' (ream). Sale unit 'ream' matches catalog."
+                  }
+                ],
+                "uncertainty": ""
+              },
+              "unit_valid": true,
+              "quoted_line_total": null,
+              "tier_quantity": null,
+              "tier_min_quantity": null,
+              "expected_unit_price": null,
+              "expected_line_total": null,
+              "price_delta": null,
+              "price_status": "NOT_CHECKED"
+            }
+          ],
+          "issues": [
+            {
+              "code": "MISSING_FIELD",
+              "line": null,
+              "detail": "customer"
+            },
+            {
+              "code": "MISSING_FIELD",
+              "line": null,
+              "detail": "declared_total"
+            },
+            {
+              "code": "UNKNOWN_CUSTOMER",
+              "line": null,
+              "detail": "No synthetic customer contract; price checks unavailable"
+            },
+            {
+              "code": "EXTRACTION_UNCERTAINTY",
+              "line": null,
+              "detail": "Customer name section is torn away."
+            },
+            {
+              "code": "EXTRACTION_UNCERTAINTY",
+              "line": null,
+              "detail": "Quantity field is unreadable."
+            },
+            {
+              "code": "EXTRACTION_UNCERTAINTY",
+              "line": null,
+              "detail": "Unit price field is unreadable."
+            },
+            {
+              "code": "EXTRACTION_UNCERTAINTY",
+              "line": null,
+              "detail": "Net amount/total is missing from bottom of page."
+            },
+            {
+              "code": "MISSING_FIELD",
+              "line": 1,
+              "detail": "quantity"
+            },
+            {
+              "code": "MISSING_FIELD",
+              "line": 1,
+              "detail": "unit_price"
+            }
+          ],
+          "totals": {
+            "declared": null,
+            "quoted_computed": null,
+            "contract_expected": null,
+            "quoted_minus_declared": null
+          },
+          "extraction": {
+            "customer": {
+              "value": null,
+              "quote": ""
+            },
+            "po_number": {
+              "value": "HX-210",
+              "quote": "Purchase order HX-210"
+            },
+            "currency": {
+              "value": "EUR",
+              "quote": "CURRENCY EUR"
+            },
+            "declared_total": {
+              "value": null,
+              "quote": ""
+            },
+            "extraction_issues": [
+              "Customer name section is torn away.",
+              "Quantity field is unreadable.",
+              "Unit price field is unreadable.",
+              "Net amount/total is missing from bottom of page."
+            ],
+            "lines": [
+              {
+                "description": {
+                  "value": "White A4 printer sheets; 80 gsm; sealed ream of 500",
+                  "quote": "ARTICLE: White A4 printer sheets; 80 gsm; sealed ream of 500"
+                },
+                "quantity": {
+                  "value": null,
+                  "quote": ""
+                },
+                "sale_unit": {
+                  "value": "ream",
+                  "quote": "Selling unit: ream"
+                },
+                "unit_price": {
+                  "value": null,
+                  "quote": ""
+                },
+                "candidates": [
+                  {
+                    "sku": "PAPER-A4-80",
+                    "score": 0.95,
+                    "reason": "Description matches 'A4 copier paper 80 gsm' and pack size '500 sheets' (ream). Sale unit 'ream' matches catalog."
+                  }
+                ],
+                "ambiguous": false,
+                "uncertainty": ""
+              }
+            ]
+          },
+          "human_confirmation_required": true,
+          "action": "RECONCILIATION_DRAFT_ONLY"
+        }
+      },
+      "completed_utc": "2026-09-29T22:53:26.804093+00:00",
+      "raw_quote_audit": {
+        "returned_snippets": 4,
+        "verbatim_snippets": 4,
+        "all_returned_snippets_verbatim": true,
+        "checks": [
+          {
+            "field_path": "response.po_number",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.currency",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].description",
+            "verbatim_in_source": true
+          },
+          {
+            "field_path": "response.lines[0].sale_unit",
+            "verbatim_in_source": true
+          }
+        ],
+        "schema_rejection_still_earns_zero_scoring_credit": true
+      }
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h01_paper",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:27.031478+00:00",
+      "source_sha256": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+      "request_body_sha256": "662db73c31a7e44c8a2d8fb0834e244b1c5d4565282a7d61c46b33ce7e18b7c2",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 351.36,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:53:27.399779+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h02_large",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:27.623678+00:00",
+      "source_sha256": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+      "request_body_sha256": "3434ce22aa77f4d3b5615703f84ac23aa27f319cc09902ac9f271c1c38805cb4",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 320.4,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:53:27.961997+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h03_alias",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:28.198081+00:00",
+      "source_sha256": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+      "request_body_sha256": "2fe3bb182f2531e8714dbb5e44a865b3cbab7d3a83a3899992ec634b631dc262",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 343.77,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:53:28.560848+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h04_tape",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:28.797133+00:00",
+      "source_sha256": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+      "request_body_sha256": "bf1da2f2e6be6b9b6a19718f4d3e888852e32d2d24170a84ab7bfb073f6e637c",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 332.06,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:53:29.151794+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h05_no_size",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:29.379692+00:00",
+      "source_sha256": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+      "request_body_sha256": "010dc3788ea099b2e6d6576c89889169e0837f91433a646f4f8acf03367c1f5a",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 347.89,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": null,
+      "ambiguity_review_correctness": false,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:53:29.744919+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h06_no_pack",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:29.997395+00:00",
+      "source_sha256": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+      "request_body_sha256": "314e84b9db12a670796c44693d6549cf8ab541f6b7acc494f8bacac7afe37f40",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 359.76,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": null,
+      "ambiguity_review_correctness": false,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:53:30.378702+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h07_not_medium",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:30.650425+00:00",
+      "source_sha256": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+      "request_body_sha256": "0714b4c024dc2039cb82b989fdb049c6169dbf76870cfb075c2ac5580866ef26",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 354.71,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:53:31.025159+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h08_not_large",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:31.284796+00:00",
+      "source_sha256": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+      "request_body_sha256": "606c9f15f1e2ad0b4a0f70aaa0c7c1a8e3d40128af34d0c7d13d85b1ffecfe5e",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 325.36,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:53:31.631922+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h09_latex",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:31.901018+00:00",
+      "source_sha256": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+      "request_body_sha256": "3c61be738b9fea1dbbe49d3b8662da6de7d689803d4a641e4e213a5e540bacd1",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 388.28,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": null,
+      "ambiguity_review_correctness": false,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:53:32.311351+00:00",
+      "raw_quote_audit": null
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "fixture_id": "h10_damaged",
+      "run_index": 1,
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T22:53:32.596072+00:00",
+      "source_sha256": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+      "request_body_sha256": "013b365c471fca92ec181e26de9a8b4f8682640c5c2ff5e3d51c06b764bbb1c6",
+      "http_status": 400,
+      "provider_outcome": "HTTP_ERROR",
+      "finish_reason": null,
+      "schema_valid": false,
+      "json_parsed": false,
+      "raw_provider_output": null,
+      "evidence_grounding": null,
+      "token_usage": null,
+      "wall_clock_ms": 342.38,
+      "error_class": "PROVIDER_4XX",
+      "error_classes": [
+        "PROVIDER_4XX"
+      ],
+      "mandatory_field_correctness": {},
+      "determinate_sku_correctness": false,
+      "ambiguity_review_correctness": null,
+      "wrong_confident_sku": false,
+      "score": {
+        "schema_valid": false,
+        "field_correct": 0,
+        "field_expected": 8,
+        "field_checks": {},
+        "all_fields_correct": false,
+        "provenance_valid": 0,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 0,
+        "nonnull_evidence_expected": 4,
+        "all_provenance_valid": false,
+        "proposed_sku": null,
+        "sku_correct": false,
+        "confident_proposal": false,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": null,
+        "core_error": null,
+        "core_result": null,
+        "schema_error": "response: expected ['object']"
+      },
+      "completed_utc": "2026-09-29T22:53:32.961249+00:00",
+      "raw_quote_audit": null
+    }
+  ]
+}

@@ -1,0 +1,264 @@
+{
+  "started_utc": "2026-09-29T22:52:02.794862+00:00",
+  "scope": "PHASE_1_ONLY",
+  "planned_calls": 30,
+  "run_index": 1,
+  "configurations": [
+    {
+      "provider": "Google Gemini API",
+      "model": "gemini-3.5-flash-lite",
+      "thinking_level": "minimal",
+      "thinking": {
+        "thinking_level": "minimal"
+      },
+      "output_mode": "Gemini responseFormat.text JSON Schema",
+      "max_output_tokens": 4096,
+      "temperature": 0,
+      "stream": false,
+      "timeout_seconds": 180,
+      "automatic_retries": 0,
+      "redirects": false,
+      "tools_search_grounding": false
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "model": "qwen3.8-flash",
+      "enable_thinking": false,
+      "thinking": {
+        "enable_thinking": false
+      },
+      "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+      "max_output_tokens": 4096,
+      "temperature": 0,
+      "stream": false,
+      "timeout_seconds": 180,
+      "automatic_retries": 0,
+      "redirects": false,
+      "tools_search_grounding": false
+    },
+    {
+      "provider": "Google Gemini API",
+      "model": "gemini-3.8-flash",
+      "thinking_level": "low",
+      "thinking": {
+        "thinking_level": "low"
+      },
+      "output_mode": "Gemini responseFormat.text JSON Schema",
+      "max_output_tokens": 4096,
+      "temperature": 0,
+      "stream": false,
+      "timeout_seconds": 180,
+      "automatic_retries": 0,
+      "redirects": false,
+      "tools_search_grounding": false
+    }
+  ],
+  "free_only_settings": "USER_CONFIRMED_IN_PREFLIGHT",
+  "qwen_environment_source": "Windows user scope; stale process value overridden in memory",
+  "call_order": "candidate-major; h01..h10 per candidate",
+  "integrity_before": {
+    "freeze_sha256": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+    "schema_sha256": "f5bd3918128dce7e8efd1e1c2a566e1cd166d692b534641345b9d5b70057f5c3",
+    "frozen_files": {
+      "live/expected.json": {
+        "sha256": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+        "verified_from": "working_tree"
+      },
+      "live/protocol.md": {
+        "sha256": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+        "verified_from": "working_tree"
+      },
+      "live/adapter.py": {
+        "sha256": "0a16b12de4eef3eaf5612fafc3ec379cfe2152cec9a60ded9f1456f5992f56e6",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/score.py": {
+        "sha256": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "live/run.py": {
+        "sha256": "2d46e5be5550ba4f17d48da3b74e21bacb9737bb10a755b4a5da70beb9e61c19",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/test_live.py": {
+        "sha256": "04aef30766727a6f2ce027143530896b3bd571150270c37828a41c5f1c7fc282",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/fixtures/h01_paper.txt": {
+        "sha256": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h02_large.txt": {
+        "sha256": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h03_alias.txt": {
+        "sha256": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h04_tape.txt": {
+        "sha256": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h05_no_size.txt": {
+        "sha256": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h06_no_pack.txt": {
+        "sha256": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h07_not_medium.txt": {
+        "sha256": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h08_not_large.txt": {
+        "sha256": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h09_latex.txt": {
+        "sha256": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h10_damaged.txt": {
+        "sha256": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+        "verified_from": "working_tree"
+      },
+      "ordershield.py": {
+        "sha256": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "catalog.json": {
+        "sha256": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+        "verified_from": "working_tree"
+      },
+      "prompt.txt": {
+        "sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "verified_from": "working_tree"
+      }
+    },
+    "reference_commit": "12a7e50"
+  },
+  "preflight_hashes_before": {
+    "preflight.json": "16e642dcdef3391a55b6aebeed8231a2f63ef3a15353e31549cc58fea9f23719",
+    "preflight.md": "f4f19d61e033a8dc5f79718d54579e65704e4296aa8486c4db72baa79870d59b"
+  },
+  "protocol_overrides": [
+    "User specified three free direct API providers instead of frozen Codex CLI",
+    "One run per fixture/provider instead of three runs of one provider",
+    "HTTP wall latency instead of CLI subprocess latency",
+    "User authorized terminal-punctuation grounding repair"
+  ],
+  "harness_sha256": "711d1a44c3b6d4bdb584b2e69fc483abc3750c8953c13984c386602e1a5ea675",
+  "local_schema_unchanged": true,
+  "stop_reason": null,
+  "integrity_after": {
+    "freeze_sha256": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+    "schema_sha256": "f5bd3918128dce7e8efd1e1c2a566e1cd166d692b534641345b9d5b70057f5c3",
+    "frozen_files": {
+      "live/expected.json": {
+        "sha256": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+        "verified_from": "working_tree"
+      },
+      "live/protocol.md": {
+        "sha256": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+        "verified_from": "working_tree"
+      },
+      "live/adapter.py": {
+        "sha256": "0a16b12de4eef3eaf5612fafc3ec379cfe2152cec9a60ded9f1456f5992f56e6",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/score.py": {
+        "sha256": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "live/run.py": {
+        "sha256": "2d46e5be5550ba4f17d48da3b74e21bacb9737bb10a755b4a5da70beb9e61c19",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/test_live.py": {
+        "sha256": "04aef30766727a6f2ce027143530896b3bd571150270c37828a41c5f1c7fc282",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/fixtures/h01_paper.txt": {
+        "sha256": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h02_large.txt": {
+        "sha256": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h03_alias.txt": {
+        "sha256": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h04_tape.txt": {
+        "sha256": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h05_no_size.txt": {
+        "sha256": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h06_no_pack.txt": {
+        "sha256": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h07_not_medium.txt": {
+        "sha256": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h08_not_large.txt": {
+        "sha256": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h09_latex.txt": {
+        "sha256": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h10_damaged.txt": {
+        "sha256": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+        "verified_from": "working_tree"
+      },
+      "ordershield.py": {
+        "sha256": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "catalog.json": {
+        "sha256": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+        "verified_from": "working_tree"
+      },
+      "prompt.txt": {
+        "sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "verified_from": "working_tree"
+      }
+    },
+    "reference_commit": "12a7e50"
+  },
+  "preflight_preserved": true,
+  "completed_utc": "2026-09-29T22:53:33.210709+00:00",
+  "attempted_calls": 30,
+  "post_run_audit": {
+    "unique_calls": 30,
+    "local_score_reproduction": "PASS",
+    "aggregate_reproduction": "PASS",
+    "frozen_hashes": "PASS",
+    "preflight_hashes": "PASS",
+    "secret_exclusion": "PASS",
+    "artifact_whitespace": "PASS",
+    "harness_sha256_after": "7765cd0a7e64d47349e0d0394e70c3dc3601ffeb643dafab43cac527e9e4c2e1",
+    "raw_quote_gate": "Literal snippets additionally checked in parsed schema-invalid outputs per hard gate 5; frozen score/credit remains unchanged",
+    "harness_changes_after_calls": "Added offline raw-quote gate audit and summary reproduction only; request construction, executed configurations, frozen scoring and recorded model outputs remain unchanged"
+  },
+  "verification": {
+    "tests_command": "python -B -m unittest discover -s spikes/ordershield/provider_bakeoff -p \"test_*.py\" -q",
+    "tests_result": "28 passed",
+    "freeze_command": "python -B spikes/ordershield/provider_bakeoff/phase1.py validate",
+    "freeze_result": "PASS",
+    "diff_command": "git diff --check",
+    "diff_result": "PASS",
+    "live_command": "python -B spikes/ordershield/provider_bakeoff/phase1.py run",
+    "live_result": "30 single-attempt calls; 10 model outputs; 20 HTTP 400 responses",
+    "configured_lint_typecheck": "No configured repository lint/typecheck runner found"
+  }
+}

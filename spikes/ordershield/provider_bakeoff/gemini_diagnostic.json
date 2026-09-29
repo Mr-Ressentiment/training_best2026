@@ -1,0 +1,1723 @@
+{
+  "scope": "GEMINI_DIAGNOSTIC_ONLY",
+  "offline_completed_utc": "2026-09-29T23:11:22.612294+00:00",
+  "live_call_limit": 2,
+  "automatic_retries": 0,
+  "calls": [
+    {
+      "call_index": 1,
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "fixture_id": "h01_paper",
+      "path_variant": "original",
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "request_body_sha256": "a4e9e8be377dadc39ea07526e1d224b5b7e4a59d1588ec856579915da331ed21",
+      "generation_config": {
+        "thinkingConfig": {
+          "thinkingLevel": "minimal"
+        },
+        "responseFormat": {
+          "text": {
+            "mimeType": "application/json",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "customer": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "quote": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                },
+                "po_number": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "quote": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                },
+                "currency": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "quote": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                },
+                "declared_total": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "quote": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                },
+                "extraction_issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "lines": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "quote": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "quantity": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "quote": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "sale_unit": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "quote": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "unit_price": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "quote": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "sku": {
+                              "type": "string"
+                            },
+                            "score": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 1
+                            },
+                            "reason": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "sku",
+                            "score",
+                            "reason"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "ambiguous": {
+                        "type": "boolean"
+                      },
+                      "uncertainty": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "description",
+                      "quantity",
+                      "sale_unit",
+                      "unit_price",
+                      "candidates",
+                      "ambiguous",
+                      "uncertainty"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "customer",
+                "po_number",
+                "currency",
+                "declared_total",
+                "extraction_issues",
+                "lines"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "maxOutputTokens": 4096,
+        "temperature": 0
+      },
+      "matches_original_phase1_body": true,
+      "harness_sha256": "61367cb99a142f00bb17fc00c10b1955e5182a4e29757124d094899d61edff49",
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T23:12:55.250221+00:00",
+      "http_status": 400,
+      "returned_model_id": null,
+      "json_parsed": false,
+      "schema_valid": false,
+      "token_usage": null,
+      "error_class": "PROVIDER_4XX",
+      "wall_clock_ms": 364.02,
+      "safe_error": {
+        "http_status": 400,
+        "gemini_error_status": "INVALID_ARGUMENT",
+        "gemini_error_message": "Invalid value at 'generation_config.response_format.text.mime_type' (type.googleapis.com/google.ai.generativelanguage.v1beta.TextResponseFormat.MimeType), \"application/json\"",
+        "error_info_reasons": [],
+        "request_id": null,
+        "requested_model_id": "gemini-3.5-flash-lite",
+        "message_limit_characters": 2048
+      },
+      "completed_utc": "2026-09-29T23:12:55.639551+00:00"
+    },
+    {
+      "call_index": 2,
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.5-flash-lite",
+      "fixture_id": "h01_paper",
+      "path_variant": "corrected",
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema (mimeType=APPLICATION_JSON)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "request_body_sha256": "ffb663fb0a8c63148890f97b22996a09fcb11bea2ad252db48ca2e84f8adb5c4",
+      "generation_config": {
+        "thinkingConfig": {
+          "thinkingLevel": "minimal"
+        },
+        "responseFormat": {
+          "text": {
+            "mimeType": "APPLICATION_JSON",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "customer": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "quote": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                },
+                "po_number": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "quote": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                },
+                "currency": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "quote": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                },
+                "declared_total": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "quote": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                },
+                "extraction_issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "lines": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "quote": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "quantity": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "quote": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "sale_unit": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "quote": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "unit_price": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "quote": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "sku": {
+                              "type": "string"
+                            },
+                            "score": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 1
+                            },
+                            "reason": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "sku",
+                            "score",
+                            "reason"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "ambiguous": {
+                        "type": "boolean"
+                      },
+                      "uncertainty": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "description",
+                      "quantity",
+                      "sale_unit",
+                      "unit_price",
+                      "candidates",
+                      "ambiguous",
+                      "uncertainty"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "customer",
+                "po_number",
+                "currency",
+                "declared_total",
+                "extraction_issues",
+                "lines"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "maxOutputTokens": 4096,
+        "temperature": 0
+      },
+      "matches_original_phase1_body": false,
+      "harness_sha256": "83c529bc7d9baa2b14eecc3ae607ccf767ef89a692ce5db0d70bcdfc74000426",
+      "state": "COMPLETED",
+      "started_utc": "2026-09-29T23:14:19.568482+00:00",
+      "http_status": 200,
+      "returned_model_id": "gemini-3.5-flash-lite",
+      "json_parsed": true,
+      "schema_valid": true,
+      "token_usage": {
+        "promptTokenCount": 812,
+        "candidatesTokenCount": 442,
+        "totalTokenCount": 1254
+      },
+      "error_class": null,
+      "wall_clock_ms": 2006.6,
+      "finish_reason": "STOP",
+      "raw_provider_output": "{\n  \"customer\": {\n    \"value\": \"Alder Office Supplies\",\n    \"quote\": \"Account billed: Alder Office Supplies\"\n  },\n  \"po_number\": {\n    \"value\": \"HX-201\",\n    \"quote\": \"Requisition identifier HX-201; purchase-order reference HX-201\"\n  },\n  \"currency\": {\n    \"value\": \"EUR\",\n    \"quote\": \"Money unit EUR\"\n  },\n  \"declared_total\": {\n    \"value\": \"35.00\",\n    \"quote\": \"Amount before taxes: 35.00\"\n  },\n  \"extraction_issues\": [],\n  \"lines\": [\n    {\n      \"description\": {\n        \"value\": \"PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream\",\n        \"quote\": \"Requested article: PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream\"\n      },\n      \"quantity\": {\n        \"value\": \"7\",\n        \"quote\": \"Number ordered: 7\"\n      },\n      \"sale_unit\": {\n        \"value\": \"ream\",\n        \"quote\": \"Selling unit: ream\"\n      },\n      \"unit_price\": {\n        \"value\": \"5.00\",\n        \"quote\": \"Rate for one selling unit: 5.00\"\n      },\n      \"candidates\": [\n        {\n          \"sku\": \"PAPER-A4-80\",\n          \"score\": 1.0,\n          \"reason\": \"Matches size, weight (gsm), sheet count, and is associated with customer 'Alder Office Supplies'.\"\n        }\n      ],\n      \"ambiguous\": false,\n      \"uncertainty\": \"\"\n    }\n  ]\n}",
+      "score": {
+        "schema_valid": true,
+        "field_correct": 8,
+        "field_expected": 8,
+        "field_checks": {
+          "customer": true,
+          "po_number": true,
+          "currency": true,
+          "declared_total": true,
+          "line.description": true,
+          "line.quantity": true,
+          "line.sale_unit": true,
+          "line.unit_price": true
+        },
+        "all_fields_correct": true,
+        "provenance_valid": 8,
+        "provenance_expected": 8,
+        "nonnull_evidence_valid": 8,
+        "nonnull_evidence_expected": 8,
+        "all_provenance_valid": true,
+        "proposed_sku": "PAPER-A4-80",
+        "sku_correct": true,
+        "confident_proposal": true,
+        "wrong_confident": false,
+        "review_success": false,
+        "ambiguous_clean": false,
+        "core_status": "CLEAN_DRAFT",
+        "core_error": null,
+        "core_result": {
+          "status": "CLEAN_DRAFT",
+          "customer": "Alder Office Supplies",
+          "po_number": "HX-201",
+          "currency": "EUR",
+          "lines": [
+            {
+              "line": 1,
+              "description": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream",
+              "quantity": 7,
+              "sale_unit": "ream",
+              "unit_price": "5.00",
+              "match": {
+                "status": "PROPOSED",
+                "sku": "PAPER-A4-80",
+                "confidence": 1.0,
+                "margin": 1.0,
+                "confidence_kind": "uncalibrated_model_score",
+                "candidates": [
+                  {
+                    "sku": "PAPER-A4-80",
+                    "score": 1.0,
+                    "reason": "Matches size, weight (gsm), sheet count, and is associated with customer 'Alder Office Supplies'."
+                  }
+                ],
+                "uncertainty": ""
+              },
+              "unit_valid": true,
+              "quoted_line_total": "35.00",
+              "tier_quantity": 7,
+              "tier_min_quantity": 1,
+              "expected_unit_price": "5.00",
+              "expected_line_total": "35.00",
+              "price_delta": "0.00",
+              "price_status": "PASS"
+            }
+          ],
+          "issues": [],
+          "totals": {
+            "declared": "35.00",
+            "quoted_computed": "35.00",
+            "contract_expected": "35.00",
+            "quoted_minus_declared": "0.00"
+          },
+          "extraction": {
+            "customer": {
+              "value": "Alder Office Supplies",
+              "quote": "Account billed: Alder Office Supplies"
+            },
+            "po_number": {
+              "value": "HX-201",
+              "quote": "Requisition identifier HX-201; purchase-order reference HX-201"
+            },
+            "currency": {
+              "value": "EUR",
+              "quote": "Money unit EUR"
+            },
+            "declared_total": {
+              "value": "35.00",
+              "quote": "Amount before taxes: 35.00"
+            },
+            "extraction_issues": [],
+            "lines": [
+              {
+                "description": {
+                  "value": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream",
+                  "quote": "Requested article: PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream"
+                },
+                "quantity": {
+                  "value": "7",
+                  "quote": "Number ordered: 7"
+                },
+                "sale_unit": {
+                  "value": "ream",
+                  "quote": "Selling unit: ream"
+                },
+                "unit_price": {
+                  "value": "5.00",
+                  "quote": "Rate for one selling unit: 5.00"
+                },
+                "candidates": [
+                  {
+                    "sku": "PAPER-A4-80",
+                    "score": 1.0,
+                    "reason": "Matches size, weight (gsm), sheet count, and is associated with customer 'Alder Office Supplies'."
+                  }
+                ],
+                "ambiguous": false,
+                "uncertainty": ""
+              }
+            ]
+          },
+          "human_confirmation_required": true,
+          "action": "RECONCILIATION_DRAFT_ONLY"
+        }
+      },
+      "evidence_grounding": {
+        "fields": [
+          {
+            "field": "customer",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "po_number",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "currency",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "declared_total",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.description",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.quantity",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.sale_unit",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          },
+          {
+            "field": "line1.unit_price",
+            "quote_present_verbatim": true,
+            "has_quote": true,
+            "value_supported": true
+          }
+        ],
+        "returned_snippets": 8,
+        "verbatim_snippets": 8,
+        "all_returned_snippets_verbatim": true,
+        "all_returned_fields_grounded": true
+      },
+      "error_classes": [],
+      "completed_utc": "2026-09-29T23:14:21.599517+00:00"
+    }
+  ],
+  "protected_sha256_before": {
+    "provider_bakeoff\\preflight.json": "16e642dcdef3391a55b6aebeed8231a2f63ef3a15353e31549cc58fea9f23719",
+    "provider_bakeoff\\preflight.md": "f4f19d61e033a8dc5f79718d54579e65704e4296aa8486c4db72baa79870d59b",
+    "provider_bakeoff\\phase1_calls.json": "08d05424858a91f703aea0d8bed11d5115c5a68ffec5cdc54a8adb5acd8fd879",
+    "provider_bakeoff\\phase1_summary.json": "16dceeee6f29220a0082fa6772f60f267bf993da245d5e60aeb5b87f4807ece2",
+    "provider_bakeoff\\phase1_metadata.json": "8f8092a33b55feb739fda73ba151181df106bc6a2f6616641cf7668b6bfba20d",
+    "provider_bakeoff\\phase1.md": "e04f82bfc763124b3b72f2ab2b6f2e5dc1b1f0b5f06cedd8449c81ed769fd90f",
+    "catalog.json": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+    "prompt.txt": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+    "live\\expected.json": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+    "live\\freeze.json": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+    "live\\protocol.md": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+    "live\\fixtures\\h01_paper.txt": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+    "live\\fixtures\\h02_large.txt": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+    "live\\fixtures\\h03_alias.txt": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+    "live\\fixtures\\h04_tape.txt": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+    "live\\fixtures\\h05_no_size.txt": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+    "live\\fixtures\\h06_no_pack.txt": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+    "live\\fixtures\\h07_not_medium.txt": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+    "live\\fixtures\\h08_not_large.txt": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+    "live\\fixtures\\h09_latex.txt": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+    "live\\fixtures\\h10_damaged.txt": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+    "provider_bakeoff\\frozen_reference\\ordershield.py": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+    "provider_bakeoff\\frozen_reference\\live\\score.py": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9"
+  },
+  "phase1_harness_sha256_before": "7765cd0a7e64d47349e0d0394e70c3dc3601ffeb643dafab43cac527e9e4c2e1",
+  "free_only_settings": "Previously explicitly user-confirmed; unchanged account/endpoint",
+  "offline_comparison": [
+    [
+      "Endpoint / version",
+      "generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+      "Identical"
+    ],
+    [
+      "Headers / authentication",
+      "Content-Type application/json; x-goog-api-key from GEMINI_API_KEY",
+      "Identical; header values never persisted"
+    ],
+    [
+      "Model ID",
+      "3.8 Flash passed; 3.5 Flash-Lite passed remediation",
+      "Same exact model IDs; model in URL, no body model field"
+    ],
+    [
+      "Body structure",
+      "contents: one user role, one text part; generationConfig",
+      "Identical envelope; text is frozen prompt + synthetic catalog + one fixture"
+    ],
+    [
+      "thinkingConfig",
+      "thinkingLevel low (3.8), minimal (successful Lite remediation)",
+      "Identical per-model levels; no thinkingBudget or includeThoughts"
+    ],
+    [
+      "Response MIME / format",
+      "responseMimeType: application/json",
+      "responseFormat.text.mimeType: application/json"
+    ],
+    [
+      "JSON schema",
+      "None (two-field synthetic object, locally checked)",
+      "Full unchanged application JSON Schema at responseFormat.text.schema"
+    ],
+    [
+      "Max output",
+      "256",
+      "4096"
+    ],
+    [
+      "Temperature",
+      "Omitted (provider default)",
+      "0"
+    ],
+    [
+      "Deprecated / unsupported parameters",
+      "responseMimeType marked deprecated by current API reference",
+      "responseFormat documented; no definite unsupported schema keyword found offline"
+    ],
+    [
+      "Tools / search / grounding",
+      "None",
+      "None"
+    ],
+    [
+      "Encoding / transport",
+      "json.dumps default ASCII; POST; 30s timeout; no redirects/retries",
+      "UTF-8 ensure_ascii=False; POST; 180s timeout; no redirects/retries"
+    ]
+  ],
+  "schema_audit": {
+    "schema_sha256": "f5bd3918128dce7e8efd1e1c2a566e1cd166d692b534641345b9d5b70057f5c3",
+    "full_schema": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "value",
+            "quote"
+          ],
+          "additionalProperties": false
+        },
+        "po_number": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "value",
+            "quote"
+          ],
+          "additionalProperties": false
+        },
+        "currency": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "value",
+            "quote"
+          ],
+          "additionalProperties": false
+        },
+        "declared_total": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "value",
+            "quote"
+          ],
+          "additionalProperties": false
+        },
+        "extraction_issues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "quote": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              "quantity": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "quote": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              "sale_unit": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "quote": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              "unit_price": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "quote": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              "candidates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "sku": {
+                      "type": "string"
+                    },
+                    "score": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "reason": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "sku",
+                    "score",
+                    "reason"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "ambiguous": {
+                "type": "boolean"
+              },
+              "uncertainty": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "description",
+              "quantity",
+              "sale_unit",
+              "unit_price",
+              "candidates",
+              "ambiguous",
+              "uncertainty"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "customer",
+        "po_number",
+        "currency",
+        "declared_total",
+        "extraction_issues",
+        "lines"
+      ],
+      "additionalProperties": false
+    },
+    "nodes": [
+      {
+        "path": "$",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.customer",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.customer.value",
+        "type": [
+          "string",
+          "null"
+        ],
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.customer.quote",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.po_number",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.po_number.value",
+        "type": [
+          "string",
+          "null"
+        ],
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.po_number.quote",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.currency",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.currency.value",
+        "type": [
+          "string",
+          "null"
+        ],
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.currency.quote",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.declared_total",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.declared_total.value",
+        "type": [
+          "string",
+          "null"
+        ],
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.declared_total.quote",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.extraction_issues",
+        "type": "array",
+        "keywords": [
+          "items",
+          "type"
+        ]
+      },
+      {
+        "path": "$.extraction_issues[]",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines",
+        "type": "array",
+        "keywords": [
+          "items",
+          "minItems",
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[]",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].description",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].description.value",
+        "type": [
+          "string",
+          "null"
+        ],
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].description.quote",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].quantity",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].quantity.value",
+        "type": [
+          "string",
+          "null"
+        ],
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].quantity.quote",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].sale_unit",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].sale_unit.value",
+        "type": [
+          "string",
+          "null"
+        ],
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].sale_unit.quote",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].unit_price",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].unit_price.value",
+        "type": [
+          "string",
+          "null"
+        ],
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].unit_price.quote",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].candidates",
+        "type": "array",
+        "keywords": [
+          "items",
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].candidates[]",
+        "type": "object",
+        "keywords": [
+          "additionalProperties",
+          "properties",
+          "required",
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].candidates[].sku",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].candidates[].score",
+        "type": "number",
+        "keywords": [
+          "maximum",
+          "minimum",
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].candidates[].reason",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].ambiguous",
+        "type": "boolean",
+        "keywords": [
+          "type"
+        ]
+      },
+      {
+        "path": "$.lines[].uncertainty",
+        "type": "string",
+        "keywords": [
+          "type"
+        ]
+      }
+    ],
+    "keywords": [
+      "additionalProperties",
+      "items",
+      "maximum",
+      "minItems",
+      "minimum",
+      "properties",
+      "required",
+      "type"
+    ],
+    "unsupported_keywords_found": [],
+    "nullable_union_nodes": 8,
+    "all_objects_closed_and_fully_required": true,
+    "documentation": "https://ai.google.dev/gemini-api/docs/generate-content/structured-output",
+    "conclusion": "All used keywords and nullable type arrays are documented as supported; actual endpoint acceptance remains to be diagnosed."
+  },
+  "suspected_incompatibility": "responseFormat.text/schema wire configuration; not yet confirmed",
+  "original_generation_config": {
+    "thinkingConfig": {
+      "thinkingLevel": "minimal"
+    },
+    "responseFormat": {
+      "text": {
+        "mimeType": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "customer": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "quote": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            "po_number": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "quote": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            "currency": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "quote": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            "declared_total": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "quote": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            "extraction_issues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "lines": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "quote": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "quantity": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "quote": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "sale_unit": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "quote": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "unit_price": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "quote": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "quote"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "candidates": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "sku": {
+                          "type": "string"
+                        },
+                        "score": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "reason": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "sku",
+                        "score",
+                        "reason"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "ambiguous": {
+                    "type": "boolean"
+                  },
+                  "uncertainty": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "description",
+                  "quantity",
+                  "sale_unit",
+                  "unit_price",
+                  "candidates",
+                  "ambiguous",
+                  "uncertainty"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "customer",
+            "po_number",
+            "currency",
+            "declared_total",
+            "extraction_issues",
+            "lines"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "maxOutputTokens": 4096,
+    "temperature": 0
+  },
+  "protected_evidence_preserved": true,
+  "conclusion": "Confirmed request-construction defect: responseFormat.text.mimeType requires APPLICATION_JSON, not application/json. The original h01 body was reproduced exactly and returned INVALID_ARGUMENT. Changing only this enum value returned HTTP 200 and passed the unchanged schema, all eight mandatory fields, determinate SKU and grounding checks.",
+  "bounded_fix_authorized_by_evidence": true,
+  "correction": "Shared Gemini build_request: responseFormat.text.mimeType changes only from application/json to APPLICATION_JSON. Full wire schema, local schema, input, thinking, limits and scorer are unchanged.",
+  "root_cause": "The new responseFormat.text.mimeType is a protobuf enum, not the legacy responseMimeType MIME string; application/json is invalid.",
+  "api_reference": "https://ai.google.dev/api/generate-content#TextResponseFormat",
+  "documentation_discrepancy": "Structured-output REST guide uses application/json; API reference and live error identify an enum requiring APPLICATION_JSON.",
+  "fix_recorded_utc": "2026-09-29T23:13:58.322404+00:00",
+  "completed_utc": "2026-09-29T23:16:11.862990+00:00",
+  "new_live_calls": 2,
+  "stop_reason": "Diagnostic budget exhausted; no further model calls",
+  "confirmed_root_cause": "The new responseFormat.text.mimeType is a protobuf enum, not the legacy responseMimeType MIME string; application/json is invalid.",
+  "remediation_readiness": "Safe to prepare a separately authorized clean Gemini remediation run using the corrected shared request path and unchanged schema/scorer. Flash-Lite/h01 is live-verified. The same defective field is present in the 3.8/low path and is corrected offline; 3.8 and the other nine fixtures were not rerun. Historical errors cannot be recovered retrospectively because their bodies were discarded. No benchmark or Phase 2 was started.",
+  "integrity_after": {
+    "freeze_sha256": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+    "schema_sha256": "f5bd3918128dce7e8efd1e1c2a566e1cd166d692b534641345b9d5b70057f5c3",
+    "frozen_files": {
+      "live/expected.json": {
+        "sha256": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+        "verified_from": "working_tree"
+      },
+      "live/protocol.md": {
+        "sha256": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+        "verified_from": "working_tree"
+      },
+      "live/adapter.py": {
+        "sha256": "0a16b12de4eef3eaf5612fafc3ec379cfe2152cec9a60ded9f1456f5992f56e6",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/score.py": {
+        "sha256": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "live/run.py": {
+        "sha256": "2d46e5be5550ba4f17d48da3b74e21bacb9737bb10a755b4a5da70beb9e61c19",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/test_live.py": {
+        "sha256": "04aef30766727a6f2ce027143530896b3bd571150270c37828a41c5f1c7fc282",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/fixtures/h01_paper.txt": {
+        "sha256": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h02_large.txt": {
+        "sha256": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h03_alias.txt": {
+        "sha256": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h04_tape.txt": {
+        "sha256": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h05_no_size.txt": {
+        "sha256": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h06_no_pack.txt": {
+        "sha256": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h07_not_medium.txt": {
+        "sha256": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h08_not_large.txt": {
+        "sha256": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h09_latex.txt": {
+        "sha256": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h10_damaged.txt": {
+        "sha256": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+        "verified_from": "working_tree"
+      },
+      "ordershield.py": {
+        "sha256": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "catalog.json": {
+        "sha256": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+        "verified_from": "working_tree"
+      },
+      "prompt.txt": {
+        "sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "verified_from": "working_tree"
+      }
+    },
+    "reference_commit": "12a7e50"
+  },
+  "phase1_harness_sha256_after": "83c529bc7d9baa2b14eecc3ae607ccf767ef89a692ce5db0d70bcdfc74000426",
+  "checks": [
+    "python -B -m unittest discover -s spikes/ordershield/provider_bakeoff -p \"test_*.py\" -q: 35 tests PASS",
+    "python -B spikes/ordershield/provider_bakeoff/phase1.py validate: PASS",
+    "git diff --check: PASS",
+    "Protected preflight, original Phase-1 evidence, corpus and frozen reference SHA-256 comparison: PASS",
+    "Diagnostic artifact secret scan (values inspected only in memory): PASS"
+  ]
+}
