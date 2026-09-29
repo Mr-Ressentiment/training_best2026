@@ -1,0 +1,8 @@
+SYNTHETIC EMAIL - no real customer information
+From: purchasing at Cedar Care
+Subject: Purchase order PO-1002
+Please supply the following to Cedar Care:
+4 boxes of Powder-free blue examination gloves, nitrile, size M, 100 per box
+at EUR 8.00 per box.
+Our net total is EUR 32.00. Currency: EUR.
+Thank you, the fictional purchasing team

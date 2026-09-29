@@ -1,0 +1,7 @@
+SYNTHETIC CUSTOMER EXPORT
+buyer;Alder Office Supplies
+po;PO-1004
+currency;EUR
+description;quantity;unit;price
+A4 copier paper 80 gsm, 500 sheets;10;ream;5.00
+net_total;50.00

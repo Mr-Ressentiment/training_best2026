@@ -1,0 +1,8 @@
+SYNTHETIC PURCHASE ORDER - not a real customer
+Customer: Alder Office Supplies
+PO number: PO-1001
+Currency: EUR
+Description | Quantity | Sale unit | Unit price
+A4 copier paper 80 gsm, 500 sheets | 2 | ream | 5.00
+Transparent polypropylene packing tape 48 mm x 66 m | 3 | roll | 2.00
+Net total: 16.00 EUR

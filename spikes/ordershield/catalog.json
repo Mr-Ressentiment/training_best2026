@@ -1,0 +1,15 @@
+{
+  "synthetic": true,
+  "currency": "EUR",
+  "products": [
+    {"sku": "PAPER-A4-80", "description": "A4 copier paper 80 gsm, 500 sheets", "sale_unit": "ream", "tiers": [{"min_quantity": 1, "unit_price": "5.00"}, {"min_quantity": 10, "unit_price": "4.50"}]},
+    {"sku": "GLOVE-N-M", "description": "Blue powder-free nitrile exam gloves, medium, box of 100", "sale_unit": "box", "tiers": [{"min_quantity": 1, "unit_price": "8.00"}, {"min_quantity": 20, "unit_price": "7.20"}]},
+    {"sku": "GLOVE-N-L", "description": "Blue powder-free nitrile exam gloves, large, box of 100", "sale_unit": "box", "tiers": [{"min_quantity": 1, "unit_price": "8.00"}, {"min_quantity": 20, "unit_price": "7.20"}]},
+    {"sku": "TAPE-48", "description": "Transparent polypropylene packing tape 48 mm x 66 m", "sale_unit": "roll", "tiers": [{"min_quantity": 1, "unit_price": "2.00"}, {"min_quantity": 10, "unit_price": "1.80"}]}
+  ],
+  "contracts": {
+    "Alder Office Supplies": ["PAPER-A4-80", "TAPE-48"],
+    "Cedar Care": ["GLOVE-N-M", "GLOVE-N-L"],
+    "Harbor Logistics": ["TAPE-48"]
+  }
+}

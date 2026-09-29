@@ -1,0 +1,85 @@
+{
+  "origin": "curated_in_session_ai_output_not_independent_api_capture",
+  "note": "Curated by the coding assistant in this session. Not an independent API capture or accuracy measurement.",
+  "bindings": {
+    "source_sha256": "d2d097dd160a892c54c1c7309030461227f7a9fa351726d1c2ab86400d07888d",
+    "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+    "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+    "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+  },
+  "response": {
+    "customer": {
+      "value": "Alder Office Supplies",
+      "quote": "Alder Office Supplies"
+    },
+    "po_number": {
+      "value": "PO-1001",
+      "quote": "PO-1001"
+    },
+    "currency": {
+      "value": "EUR",
+      "quote": "EUR"
+    },
+    "declared_total": {
+      "value": "16.00",
+      "quote": "16.00"
+    },
+    "extraction_issues": [],
+    "lines": [
+      {
+        "description": {
+          "value": "A4 copier paper 80 gsm, 500 sheets",
+          "quote": "A4 copier paper 80 gsm, 500 sheets"
+        },
+        "quantity": {
+          "value": "2",
+          "quote": "2"
+        },
+        "sale_unit": {
+          "value": "ream",
+          "quote": "ream"
+        },
+        "unit_price": {
+          "value": "5.00",
+          "quote": "5.00"
+        },
+        "candidates": [
+          {
+            "sku": "PAPER-A4-80",
+            "score": 0.99,
+            "reason": "Exact catalog description and ream unit."
+          }
+        ],
+        "ambiguous": false,
+        "uncertainty": ""
+      },
+      {
+        "description": {
+          "value": "Transparent polypropylene packing tape 48 mm x 66 m",
+          "quote": "Transparent polypropylene packing tape 48 mm x 66 m"
+        },
+        "quantity": {
+          "value": "3",
+          "quote": "3"
+        },
+        "sale_unit": {
+          "value": "roll",
+          "quote": "roll"
+        },
+        "unit_price": {
+          "value": "2.00",
+          "quote": "2.00"
+        },
+        "candidates": [
+          {
+            "sku": "TAPE-48",
+            "score": 0.99,
+            "reason": "Exact tape material, dimensions and sale unit."
+          }
+        ],
+        "ambiguous": false,
+        "uncertainty": ""
+      }
+    ]
+  }
+}

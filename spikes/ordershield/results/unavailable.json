@@ -1,0 +1,133 @@
+{
+  "spike": "ordershield",
+  "synthetic": true,
+  "mode": "REPLAY",
+  "live_ai_reliability": "UNVERIFIED",
+  "results": [
+    {
+      "status": "AI_UNAVAILABLE",
+      "issues": [
+        {
+          "code": "AI_UNAVAILABLE",
+          "line": null,
+          "detail": "No AI output available; no automatic fallback"
+        }
+      ],
+      "lines": [],
+      "totals": null,
+      "human_confirmation_required": true,
+      "action": "RECONCILIATION_DRAFT_ONLY",
+      "provenance": {
+        "mode": "REPLAY",
+        "origin": "curated_in_session_ai_output_not_independent_api_capture",
+        "live_inference": false,
+        "fixture": "01_clean.txt",
+        "source_sha256": "d2d097dd160a892c54c1c7309030461227f7a9fa351726d1c2ab86400d07888d",
+        "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+        "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+      },
+      "elapsed_ms": 0.559
+    },
+    {
+      "status": "AI_UNAVAILABLE",
+      "issues": [
+        {
+          "code": "AI_UNAVAILABLE",
+          "line": null,
+          "detail": "No AI output available; no automatic fallback"
+        }
+      ],
+      "lines": [],
+      "totals": null,
+      "human_confirmation_required": true,
+      "action": "RECONCILIATION_DRAFT_ONLY",
+      "provenance": {
+        "mode": "REPLAY",
+        "origin": "curated_in_session_ai_output_not_independent_api_capture",
+        "live_inference": false,
+        "fixture": "02_semantic.txt",
+        "source_sha256": "e490a1ea4b3c06b696feb9c2c0524d4dfddb6b580e4d022b22178831eb3dcf03",
+        "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+        "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+      },
+      "elapsed_ms": 0.449
+    },
+    {
+      "status": "AI_UNAVAILABLE",
+      "issues": [
+        {
+          "code": "AI_UNAVAILABLE",
+          "line": null,
+          "detail": "No AI output available; no automatic fallback"
+        }
+      ],
+      "lines": [],
+      "totals": null,
+      "human_confirmation_required": true,
+      "action": "RECONCILIATION_DRAFT_ONLY",
+      "provenance": {
+        "mode": "REPLAY",
+        "origin": "curated_in_session_ai_output_not_independent_api_capture",
+        "live_inference": false,
+        "fixture": "03_ambiguous.txt",
+        "source_sha256": "d74790b4d94e7bea46d3625ddd2500f275aeeecb32061dddf5726ee44596f7da",
+        "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+        "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+      },
+      "elapsed_ms": 0.472
+    },
+    {
+      "status": "AI_UNAVAILABLE",
+      "issues": [
+        {
+          "code": "AI_UNAVAILABLE",
+          "line": null,
+          "detail": "No AI output available; no automatic fallback"
+        }
+      ],
+      "lines": [],
+      "totals": null,
+      "human_confirmation_required": true,
+      "action": "RECONCILIATION_DRAFT_ONLY",
+      "provenance": {
+        "mode": "REPLAY",
+        "origin": "curated_in_session_ai_output_not_independent_api_capture",
+        "live_inference": false,
+        "fixture": "04_price_violation.txt",
+        "source_sha256": "0b0d89ea3659b9d8384c390c2156a6bb5f677ad6716105c3b42120c4c64ab2e7",
+        "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+        "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+      },
+      "elapsed_ms": 0.475
+    },
+    {
+      "status": "AI_UNAVAILABLE",
+      "issues": [
+        {
+          "code": "AI_UNAVAILABLE",
+          "line": null,
+          "detail": "No AI output available; no automatic fallback"
+        }
+      ],
+      "lines": [],
+      "totals": null,
+      "human_confirmation_required": true,
+      "action": "RECONCILIATION_DRAFT_ONLY",
+      "provenance": {
+        "mode": "REPLAY",
+        "origin": "curated_in_session_ai_output_not_independent_api_capture",
+        "live_inference": false,
+        "fixture": "05_split_tier.txt",
+        "source_sha256": "1927b09ab8979ae3f42f1fdad484f05164ec55e6a60c023ee364487947f59dac",
+        "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+        "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+      },
+      "elapsed_ms": 0.58
+    }
+  ]
+}

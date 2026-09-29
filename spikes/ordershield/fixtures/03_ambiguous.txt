@@ -1,0 +1,10 @@
+SYNTHETIC PDF-TEXT EXPORT                 Page 1 of 1
+BUYER     Cedar Care
+PURCHASE ORDER     PO-1003
+CCY: EUR
+ITEM DESCRIPTION
+Blue nitrile examination gloves, 100 per box
+(size not specified)
+QTY       UNIT       PRICE / UNIT
+3         box        8.00
+NET AMOUNT EUR 24.00

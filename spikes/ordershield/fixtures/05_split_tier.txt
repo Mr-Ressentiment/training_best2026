@@ -1,0 +1,9 @@
+SYNTHETIC DELIVERY SCHEDULE / PDF-LIKE TEXT
+Customer: Harbor Logistics
+Order reference: PO-1005
+All amounts EUR; prices per roll. No tax or freight.
+Delivery A: Clear packing tape, 48 mm x 66 m
+Quantity 6 roll @ 1.80
+Delivery B: Transparent polypropylene packing tape 48 mm x 66 m
+Quantity 4 roll @ 1.80
+Declared net total: 19.00 EUR

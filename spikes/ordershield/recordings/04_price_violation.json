@@ -1,0 +1,58 @@
+{
+  "origin": "curated_in_session_ai_output_not_independent_api_capture",
+  "note": "Curated by the coding assistant in this session. Not an independent API capture or accuracy measurement.",
+  "bindings": {
+    "source_sha256": "0b0d89ea3659b9d8384c390c2156a6bb5f677ad6716105c3b42120c4c64ab2e7",
+    "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+    "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+    "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+  },
+  "response": {
+    "customer": {
+      "value": "Alder Office Supplies",
+      "quote": "Alder Office Supplies"
+    },
+    "po_number": {
+      "value": "PO-1004",
+      "quote": "PO-1004"
+    },
+    "currency": {
+      "value": "EUR",
+      "quote": "EUR"
+    },
+    "declared_total": {
+      "value": "50.00",
+      "quote": "50.00"
+    },
+    "extraction_issues": [],
+    "lines": [
+      {
+        "description": {
+          "value": "A4 copier paper 80 gsm, 500 sheets",
+          "quote": "A4 copier paper 80 gsm, 500 sheets"
+        },
+        "quantity": {
+          "value": "10",
+          "quote": "10"
+        },
+        "sale_unit": {
+          "value": "ream",
+          "quote": "ream"
+        },
+        "unit_price": {
+          "value": "5.00",
+          "quote": "5.00"
+        },
+        "candidates": [
+          {
+            "sku": "PAPER-A4-80",
+            "score": 0.99,
+            "reason": "Exact description; preserve quoted price without applying tiers."
+          }
+        ],
+        "ambiguous": false,
+        "uncertainty": ""
+      }
+    ]
+  }
+}

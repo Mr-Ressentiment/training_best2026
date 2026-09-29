@@ -1,0 +1,32 @@
+{
+  "01_clean": {
+    "header": ["Alder Office Supplies", "PO-1001", "EUR", "16.00"],
+    "fields": [["A4 copier paper 80 gsm, 500 sheets", "2", "ream", "5.00"], ["Transparent polypropylene packing tape 48 mm x 66 m", "3", "roll", "2.00"]],
+    "skus": ["PAPER-A4-80", "TAPE-48"], "status": "CLEAN_DRAFT", "issues": [],
+    "quoted_total": "16.00", "expected_total": "16.00", "tier_quantities": [2, 3]
+  },
+  "02_semantic": {
+    "header": ["Cedar Care", "PO-1002", "EUR", "32.00"],
+    "fields": [["Powder-free blue examination gloves, nitrile, size M, 100 per box", "4", "box", "8.00"]],
+    "skus": ["GLOVE-N-M"], "status": "CLEAN_DRAFT", "issues": [],
+    "quoted_total": "32.00", "expected_total": "32.00", "tier_quantities": [4]
+  },
+  "03_ambiguous": {
+    "header": ["Cedar Care", "PO-1003", "EUR", "24.00"],
+    "fields": [["Blue nitrile examination gloves, 100 per box\n(size not specified)", "3", "box", "8.00"]],
+    "skus": [null], "status": "HUMAN_REVIEW", "issues": ["SKU_REVIEW"],
+    "quoted_total": "24.00", "expected_total": null, "tier_quantities": [null]
+  },
+  "04_price_violation": {
+    "header": ["Alder Office Supplies", "PO-1004", "EUR", "50.00"],
+    "fields": [["A4 copier paper 80 gsm, 500 sheets", "10", "ream", "5.00"]],
+    "skus": ["PAPER-A4-80"], "status": "RULE_VIOLATION", "issues": ["PRICE_RULE_VIOLATION"],
+    "quoted_total": "50.00", "expected_total": "45.00", "tier_quantities": [10]
+  },
+  "05_split_tier": {
+    "header": ["Harbor Logistics", "PO-1005", "EUR", "19.00"],
+    "fields": [["Clear packing tape, 48 mm x 66 m", "6", "roll", "1.80"], ["Transparent polypropylene packing tape 48 mm x 66 m", "4", "roll", "1.80"]],
+    "skus": ["TAPE-48", "TAPE-48"], "status": "RULE_VIOLATION", "issues": ["TOTAL_MISMATCH"],
+    "quoted_total": "18.00", "expected_total": "18.00", "tier_quantities": [10, 10]
+  }
+}

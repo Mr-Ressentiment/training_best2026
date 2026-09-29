@@ -1,0 +1,690 @@
+{
+  "spike": "ordershield",
+  "synthetic": true,
+  "mode": "REPLAY",
+  "live_ai_reliability": "UNVERIFIED",
+  "results": [
+    {
+      "status": "CLEAN_DRAFT",
+      "customer": "Alder Office Supplies",
+      "po_number": "PO-1001",
+      "currency": "EUR",
+      "lines": [
+        {
+          "line": 1,
+          "description": "A4 copier paper 80 gsm, 500 sheets",
+          "quantity": 2,
+          "sale_unit": "ream",
+          "unit_price": "5.00",
+          "match": {
+            "status": "PROPOSED",
+            "sku": "PAPER-A4-80",
+            "confidence": 0.99,
+            "margin": 0.99,
+            "confidence_kind": "uncalibrated_model_score",
+            "candidates": [
+              {
+                "sku": "PAPER-A4-80",
+                "score": 0.99,
+                "reason": "Exact catalog description and ream unit."
+              }
+            ],
+            "uncertainty": ""
+          },
+          "unit_valid": true,
+          "quoted_line_total": "10.00",
+          "tier_quantity": 2,
+          "tier_min_quantity": 1,
+          "expected_unit_price": "5.00",
+          "expected_line_total": "10.00",
+          "price_delta": "0.00",
+          "price_status": "PASS"
+        },
+        {
+          "line": 2,
+          "description": "Transparent polypropylene packing tape 48 mm x 66 m",
+          "quantity": 3,
+          "sale_unit": "roll",
+          "unit_price": "2.00",
+          "match": {
+            "status": "PROPOSED",
+            "sku": "TAPE-48",
+            "confidence": 0.99,
+            "margin": 0.99,
+            "confidence_kind": "uncalibrated_model_score",
+            "candidates": [
+              {
+                "sku": "TAPE-48",
+                "score": 0.99,
+                "reason": "Exact tape material, dimensions and sale unit."
+              }
+            ],
+            "uncertainty": ""
+          },
+          "unit_valid": true,
+          "quoted_line_total": "6.00",
+          "tier_quantity": 3,
+          "tier_min_quantity": 1,
+          "expected_unit_price": "2.00",
+          "expected_line_total": "6.00",
+          "price_delta": "0.00",
+          "price_status": "PASS"
+        }
+      ],
+      "issues": [],
+      "totals": {
+        "declared": "16.00",
+        "quoted_computed": "16.00",
+        "contract_expected": "16.00",
+        "quoted_minus_declared": "0.00"
+      },
+      "extraction": {
+        "customer": {
+          "value": "Alder Office Supplies",
+          "quote": "Alder Office Supplies"
+        },
+        "po_number": {
+          "value": "PO-1001",
+          "quote": "PO-1001"
+        },
+        "currency": {
+          "value": "EUR",
+          "quote": "EUR"
+        },
+        "declared_total": {
+          "value": "16.00",
+          "quote": "16.00"
+        },
+        "extraction_issues": [],
+        "lines": [
+          {
+            "description": {
+              "value": "A4 copier paper 80 gsm, 500 sheets",
+              "quote": "A4 copier paper 80 gsm, 500 sheets"
+            },
+            "quantity": {
+              "value": "2",
+              "quote": "2"
+            },
+            "sale_unit": {
+              "value": "ream",
+              "quote": "ream"
+            },
+            "unit_price": {
+              "value": "5.00",
+              "quote": "5.00"
+            },
+            "candidates": [
+              {
+                "sku": "PAPER-A4-80",
+                "score": 0.99,
+                "reason": "Exact catalog description and ream unit."
+              }
+            ],
+            "ambiguous": false,
+            "uncertainty": ""
+          },
+          {
+            "description": {
+              "value": "Transparent polypropylene packing tape 48 mm x 66 m",
+              "quote": "Transparent polypropylene packing tape 48 mm x 66 m"
+            },
+            "quantity": {
+              "value": "3",
+              "quote": "3"
+            },
+            "sale_unit": {
+              "value": "roll",
+              "quote": "roll"
+            },
+            "unit_price": {
+              "value": "2.00",
+              "quote": "2.00"
+            },
+            "candidates": [
+              {
+                "sku": "TAPE-48",
+                "score": 0.99,
+                "reason": "Exact tape material, dimensions and sale unit."
+              }
+            ],
+            "ambiguous": false,
+            "uncertainty": ""
+          }
+        ]
+      },
+      "human_confirmation_required": true,
+      "action": "RECONCILIATION_DRAFT_ONLY",
+      "provenance": {
+        "mode": "REPLAY",
+        "origin": "curated_in_session_ai_output_not_independent_api_capture",
+        "live_inference": false,
+        "fixture": "01_clean.txt",
+        "source_sha256": "d2d097dd160a892c54c1c7309030461227f7a9fa351726d1c2ab86400d07888d",
+        "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+        "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+      },
+      "elapsed_ms": 3.419
+    },
+    {
+      "status": "CLEAN_DRAFT",
+      "customer": "Cedar Care",
+      "po_number": "PO-1002",
+      "currency": "EUR",
+      "lines": [
+        {
+          "line": 1,
+          "description": "Powder-free blue examination gloves, nitrile, size M, 100 per box",
+          "quantity": 4,
+          "sale_unit": "box",
+          "unit_price": "8.00",
+          "match": {
+            "status": "PROPOSED",
+            "sku": "GLOVE-N-M",
+            "confidence": 0.96,
+            "margin": 0.92,
+            "confidence_kind": "uncalibrated_model_score",
+            "candidates": [
+              {
+                "sku": "GLOVE-N-M",
+                "score": 0.96,
+                "reason": "Examination means exam; size M means medium; material and box count agree."
+              },
+              {
+                "sku": "GLOVE-N-L",
+                "score": 0.04,
+                "reason": "Large conflicts with explicit size M."
+              }
+            ],
+            "uncertainty": ""
+          },
+          "unit_valid": true,
+          "quoted_line_total": "32.00",
+          "tier_quantity": 4,
+          "tier_min_quantity": 1,
+          "expected_unit_price": "8.00",
+          "expected_line_total": "32.00",
+          "price_delta": "0.00",
+          "price_status": "PASS"
+        }
+      ],
+      "issues": [],
+      "totals": {
+        "declared": "32.00",
+        "quoted_computed": "32.00",
+        "contract_expected": "32.00",
+        "quoted_minus_declared": "0.00"
+      },
+      "extraction": {
+        "customer": {
+          "value": "Cedar Care",
+          "quote": "Cedar Care"
+        },
+        "po_number": {
+          "value": "PO-1002",
+          "quote": "PO-1002"
+        },
+        "currency": {
+          "value": "EUR",
+          "quote": "EUR"
+        },
+        "declared_total": {
+          "value": "32.00",
+          "quote": "32.00"
+        },
+        "extraction_issues": [],
+        "lines": [
+          {
+            "description": {
+              "value": "Powder-free blue examination gloves, nitrile, size M, 100 per box",
+              "quote": "Powder-free blue examination gloves, nitrile, size M, 100 per box"
+            },
+            "quantity": {
+              "value": "4",
+              "quote": "4"
+            },
+            "sale_unit": {
+              "value": "box",
+              "quote": "box"
+            },
+            "unit_price": {
+              "value": "8.00",
+              "quote": "8.00"
+            },
+            "candidates": [
+              {
+                "sku": "GLOVE-N-M",
+                "score": 0.96,
+                "reason": "Examination means exam; size M means medium; material and box count agree."
+              },
+              {
+                "sku": "GLOVE-N-L",
+                "score": 0.04,
+                "reason": "Large conflicts with explicit size M."
+              }
+            ],
+            "ambiguous": false,
+            "uncertainty": ""
+          }
+        ]
+      },
+      "human_confirmation_required": true,
+      "action": "RECONCILIATION_DRAFT_ONLY",
+      "provenance": {
+        "mode": "REPLAY",
+        "origin": "curated_in_session_ai_output_not_independent_api_capture",
+        "live_inference": false,
+        "fixture": "02_semantic.txt",
+        "source_sha256": "e490a1ea4b3c06b696feb9c2c0524d4dfddb6b580e4d022b22178831eb3dcf03",
+        "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+        "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+      },
+      "elapsed_ms": 2.657
+    },
+    {
+      "status": "HUMAN_REVIEW",
+      "customer": "Cedar Care",
+      "po_number": "PO-1003",
+      "currency": "EUR",
+      "lines": [
+        {
+          "line": 1,
+          "description": "Blue nitrile examination gloves, 100 per box\n(size not specified)",
+          "quantity": 3,
+          "sale_unit": "box",
+          "unit_price": "8.00",
+          "match": {
+            "status": "HUMAN_REVIEW",
+            "sku": null,
+            "confidence": 0.52,
+            "margin": 0.04,
+            "confidence_kind": "uncalibrated_model_score",
+            "candidates": [
+              {
+                "sku": "GLOVE-N-M",
+                "score": 0.52,
+                "reason": "Medium is possible; size absent."
+              },
+              {
+                "sku": "GLOVE-N-L",
+                "score": 0.48,
+                "reason": "Large is equally plausible; size absent."
+              }
+            ],
+            "uncertainty": "Customer must specify medium or large; price cannot resolve the size."
+          },
+          "unit_valid": false,
+          "quoted_line_total": "24.00",
+          "tier_quantity": null,
+          "tier_min_quantity": null,
+          "expected_unit_price": null,
+          "expected_line_total": null,
+          "price_delta": null,
+          "price_status": "NOT_CHECKED"
+        }
+      ],
+      "issues": [
+        {
+          "code": "SKU_REVIEW",
+          "line": 1,
+          "detail": "Customer must specify medium or large; price cannot resolve the size."
+        }
+      ],
+      "totals": {
+        "declared": "24.00",
+        "quoted_computed": "24.00",
+        "contract_expected": null,
+        "quoted_minus_declared": "0.00"
+      },
+      "extraction": {
+        "customer": {
+          "value": "Cedar Care",
+          "quote": "Cedar Care"
+        },
+        "po_number": {
+          "value": "PO-1003",
+          "quote": "PO-1003"
+        },
+        "currency": {
+          "value": "EUR",
+          "quote": "EUR"
+        },
+        "declared_total": {
+          "value": "24.00",
+          "quote": "24.00"
+        },
+        "extraction_issues": [],
+        "lines": [
+          {
+            "description": {
+              "value": "Blue nitrile examination gloves, 100 per box\n(size not specified)",
+              "quote": "Blue nitrile examination gloves, 100 per box\n(size not specified)"
+            },
+            "quantity": {
+              "value": "3",
+              "quote": "3"
+            },
+            "sale_unit": {
+              "value": "box",
+              "quote": "box"
+            },
+            "unit_price": {
+              "value": "8.00",
+              "quote": "8.00"
+            },
+            "candidates": [
+              {
+                "sku": "GLOVE-N-M",
+                "score": 0.52,
+                "reason": "Medium is possible; size absent."
+              },
+              {
+                "sku": "GLOVE-N-L",
+                "score": 0.48,
+                "reason": "Large is equally plausible; size absent."
+              }
+            ],
+            "ambiguous": true,
+            "uncertainty": "Customer must specify medium or large; price cannot resolve the size."
+          }
+        ]
+      },
+      "human_confirmation_required": true,
+      "action": "RECONCILIATION_DRAFT_ONLY",
+      "provenance": {
+        "mode": "REPLAY",
+        "origin": "curated_in_session_ai_output_not_independent_api_capture",
+        "live_inference": false,
+        "fixture": "03_ambiguous.txt",
+        "source_sha256": "d74790b4d94e7bea46d3625ddd2500f275aeeecb32061dddf5726ee44596f7da",
+        "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+        "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+      },
+      "elapsed_ms": 1.777
+    },
+    {
+      "status": "RULE_VIOLATION",
+      "customer": "Alder Office Supplies",
+      "po_number": "PO-1004",
+      "currency": "EUR",
+      "lines": [
+        {
+          "line": 1,
+          "description": "A4 copier paper 80 gsm, 500 sheets",
+          "quantity": 10,
+          "sale_unit": "ream",
+          "unit_price": "5.00",
+          "match": {
+            "status": "PROPOSED",
+            "sku": "PAPER-A4-80",
+            "confidence": 0.99,
+            "margin": 0.99,
+            "confidence_kind": "uncalibrated_model_score",
+            "candidates": [
+              {
+                "sku": "PAPER-A4-80",
+                "score": 0.99,
+                "reason": "Exact description; preserve quoted price without applying tiers."
+              }
+            ],
+            "uncertainty": ""
+          },
+          "unit_valid": true,
+          "quoted_line_total": "50.00",
+          "tier_quantity": 10,
+          "tier_min_quantity": 10,
+          "expected_unit_price": "4.50",
+          "expected_line_total": "45.00",
+          "price_delta": "5.00",
+          "price_status": "VIOLATION"
+        }
+      ],
+      "issues": [
+        {
+          "code": "PRICE_RULE_VIOLATION",
+          "line": 1,
+          "detail": "Expected 4.50 EUR per sale unit"
+        }
+      ],
+      "totals": {
+        "declared": "50.00",
+        "quoted_computed": "50.00",
+        "contract_expected": "45.00",
+        "quoted_minus_declared": "0.00"
+      },
+      "extraction": {
+        "customer": {
+          "value": "Alder Office Supplies",
+          "quote": "Alder Office Supplies"
+        },
+        "po_number": {
+          "value": "PO-1004",
+          "quote": "PO-1004"
+        },
+        "currency": {
+          "value": "EUR",
+          "quote": "EUR"
+        },
+        "declared_total": {
+          "value": "50.00",
+          "quote": "50.00"
+        },
+        "extraction_issues": [],
+        "lines": [
+          {
+            "description": {
+              "value": "A4 copier paper 80 gsm, 500 sheets",
+              "quote": "A4 copier paper 80 gsm, 500 sheets"
+            },
+            "quantity": {
+              "value": "10",
+              "quote": "10"
+            },
+            "sale_unit": {
+              "value": "ream",
+              "quote": "ream"
+            },
+            "unit_price": {
+              "value": "5.00",
+              "quote": "5.00"
+            },
+            "candidates": [
+              {
+                "sku": "PAPER-A4-80",
+                "score": 0.99,
+                "reason": "Exact description; preserve quoted price without applying tiers."
+              }
+            ],
+            "ambiguous": false,
+            "uncertainty": ""
+          }
+        ]
+      },
+      "human_confirmation_required": true,
+      "action": "RECONCILIATION_DRAFT_ONLY",
+      "provenance": {
+        "mode": "REPLAY",
+        "origin": "curated_in_session_ai_output_not_independent_api_capture",
+        "live_inference": false,
+        "fixture": "04_price_violation.txt",
+        "source_sha256": "0b0d89ea3659b9d8384c390c2156a6bb5f677ad6716105c3b42120c4c64ab2e7",
+        "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+        "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+      },
+      "elapsed_ms": 1.786
+    },
+    {
+      "status": "RULE_VIOLATION",
+      "customer": "Harbor Logistics",
+      "po_number": "PO-1005",
+      "currency": "EUR",
+      "lines": [
+        {
+          "line": 1,
+          "description": "Clear packing tape, 48 mm x 66 m",
+          "quantity": 6,
+          "sale_unit": "roll",
+          "unit_price": "1.80",
+          "match": {
+            "status": "PROPOSED",
+            "sku": "TAPE-48",
+            "confidence": 0.93,
+            "margin": 0.93,
+            "confidence_kind": "uncalibrated_model_score",
+            "candidates": [
+              {
+                "sku": "TAPE-48",
+                "score": 0.93,
+                "reason": "Clear means transparent; packing use and both dimensions match the single catalog tape."
+              }
+            ],
+            "uncertainty": ""
+          },
+          "unit_valid": true,
+          "quoted_line_total": "10.80",
+          "tier_quantity": 10,
+          "tier_min_quantity": 10,
+          "expected_unit_price": "1.80",
+          "expected_line_total": "10.80",
+          "price_delta": "0.00",
+          "price_status": "PASS"
+        },
+        {
+          "line": 2,
+          "description": "Transparent polypropylene packing tape 48 mm x 66 m",
+          "quantity": 4,
+          "sale_unit": "roll",
+          "unit_price": "1.80",
+          "match": {
+            "status": "PROPOSED",
+            "sku": "TAPE-48",
+            "confidence": 0.99,
+            "margin": 0.99,
+            "confidence_kind": "uncalibrated_model_score",
+            "candidates": [
+              {
+                "sku": "TAPE-48",
+                "score": 0.99,
+                "reason": "Exact catalog wording on the second delivery."
+              }
+            ],
+            "uncertainty": ""
+          },
+          "unit_valid": true,
+          "quoted_line_total": "7.20",
+          "tier_quantity": 10,
+          "tier_min_quantity": 10,
+          "expected_unit_price": "1.80",
+          "expected_line_total": "7.20",
+          "price_delta": "0.00",
+          "price_status": "PASS"
+        }
+      ],
+      "issues": [
+        {
+          "code": "TOTAL_MISMATCH",
+          "line": null,
+          "detail": "Declared net total differs from quantity x quoted price sum"
+        }
+      ],
+      "totals": {
+        "declared": "19.00",
+        "quoted_computed": "18.00",
+        "contract_expected": "18.00",
+        "quoted_minus_declared": "-1.00"
+      },
+      "extraction": {
+        "customer": {
+          "value": "Harbor Logistics",
+          "quote": "Harbor Logistics"
+        },
+        "po_number": {
+          "value": "PO-1005",
+          "quote": "PO-1005"
+        },
+        "currency": {
+          "value": "EUR",
+          "quote": "EUR"
+        },
+        "declared_total": {
+          "value": "19.00",
+          "quote": "19.00"
+        },
+        "extraction_issues": [],
+        "lines": [
+          {
+            "description": {
+              "value": "Clear packing tape, 48 mm x 66 m",
+              "quote": "Clear packing tape, 48 mm x 66 m"
+            },
+            "quantity": {
+              "value": "6",
+              "quote": "6"
+            },
+            "sale_unit": {
+              "value": "roll",
+              "quote": "roll"
+            },
+            "unit_price": {
+              "value": "1.80",
+              "quote": "1.80"
+            },
+            "candidates": [
+              {
+                "sku": "TAPE-48",
+                "score": 0.93,
+                "reason": "Clear means transparent; packing use and both dimensions match the single catalog tape."
+              }
+            ],
+            "ambiguous": false,
+            "uncertainty": ""
+          },
+          {
+            "description": {
+              "value": "Transparent polypropylene packing tape 48 mm x 66 m",
+              "quote": "Transparent polypropylene packing tape 48 mm x 66 m"
+            },
+            "quantity": {
+              "value": "4",
+              "quote": "4"
+            },
+            "sale_unit": {
+              "value": "roll",
+              "quote": "roll"
+            },
+            "unit_price": {
+              "value": "1.80",
+              "quote": "1.80"
+            },
+            "candidates": [
+              {
+                "sku": "TAPE-48",
+                "score": 0.99,
+                "reason": "Exact catalog wording on the second delivery."
+              }
+            ],
+            "ambiguous": false,
+            "uncertainty": ""
+          }
+        ]
+      },
+      "human_confirmation_required": true,
+      "action": "RECONCILIATION_DRAFT_ONLY",
+      "provenance": {
+        "mode": "REPLAY",
+        "origin": "curated_in_session_ai_output_not_independent_api_capture",
+        "live_inference": false,
+        "fixture": "05_split_tier.txt",
+        "source_sha256": "1927b09ab8979ae3f42f1fdad484f05164ec55e6a60c023ee364487947f59dac",
+        "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+        "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+      },
+      "elapsed_ms": 2.002
+    }
+  ]
+}

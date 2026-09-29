@@ -1,0 +1,92 @@
+{
+  "mode": "CURATED_REPLAY_EVALUATION",
+  "live_ai_reliability": "UNVERIFIED",
+  "independent_ai_samples": 0,
+  "repeat_count": 20,
+  "field_comparisons_per_suite": 48,
+  "passed_fixture_runs": 100,
+  "failed_fixture_runs": 0,
+  "five_order_batch_ms": {
+    "min": 6.305,
+    "median": 6.5,
+    "max": 14.884
+  },
+  "fixtures": {
+    "01_clean": {
+      "passed_runs": 20,
+      "failed_runs": 0,
+      "last_checks": {
+        "header_fields": true,
+        "line_fields_and_count": true,
+        "matches": true,
+        "status": true,
+        "issues": true,
+        "quoted_total": true,
+        "expected_total": true,
+        "tiers": true
+      },
+      "last_status": "CLEAN_DRAFT"
+    },
+    "02_semantic": {
+      "passed_runs": 20,
+      "failed_runs": 0,
+      "last_checks": {
+        "header_fields": true,
+        "line_fields_and_count": true,
+        "matches": true,
+        "status": true,
+        "issues": true,
+        "quoted_total": true,
+        "expected_total": true,
+        "tiers": true
+      },
+      "last_status": "CLEAN_DRAFT"
+    },
+    "03_ambiguous": {
+      "passed_runs": 20,
+      "failed_runs": 0,
+      "last_checks": {
+        "header_fields": true,
+        "line_fields_and_count": true,
+        "matches": true,
+        "status": true,
+        "issues": true,
+        "quoted_total": true,
+        "expected_total": true,
+        "tiers": true
+      },
+      "last_status": "HUMAN_REVIEW"
+    },
+    "04_price_violation": {
+      "passed_runs": 20,
+      "failed_runs": 0,
+      "last_checks": {
+        "header_fields": true,
+        "line_fields_and_count": true,
+        "matches": true,
+        "status": true,
+        "issues": true,
+        "quoted_total": true,
+        "expected_total": true,
+        "tiers": true
+      },
+      "last_status": "RULE_VIOLATION"
+    },
+    "05_split_tier": {
+      "passed_runs": 20,
+      "failed_runs": 0,
+      "last_checks": {
+        "header_fields": true,
+        "line_fields_and_count": true,
+        "matches": true,
+        "status": true,
+        "issues": true,
+        "quoted_total": true,
+        "expected_total": true,
+        "tiers": true
+      },
+      "last_status": "RULE_VIOLATION"
+    }
+  },
+  "interpretation": "Tests authored replay expectations and deterministic code, not extraction accuracy or model latency."
+}

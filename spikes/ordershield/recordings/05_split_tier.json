@@ -1,0 +1,85 @@
+{
+  "origin": "curated_in_session_ai_output_not_independent_api_capture",
+  "note": "Curated by the coding assistant in this session. Not an independent API capture or accuracy measurement.",
+  "bindings": {
+    "source_sha256": "1927b09ab8979ae3f42f1fdad484f05164ec55e6a60c023ee364487947f59dac",
+    "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+    "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+    "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+  },
+  "response": {
+    "customer": {
+      "value": "Harbor Logistics",
+      "quote": "Harbor Logistics"
+    },
+    "po_number": {
+      "value": "PO-1005",
+      "quote": "PO-1005"
+    },
+    "currency": {
+      "value": "EUR",
+      "quote": "EUR"
+    },
+    "declared_total": {
+      "value": "19.00",
+      "quote": "19.00"
+    },
+    "extraction_issues": [],
+    "lines": [
+      {
+        "description": {
+          "value": "Clear packing tape, 48 mm x 66 m",
+          "quote": "Clear packing tape, 48 mm x 66 m"
+        },
+        "quantity": {
+          "value": "6",
+          "quote": "6"
+        },
+        "sale_unit": {
+          "value": "roll",
+          "quote": "roll"
+        },
+        "unit_price": {
+          "value": "1.80",
+          "quote": "1.80"
+        },
+        "candidates": [
+          {
+            "sku": "TAPE-48",
+            "score": 0.93,
+            "reason": "Clear means transparent; packing use and both dimensions match the single catalog tape."
+          }
+        ],
+        "ambiguous": false,
+        "uncertainty": ""
+      },
+      {
+        "description": {
+          "value": "Transparent polypropylene packing tape 48 mm x 66 m",
+          "quote": "Transparent polypropylene packing tape 48 mm x 66 m"
+        },
+        "quantity": {
+          "value": "4",
+          "quote": "4"
+        },
+        "sale_unit": {
+          "value": "roll",
+          "quote": "roll"
+        },
+        "unit_price": {
+          "value": "1.80",
+          "quote": "1.80"
+        },
+        "candidates": [
+          {
+            "sku": "TAPE-48",
+            "score": 0.99,
+            "reason": "Exact catalog wording on the second delivery."
+          }
+        ],
+        "ambiguous": false,
+        "uncertainty": ""
+      }
+    ]
+  }
+}

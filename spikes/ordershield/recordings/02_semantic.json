@@ -1,0 +1,63 @@
+{
+  "origin": "curated_in_session_ai_output_not_independent_api_capture",
+  "note": "Curated by the coding assistant in this session. Not an independent API capture or accuracy measurement.",
+  "bindings": {
+    "source_sha256": "e490a1ea4b3c06b696feb9c2c0524d4dfddb6b580e4d022b22178831eb3dcf03",
+    "catalog_sha256": "8dac6b396c279d41ed51342fd0fd2a33d42dc020688bad27bf1817740c64dc80",
+    "prompt_sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+    "schema_sha256": "a86daf4f3f41bd5641b10819f6ad8ee13ed04b62a699ac31f2cace961b5a3e07"
+  },
+  "response": {
+    "customer": {
+      "value": "Cedar Care",
+      "quote": "Cedar Care"
+    },
+    "po_number": {
+      "value": "PO-1002",
+      "quote": "PO-1002"
+    },
+    "currency": {
+      "value": "EUR",
+      "quote": "EUR"
+    },
+    "declared_total": {
+      "value": "32.00",
+      "quote": "32.00"
+    },
+    "extraction_issues": [],
+    "lines": [
+      {
+        "description": {
+          "value": "Powder-free blue examination gloves, nitrile, size M, 100 per box",
+          "quote": "Powder-free blue examination gloves, nitrile, size M, 100 per box"
+        },
+        "quantity": {
+          "value": "4",
+          "quote": "4"
+        },
+        "sale_unit": {
+          "value": "box",
+          "quote": "box"
+        },
+        "unit_price": {
+          "value": "8.00",
+          "quote": "8.00"
+        },
+        "candidates": [
+          {
+            "sku": "GLOVE-N-M",
+            "score": 0.96,
+            "reason": "Examination means exam; size M means medium; material and box count agree."
+          },
+          {
+            "sku": "GLOVE-N-L",
+            "score": 0.04,
+            "reason": "Large conflicts with explicit size M."
+          }
+        ],
+        "ambiguous": false,
+        "uncertainty": ""
+      }
+    ]
+  }
+}
