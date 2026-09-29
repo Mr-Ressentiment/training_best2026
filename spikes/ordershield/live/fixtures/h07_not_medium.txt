@@ -1,0 +1,6 @@
+SYNTHETIC order amendment for Cedar Care
+Purchase order HX-207. Currency EUR.
+Requested item: Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium
+This is a large-size requirement. A medium-size replacement is prohibited.
+Selling unit: box. Quantity ordered: 2. Unit cost: 8.00.
+Net order value: 16.00.

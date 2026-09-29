@@ -1,0 +1,9 @@
+SYNTHETIC TEST DOCUMENT - invented commercial transaction
+Account billed: Alder Office Supplies
+Requisition identifier HX-201; purchase-order reference HX-201
+Money unit EUR
+Requested article: PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream
+Number ordered: 7
+Selling unit: ream
+Rate for one selling unit: 5.00
+Amount before taxes: 35.00
