@@ -1,0 +1,18 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Agent-local/private state
+.agents/*
+!.agents/skills/
+!.agents/skills/**
+
+# OS noise
+.DS_Store
+Thumbs.db
+Desktop.ini

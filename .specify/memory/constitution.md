@@ -8,10 +8,10 @@ The Git repository is the single canonical source of truth for all project speci
 - All team members and AI assistants MUST synchronize against repository state before planning or implementing changes.
 
 ### II. Spec-Driven Development
-Requirements and expected behavior MUST be explicitly defined and accepted before implementation begins.
-- Implementation work MUST remain strictly traceable to accepted specifications.
-- Specifications (`spec.md`), implementation plans (`plan.md`), and execution tasks (`tasks.md`) MUST remain mutually consistent at all times.
-- If requirements evolve or unexpected complexity emerges during implementation, specifications and plans MUST be updated and approved before or alongside code modifications.
+Requirements and expected behavior MUST be defined before implementation begins.
+- A full spec-first workflow (`spec.md`, `plan.md`, `tasks.md`) is MANDATORY for non-trivial behavior-changing features, shared contracts, architecture-sensitive work, and significant bug fixes. Implementation work MUST remain strictly traceable to accepted specifications, and specs, plans, and tasks MUST remain mutually consistent.
+- Small documentation fixes, formatting, mechanical maintenance, and obvious low-risk corrections do not require a full feature specification and MAY proceed directly from a clearly scoped task with verifiable acceptance criteria.
+- If requirements evolve or unexpected complexity emerges during implementation, governing specifications and plans MUST be updated and approved before or alongside code modifications.
 
 ### III. Mandatory Human Decision Gates
 Explicit human review and approval are MANDATORY before merging changes affecting any of the following decision gates:
@@ -49,7 +49,7 @@ Existing accepted contracts, interfaces, and architecture MUST be respected unle
 ### IX. Security by Default & Least Privilege
 Security standards MUST be maintained without exception during hackathon development:
 - Secrets, credentials, private tokens, API keys, and sensitive personal data MUST NEVER be committed to the repository; local environment variables and ignore rules must be enforced.
-- All untrusted input (user submissions, webhook payloads, query parameters) MUST be strictly validated and sanitized.
+- All untrusted input (user submissions, webhook payloads, external data, query parameters) MUST be validated against expected schemas and constraints, with context-appropriate encoding, escaping, or normalization applied where required (avoiding generic or blanket sanitization assumptions).
 - Apply least privilege to service accounts, database users, and third-party API scopes.
 - Security-sensitive changes require mandatory secondary human review before merge.
 
@@ -57,7 +57,7 @@ Security standards MUST be maintained without exception during hackathon develop
 Code integration MUST remain rapid and safe across concurrent workstreams:
 - Work MUST be partitioned into small, independently reviewable, and mergeable increments.
 - Independent workstreams MUST minimize coupling and communicate through defined contracts.
-- Changes MUST pass automated repository verification (linting, type checking, build, and tests) before merging into the main branch.
+- Changes MUST pass all configured and applicable repository verification checks (such as available tests, lints, type checks, or builds) before merging into the main branch.
 
 ### XI. AI-Assisted Engineering Boundaries
 AI assistants and autonomous agents are collaborative engineering tools operating within defined bounds:
@@ -81,7 +81,7 @@ Development priorities MUST optimize directly for hackathon success:
 
 - **Branch & Trunk Hygiene**: Feature work proceeds in short-lived branches. The `main` branch MUST remain deployable and demo-ready at all times.
 - **Pre-Merge Verification Gate**: Before merging to `main`, every increment must satisfy:
-  1. Automated test suite and build verification pass.
+  1. All configured and applicable automated checks and verification commands pass.
   2. Defined task acceptance criteria are demonstrated.
   3. No secrets or untracked sensitive assets are committed.
   4. Human gate sign-off is documented if any criteria under Principle III are touched.
@@ -90,7 +90,7 @@ Development priorities MUST optimize directly for hackathon success:
 ## Governance
 
 - **Supremacy**: This constitution is the governing policy for this repository. It supersedes informal conversations, team chat messages, and autonomous agent defaults.
-- **Amendment Procedure**: Any team collaborator may propose an amendment. Amendments require team discussion, consensus approval, and a documented version update to this file.
+- **Amendment Procedure**: Any team collaborator may propose an amendment. Material amendments require team review and explicit approval from the project lead (or the delegated technical lead when the project lead is unavailable), avoiding unanimous consensus bottlenecks during time-critical hackathon work. All amendments must be documented in this file alongside an appropriate version update.
 - **Versioning Policy**: Semantic versioning (`MAJOR.MINOR.PATCH`) applies to this constitution:
   - `MAJOR`: Removals, redefinitions, or incompatible changes to core principles or governance authority.
   - `MINOR`: Addition of new principles, operational constraints, or materially expanded workflow guidance.
