@@ -1,0 +1,171 @@
+{
+  "fixture": "h02_large",
+  "repeat": 1,
+  "mode": "LIVE_ONLY",
+  "request_sha256": "c0576ef86f57b5c278e72f6d591bd29f73033973a9ef4ffb6a412a6a3758d134",
+  "provider": {
+    "provider": "codex_cli_saved_chatgpt_login",
+    "model_requested": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "model_revision_reported": null,
+    "started_at_utc": "2026-09-29T14:00:22.223236+00:00",
+    "elapsed_seconds": 11.948669,
+    "exit_code": 0,
+    "timed_out": false,
+    "auth_failure": false,
+    "session_id": "01a0ed77-6ec7-7d73-bd2b-f5b6002652cb",
+    "usage": {
+      "input_tokens": 10149,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 202,
+      "reasoning_output_tokens": 0
+    },
+    "final_text": "{\"customer\":{\"value\":\"Cedar Care\",\"quote\":\"Cedar Care\"},\"po_number\":{\"value\":\"HX-202\",\"quote\":\"HX-202\"},\"currency\":{\"value\":\"EUR\",\"quote\":\"EUR\"},\"declared_total\":{\"value\":\"48.00\",\"quote\":\"48.00\"},\"extraction_issues\":[],\"lines\":[{\"description\":{\"value\":\"Blue powder-free nitrile exam gloves, large, box of 100\",\"quote\":\"Blue powder-free nitrile exam gloves, large, box of 100\"},\"quantity\":{\"value\":\"6\",\"quote\":\"6\"},\"sale_unit\":{\"value\":\"box\",\"quote\":\"box\"},\"unit_price\":{\"value\":\"8.00\",\"quote\":\"8.00\"},\"candidates\":[{\"sku\":\"GLOVE-N-L\",\"score\":1,\"reason\":\"Exact description match, including material, large size, and box of 100.\"}],\"ambiguous\":false,\"uncertainty\":\"\"}]}",
+    "events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a0ed77-6ec7-7d73-bd2b-f5b6002652cb"
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "error",
+          "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in C:\\Users\\user\\.codex\\config.toml."
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "error",
+          "message": "Code Mode is unavailable because code-mode host is disabled. Code mode will fail closed; enable `features.code_mode_host` and install `codex-code-mode-host`."
+        }
+      },
+      {
+        "type": "turn.started"
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "agent_message",
+          "text": "{\"customer\":{\"value\":\"Cedar Care\",\"quote\":\"Cedar Care\"},\"po_number\":{\"value\":\"HX-202\",\"quote\":\"HX-202\"},\"currency\":{\"value\":\"EUR\",\"quote\":\"EUR\"},\"declared_total\":{\"value\":\"48.00\",\"quote\":\"48.00\"},\"extraction_issues\":[],\"lines\":[{\"description\":{\"value\":\"Blue powder-free nitrile exam gloves, large, box of 100\",\"quote\":\"Blue powder-free nitrile exam gloves, large, box of 100\"},\"quantity\":{\"value\":\"6\",\"quote\":\"6\"},\"sale_unit\":{\"value\":\"box\",\"quote\":\"box\"},\"unit_price\":{\"value\":\"8.00\",\"quote\":\"8.00\"},\"candidates\":[{\"sku\":\"GLOVE-N-L\",\"score\":1,\"reason\":\"Exact description match, including material, large size, and box of 100.\"}],\"ambiguous\":false,\"uncertainty\":\"\"}]}"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 10149,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 202,
+          "reasoning_output_tokens": 0
+        }
+      }
+    ],
+    "unparsed_stdout": [],
+    "stderr": "2026-09-29T14:00:22.477129Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n",
+    "tool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\OpenAI\\Codex\\bin\\faa963e871dd422c\\codex.EXE",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--json",
+      "--color",
+      "never",
+      "--model",
+      "gpt-6-astra",
+      "-c",
+      "model_reasoning_effort=\"high\"",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--enable",
+      "skip_host_skill_discovery",
+      "--disable",
+      "shell_tool",
+      "--disable",
+      "unified_exec",
+      "--disable",
+      "multi_agent",
+      "--disable",
+      "multi_agent_v2",
+      "--disable",
+      "apps",
+      "--disable",
+      "plugins",
+      "--disable",
+      "memories",
+      "--disable",
+      "browser_use",
+      "--disable",
+      "browser_use_external",
+      "--disable",
+      "computer_use",
+      "--disable",
+      "image_generation",
+      "--disable",
+      "code_mode",
+      "--disable",
+      "code_mode_host",
+      "--disable",
+      "sleep_tool",
+      "--disable",
+      "view_image",
+      "--disable",
+      "skill_search",
+      "--disable",
+      "hooks",
+      "--disable",
+      "unbounded_connection_retries",
+      "--cd",
+      "<isolated_temp>",
+      "--output-schema",
+      "<isolated_temp>\\schema.json",
+      "--output-last-message",
+      "<isolated_temp>\\final.txt",
+      "-"
+    ]
+  },
+  "outcome": "CONTAMINATED_TOOL_USE",
+  "score": {
+    "schema_valid": false,
+    "field_correct": 0,
+    "field_expected": 8,
+    "field_checks": {},
+    "all_fields_correct": false,
+    "provenance_valid": 0,
+    "provenance_expected": 8,
+    "nonnull_evidence_valid": 0,
+    "nonnull_evidence_expected": 8,
+    "all_provenance_valid": false,
+    "proposed_sku": null,
+    "sku_correct": false,
+    "confident_proposal": false,
+    "wrong_confident": false,
+    "review_success": false,
+    "ambiguous_clean": false,
+    "core_status": null,
+    "core_error": null,
+    "core_result": null,
+    "schema_error": "response: expected ['object']"
+  }
+}

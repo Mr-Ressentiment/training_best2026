@@ -1,0 +1,442 @@
+{
+  "planned_calls": 30,
+  "attempted_calls": 30,
+  "unattempted_calls": 0,
+  "complete": true,
+  "unattempted_metrics": "UNMEASURED",
+  "schema_valid_per_attempt": {
+    "numerator": 23,
+    "denominator": 30,
+    "rate": 0.766667
+  },
+  "schema_valid_per_scheduled": {
+    "numerator": 23,
+    "denominator": 30,
+    "rate": 0.766667
+  },
+  "correct_fields": {
+    "numerator": 184,
+    "denominator": 240,
+    "rate": 0.766667
+  },
+  "all_fields_correct": {
+    "numerator": 23,
+    "denominator": 30,
+    "rate": 0.766667
+  },
+  "correct_resolved_sku": {
+    "numerator": 17,
+    "denominator": 21,
+    "rate": 0.809524
+  },
+  "correct_abstention": {
+    "numerator": 6,
+    "denominator": 9,
+    "rate": 0.666667
+  },
+  "ambiguous_to_review": {
+    "numerator": 4,
+    "denominator": 6,
+    "rate": 0.666667
+  },
+  "ambiguous_to_clean": {
+    "numerator": 0,
+    "denominator": 6,
+    "rate": 0.0
+  },
+  "all_review_cases_to_review": {
+    "numerator": 6,
+    "denominator": 9,
+    "rate": 0.666667
+  },
+  "all_review_cases_to_clean": {
+    "numerator": 0,
+    "denominator": 9,
+    "rate": 0.0
+  },
+  "wrong_confident_per_attempt": {
+    "numerator": 0,
+    "denominator": 30,
+    "rate": 0.0
+  },
+  "wrong_confident_per_confident": {
+    "numerator": 0,
+    "denominator": 17,
+    "rate": 0.0
+  },
+  "dangerous_wrong_confident": {
+    "numerator": 0,
+    "denominator": 9,
+    "rate": 0.0
+  },
+  "nonnull_source_evidence": {
+    "numerator": 170,
+    "denominator": 228,
+    "rate": 0.745614
+  },
+  "provenance_or_valid_missingness": {
+    "numerator": 178,
+    "denominator": 240,
+    "rate": 0.741667
+  },
+  "all_provenance_valid": {
+    "numerator": 20,
+    "denominator": 30,
+    "rate": 0.666667
+  },
+  "cli_session_provenance": {
+    "numerator": 30,
+    "denominator": 30,
+    "rate": 1.0
+  },
+  "outcomes": {
+    "CORE_RESULT": 20,
+    "CORE_REJECTED": 3,
+    "PROVIDER_ERROR": 7
+  },
+  "latency_seconds_all": {
+    "count": 30,
+    "min": 2.832209,
+    "median": 12.802768,
+    "mean": 11.547134733333333,
+    "p90": 16.557947,
+    "p95": 17.61681,
+    "max": 17.797761
+  },
+  "latency_seconds_valid_core": {
+    "count": 20,
+    "min": 11.203714,
+    "median": 13.9900495,
+    "mean": 14.12526005,
+    "p90": 17.206796,
+    "p95": 17.61681,
+    "max": 17.797761
+  },
+  "per_fixture": {
+    "h01_paper": {
+      "attempts": 3,
+      "schema_valid": 3,
+      "all_fields_correct": 3,
+      "proposed_skus": [
+        "PAPER-A4-80",
+        "PAPER-A4-80",
+        "PAPER-A4-80"
+      ],
+      "core_statuses": [
+        "CLEAN_DRAFT",
+        "CLEAN_DRAFT",
+        "CLEAN_DRAFT"
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        16.356874,
+        17.206796,
+        14.221703
+      ]
+    },
+    "h02_large": {
+      "attempts": 3,
+      "schema_valid": 3,
+      "all_fields_correct": 3,
+      "proposed_skus": [
+        "GLOVE-N-L",
+        "GLOVE-N-L",
+        "GLOVE-N-L"
+      ],
+      "core_statuses": [
+        "CLEAN_DRAFT",
+        "CLEAN_DRAFT",
+        "CLEAN_DRAFT"
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        11.948669,
+        11.258932,
+        11.793198
+      ]
+    },
+    "h03_alias": {
+      "attempts": 3,
+      "schema_valid": 3,
+      "all_fields_correct": 3,
+      "proposed_skus": [
+        "GLOVE-N-M",
+        "GLOVE-N-M",
+        "GLOVE-N-M"
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        11.503346,
+        14.151994,
+        15.276079
+      ]
+    },
+    "h04_tape": {
+      "attempts": 3,
+      "schema_valid": 2,
+      "all_fields_correct": 2,
+      "proposed_skus": [
+        "TAPE-48",
+        "TAPE-48",
+        null
+      ],
+      "core_statuses": [
+        "CLEAN_DRAFT",
+        "CLEAN_DRAFT",
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        13.296875,
+        11.203714,
+        3.126798
+      ]
+    },
+    "h05_no_size": {
+      "attempts": 3,
+      "schema_valid": 2,
+      "all_fields_correct": 2,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        "HUMAN_REVIEW",
+        "HUMAN_REVIEW",
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        16.557947,
+        17.61681,
+        3.413761
+      ]
+    },
+    "h06_no_pack": {
+      "attempts": 3,
+      "schema_valid": 2,
+      "all_fields_correct": 2,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        "HUMAN_REVIEW",
+        "HUMAN_REVIEW",
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        14.083962,
+        14.215007,
+        3.290896
+      ]
+    },
+    "h07_not_medium": {
+      "attempts": 3,
+      "schema_valid": 2,
+      "all_fields_correct": 2,
+      "proposed_skus": [
+        "GLOVE-N-L",
+        "GLOVE-N-L",
+        null
+      ],
+      "core_statuses": [
+        "CLEAN_DRAFT",
+        "CLEAN_DRAFT",
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        13.348212,
+        16.015388,
+        3.768299
+      ]
+    },
+    "h08_not_large": {
+      "attempts": 3,
+      "schema_valid": 2,
+      "all_fields_correct": 2,
+      "proposed_skus": [
+        "GLOVE-N-M",
+        "GLOVE-N-M",
+        null
+      ],
+      "core_statuses": [
+        "CLEAN_DRAFT",
+        "CLEAN_DRAFT",
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        11.630101,
+        16.055445,
+        3.601112
+      ]
+    },
+    "h09_latex": {
+      "attempts": 3,
+      "schema_valid": 2,
+      "all_fields_correct": 2,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        "HUMAN_REVIEW",
+        "HUMAN_REVIEW",
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        11.693009,
+        12.308661,
+        2.944347
+      ]
+    },
+    "h10_damaged": {
+      "attempts": 3,
+      "schema_valid": 2,
+      "all_fields_correct": 2,
+      "proposed_skus": [
+        "PAPER-A4-80",
+        "PAPER-A4-80",
+        null
+      ],
+      "core_statuses": [
+        "HUMAN_REVIEW",
+        "HUMAN_REVIEW",
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        13.896137,
+        17.797761,
+        2.832209
+      ]
+    }
+  },
+  "audit": "Non-tool CLI error/warning items removed from tool-event classification only",
+  "original_summary": "summary.json (frozen harness bug; not the valid model-quality estimate)",
+  "audit_script_sha256": "c9a6f50fdeaa5ef5097d0854906b60ad63e2cab1134e1268fbff3b7ed3df3239",
+  "raw_call_sha256": {
+    "h01_paper-r1.json": "3df73438916653f1a52e70ce9871e04e1a7628ca751c148f9de01bfd485d047f",
+    "h01_paper-r2.json": "566602247434ee7607b882d16bed728dc9a4905a2d9d70c791696fb743de82b2",
+    "h01_paper-r3.json": "c5442b5a85da646e9b43e195edcefcf0e977ee1686a7fb2187b16e3ce57c3c7f",
+    "h02_large-r1.json": "b1ba261630a831418d320d25d6006a441394658dd40361139c1926e711f6a40f",
+    "h02_large-r2.json": "b6ba6ca3766420b87904564d4bcbab14f1cbbffd5680d63bec150b13cb1cee9b",
+    "h02_large-r3.json": "5c6b38ba3cfdc7fda3823bf0a3f27f7c75cf6ef3510d8870c59c0da3d47fe276",
+    "h03_alias-r1.json": "7c4d4b45f416bfd8c47132282e56694dceed4f973cd44e851e2e5db047e1d87a",
+    "h03_alias-r2.json": "df82003ea663efa384bd224a9f6fab60e16c9a082e37151040164448cd38f209",
+    "h03_alias-r3.json": "67fc6ba60e344ae1fafd7995ff45775ab7be28f18c016fe9bba99a454d8d2222",
+    "h04_tape-r1.json": "ba981e5b99c6709497fb58b11f326a20a31ce756aca08abcd15ef26555bb50c7",
+    "h04_tape-r2.json": "aed47546af9647858e54164625e638b63be55c67df9e8f9c579017c429aa936e",
+    "h04_tape-r3.json": "16a5f5027783310a8d76d2b262efef06333ff4a73b80d55e7844e7578713e48e",
+    "h05_no_size-r1.json": "468ecf4a586a29533bd15f750502039222d64519e5e1a5525f749a0881cec8d9",
+    "h05_no_size-r2.json": "d105a84a1fea4f46f2ae67d9aef3490f014e5b1f1d333bad33d7db599af5da49",
+    "h05_no_size-r3.json": "932f88c95717ea19b9efe3470288a9bd85430e58ce7fbe7bae84176ca1a3e886",
+    "h06_no_pack-r1.json": "0affa5013e34958ba6e79feeebcdd3d867ab5d1c4aa448a4e512d7f608252adc",
+    "h06_no_pack-r2.json": "626d91f361a2a2f4186238d179f7ec570f7072981e33399692e8bcdb67daf5cd",
+    "h06_no_pack-r3.json": "8e9d04ea0c015971fa9ef2014ea22fc7e467e048a97c4e87935b3840a1ff24f3",
+    "h07_not_medium-r1.json": "78c90bca12b34eea3bd2f5d1bb3cbf62e058edf32b986b187254db3fca8c332b",
+    "h07_not_medium-r2.json": "d5cc27ac9c10f6c1bc98625c7bd881a6c84597f62917c993149c90ff5a2cb81e",
+    "h07_not_medium-r3.json": "0684ae5be7277fdd9c9cb7b5cee98d3772925ad8287734eb6e7c58d9e6c963b4",
+    "h08_not_large-r1.json": "25a14e8133c9ec59bea494fdaf66c61d157a1617be66b4a9006e575dcadb0b15",
+    "h08_not_large-r2.json": "76d2eeb9522ab26960612ba33774cd0c098667cff17286f9ed7a3d997beb06b2",
+    "h08_not_large-r3.json": "1c1e85f113c53ee769b4a6e166332ca11ff67261d4b399b587ffe0d1d759d0c6",
+    "h09_latex-r1.json": "5669265e07d1a666fcc8cc57a1b2772f8ef20d6bdc326422b24540d504459537",
+    "h09_latex-r2.json": "b1b8652fbd1d944fc61e57376620cd1d90421e47d7b838a48b62f7d6abf6cbab",
+    "h09_latex-r3.json": "b7de7a0f843f6287474959fca1237090db995726602bd70031066dc15cafd76d",
+    "h10_damaged-r1.json": "4c1295f44efd200adfb80fb03c6af6a1b9d8c22796b4cde6b865057aa7271164",
+    "h10_damaged-r2.json": "96ef8bae8e5f6a608fa525ae3087f178454a8a5cf32c63e156eb90fac8f592d9",
+    "h10_damaged-r3.json": "e0fe7d27a289821b4b3027b98cde8570164b6c456d669bec49c220030f30e451"
+  },
+  "unique_session_ids": 30,
+  "remaining_tool_event_count": 0,
+  "total_cli_wall_seconds": 346.41404200000005,
+  "freeze_still_valid": true,
+  "supplementary_observations_not_new_acceptance_criteria": {
+    "completed_model_outputs": 23,
+    "quota_rejected_calls": 7,
+    "returned_nonnull_fields": 176,
+    "returned_nonnull_literal_quotes": 176,
+    "all_grounding_failures": [
+      {
+        "fixture": "h03_alias",
+        "repeat": 1,
+        "field": "line.1.sale_unit",
+        "value": "box",
+        "quote": "Selling unit: box.",
+        "error": "line.1.sale_unit: value is not supported by quote"
+      },
+      {
+        "fixture": "h03_alias",
+        "repeat": 1,
+        "field": "line.1.unit_price",
+        "value": "8.00",
+        "quote": "Agreed amount per selling unit: 8.00.",
+        "error": "line.1.unit_price: value is not supported by quote"
+      },
+      {
+        "fixture": "h03_alias",
+        "repeat": 2,
+        "field": "line.1.sale_unit",
+        "value": "box",
+        "quote": "Selling unit: box.",
+        "error": "line.1.sale_unit: value is not supported by quote"
+      },
+      {
+        "fixture": "h03_alias",
+        "repeat": 3,
+        "field": "declared_total",
+        "value": "64.00",
+        "quote": "Net payable: 64.00.",
+        "error": "declared_total: value is not supported by quote"
+      },
+      {
+        "fixture": "h03_alias",
+        "repeat": 3,
+        "field": "line.1.sale_unit",
+        "value": "box",
+        "quote": "Selling unit: box.",
+        "error": "line.1.sale_unit: value is not supported by quote"
+      },
+      {
+        "fixture": "h03_alias",
+        "repeat": 3,
+        "field": "line.1.unit_price",
+        "value": "8.00",
+        "quote": "Agreed amount per selling unit: 8.00.",
+        "error": "line.1.unit_price: value is not supported by quote"
+      }
+    ],
+    "latency_seconds_completed_model_outputs": {
+      "count": 23,
+      "min": 11.203714,
+      "median": 14.083962,
+      "mean": 14.062461739130434,
+      "p90": 17.206796,
+      "p95": 17.61681,
+      "max": 17.797761
+    },
+    "latency_seconds_provider_errors": {
+      "count": 7,
+      "min": 2.832209,
+      "median": 3.290896,
+      "mean": 3.282488857142857,
+      "p90": 3.768299,
+      "p95": 3.768299,
+      "max": 3.768299
+    },
+    "generations_completed_for_every_fixture_three_times": false,
+    "note": "Frozen summary.complete means 30 attempts recorded, not 30 completed generations."
+  }
+}

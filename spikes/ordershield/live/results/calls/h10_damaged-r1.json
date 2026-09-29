@@ -1,0 +1,171 @@
+{
+  "fixture": "h10_damaged",
+  "repeat": 1,
+  "mode": "LIVE_ONLY",
+  "request_sha256": "0dbbc1942eab2df71c6eb5e4bc9a68acb6f4ffc395594f2e9ac7c153b87b090a",
+  "provider": {
+    "provider": "codex_cli_saved_chatgpt_login",
+    "model_requested": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "model_revision_reported": null,
+    "started_at_utc": "2026-09-29T14:02:06.757848+00:00",
+    "elapsed_seconds": 13.896137,
+    "exit_code": 0,
+    "timed_out": false,
+    "auth_failure": false,
+    "session_id": "01a0ed79-0718-7b62-823b-1fd1194556e7",
+    "usage": {
+      "input_tokens": 10160,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 319,
+      "reasoning_output_tokens": 57
+    },
+    "final_text": "{\"customer\":{\"value\":null,\"quote\":\"\"},\"po_number\":{\"value\":\"HX-210\",\"quote\":\"Purchase order HX-210\"},\"currency\":{\"value\":\"EUR\",\"quote\":\"CURRENCY EUR\"},\"declared_total\":{\"value\":null,\"quote\":\"\"},\"extraction_issues\":[\"Customer cannot be recovered: PURCHASER: [section torn away].\",\"Quantity is marked [unreadable].\",\"Unit price is marked [unreadable].\",\"Declared total cannot be recovered: Net amount: [bottom of page missing].\"],\"lines\":[{\"description\":{\"value\":\"White A4 printer sheets; 80 gsm; sealed ream of 500\",\"quote\":\"White A4 printer sheets; 80 gsm; sealed ream of 500\"},\"quantity\":{\"value\":null,\"quote\":\"\"},\"sale_unit\":{\"value\":\"ream\",\"quote\":\"Selling unit: ream\"},\"unit_price\":{\"value\":null,\"quote\":\"\"},\"candidates\":[{\"sku\":\"PAPER-A4-80\",\"score\":0.99,\"reason\":\"A4 printer paper, 80 gsm, and a ream of 500 sheets uniquely match this catalog product.\"}],\"ambiguous\":false,\"uncertainty\":\"\"}]}",
+    "events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a0ed79-0718-7b62-823b-1fd1194556e7"
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "error",
+          "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in C:\\Users\\user\\.codex\\config.toml."
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "error",
+          "message": "Code Mode is unavailable because code-mode host is disabled. Code mode will fail closed; enable `features.code_mode_host` and install `codex-code-mode-host`."
+        }
+      },
+      {
+        "type": "turn.started"
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "agent_message",
+          "text": "{\"customer\":{\"value\":null,\"quote\":\"\"},\"po_number\":{\"value\":\"HX-210\",\"quote\":\"Purchase order HX-210\"},\"currency\":{\"value\":\"EUR\",\"quote\":\"CURRENCY EUR\"},\"declared_total\":{\"value\":null,\"quote\":\"\"},\"extraction_issues\":[\"Customer cannot be recovered: PURCHASER: [section torn away].\",\"Quantity is marked [unreadable].\",\"Unit price is marked [unreadable].\",\"Declared total cannot be recovered: Net amount: [bottom of page missing].\"],\"lines\":[{\"description\":{\"value\":\"White A4 printer sheets; 80 gsm; sealed ream of 500\",\"quote\":\"White A4 printer sheets; 80 gsm; sealed ream of 500\"},\"quantity\":{\"value\":null,\"quote\":\"\"},\"sale_unit\":{\"value\":\"ream\",\"quote\":\"Selling unit: ream\"},\"unit_price\":{\"value\":null,\"quote\":\"\"},\"candidates\":[{\"sku\":\"PAPER-A4-80\",\"score\":0.99,\"reason\":\"A4 printer paper, 80 gsm, and a ream of 500 sheets uniquely match this catalog product.\"}],\"ambiguous\":false,\"uncertainty\":\"\"}]}"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 10160,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 319,
+          "reasoning_output_tokens": 57
+        }
+      }
+    ],
+    "unparsed_stdout": [],
+    "stderr": "2026-09-29T14:02:07.004760Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n",
+    "tool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\OpenAI\\Codex\\bin\\faa963e871dd422c\\codex.EXE",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--json",
+      "--color",
+      "never",
+      "--model",
+      "gpt-6-astra",
+      "-c",
+      "model_reasoning_effort=\"high\"",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--enable",
+      "skip_host_skill_discovery",
+      "--disable",
+      "shell_tool",
+      "--disable",
+      "unified_exec",
+      "--disable",
+      "multi_agent",
+      "--disable",
+      "multi_agent_v2",
+      "--disable",
+      "apps",
+      "--disable",
+      "plugins",
+      "--disable",
+      "memories",
+      "--disable",
+      "browser_use",
+      "--disable",
+      "browser_use_external",
+      "--disable",
+      "computer_use",
+      "--disable",
+      "image_generation",
+      "--disable",
+      "code_mode",
+      "--disable",
+      "code_mode_host",
+      "--disable",
+      "sleep_tool",
+      "--disable",
+      "view_image",
+      "--disable",
+      "skill_search",
+      "--disable",
+      "hooks",
+      "--disable",
+      "unbounded_connection_retries",
+      "--cd",
+      "<isolated_temp>",
+      "--output-schema",
+      "<isolated_temp>\\schema.json",
+      "--output-last-message",
+      "<isolated_temp>\\final.txt",
+      "-"
+    ]
+  },
+  "outcome": "CONTAMINATED_TOOL_USE",
+  "score": {
+    "schema_valid": false,
+    "field_correct": 0,
+    "field_expected": 8,
+    "field_checks": {},
+    "all_fields_correct": false,
+    "provenance_valid": 0,
+    "provenance_expected": 8,
+    "nonnull_evidence_valid": 0,
+    "nonnull_evidence_expected": 4,
+    "all_provenance_valid": false,
+    "proposed_sku": null,
+    "sku_correct": false,
+    "confident_proposal": false,
+    "wrong_confident": false,
+    "review_success": false,
+    "ambiguous_clean": false,
+    "core_status": null,
+    "core_error": null,
+    "core_result": null,
+    "schema_error": "response: expected ['object']"
+  }
+}

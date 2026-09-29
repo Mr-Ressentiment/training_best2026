@@ -1,0 +1,34 @@
+{
+  "started_at_utc": "2026-09-29T14:00:05.714033+00:00",
+  "cli_version": "codex-cli 0.158.0-alpha.2.1",
+  "login": "ChatGPT authenticated",
+  "freeze_sha256": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+  "freeze": {
+    "frozen_at_utc": "2026-09-29T14:00:04.670616+00:00",
+    "files": {
+      "live/expected.json": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+      "live/protocol.md": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+      "live/adapter.py": "0a16b12de4eef3eaf5612fafc3ec379cfe2152cec9a60ded9f1456f5992f56e6",
+      "live/score.py": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9",
+      "live/run.py": "2d46e5be5550ba4f17d48da3b74e21bacb9737bb10a755b4a5da70beb9e61c19",
+      "live/test_live.py": "04aef30766727a6f2ce027143530896b3bd571150270c37828a41c5f1c7fc282",
+      "live/fixtures/h01_paper.txt": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+      "live/fixtures/h02_large.txt": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+      "live/fixtures/h03_alias.txt": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+      "live/fixtures/h04_tape.txt": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+      "live/fixtures/h05_no_size.txt": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+      "live/fixtures/h06_no_pack.txt": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+      "live/fixtures/h07_not_medium.txt": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+      "live/fixtures/h08_not_large.txt": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+      "live/fixtures/h09_latex.txt": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+      "live/fixtures/h10_damaged.txt": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+      "ordershield.py": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+      "catalog.json": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+      "prompt.txt": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3"
+    },
+    "model_requested": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "schema_sha256": "f5bd3918128dce7e8efd1e1c2a566e1cd166d692b534641345b9d5b70057f5c3",
+    "planned_calls": 30
+  }
+}

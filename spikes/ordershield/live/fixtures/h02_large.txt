@@ -1,0 +1,5 @@
+FICTIONAL ORDER CARD
+Order HX-202 is issued by Cedar Care. Settlement currency EUR.
+Goods: Blue powder-free nitrile exam gloves, large, box of 100
+Selling unit = box; requested quantity = 6; each selling unit costs 8.00.
+Order's net amount = 48.00.

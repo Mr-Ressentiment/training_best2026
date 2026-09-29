@@ -1,0 +1,319 @@
+{
+  "planned_calls": 30,
+  "attempted_calls": 30,
+  "unattempted_calls": 0,
+  "complete": true,
+  "unattempted_metrics": "UNMEASURED",
+  "schema_valid_per_attempt": {
+    "numerator": 0,
+    "denominator": 30,
+    "rate": 0.0
+  },
+  "schema_valid_per_scheduled": {
+    "numerator": 0,
+    "denominator": 30,
+    "rate": 0.0
+  },
+  "correct_fields": {
+    "numerator": 0,
+    "denominator": 240,
+    "rate": 0.0
+  },
+  "all_fields_correct": {
+    "numerator": 0,
+    "denominator": 30,
+    "rate": 0.0
+  },
+  "correct_resolved_sku": {
+    "numerator": 0,
+    "denominator": 21,
+    "rate": 0.0
+  },
+  "correct_abstention": {
+    "numerator": 0,
+    "denominator": 9,
+    "rate": 0.0
+  },
+  "ambiguous_to_review": {
+    "numerator": 0,
+    "denominator": 6,
+    "rate": 0.0
+  },
+  "ambiguous_to_clean": {
+    "numerator": 0,
+    "denominator": 6,
+    "rate": 0.0
+  },
+  "all_review_cases_to_review": {
+    "numerator": 0,
+    "denominator": 9,
+    "rate": 0.0
+  },
+  "all_review_cases_to_clean": {
+    "numerator": 0,
+    "denominator": 9,
+    "rate": 0.0
+  },
+  "wrong_confident_per_attempt": {
+    "numerator": 0,
+    "denominator": 30,
+    "rate": 0.0
+  },
+  "wrong_confident_per_confident": {
+    "numerator": 0,
+    "denominator": 0,
+    "rate": null
+  },
+  "dangerous_wrong_confident": {
+    "numerator": 0,
+    "denominator": 9,
+    "rate": 0.0
+  },
+  "nonnull_source_evidence": {
+    "numerator": 0,
+    "denominator": 228,
+    "rate": 0.0
+  },
+  "provenance_or_valid_missingness": {
+    "numerator": 0,
+    "denominator": 240,
+    "rate": 0.0
+  },
+  "all_provenance_valid": {
+    "numerator": 0,
+    "denominator": 30,
+    "rate": 0.0
+  },
+  "cli_session_provenance": {
+    "numerator": 30,
+    "denominator": 30,
+    "rate": 1.0
+  },
+  "outcomes": {
+    "CONTAMINATED_TOOL_USE": 30
+  },
+  "latency_seconds_all": {
+    "count": 30,
+    "min": 2.832209,
+    "median": 12.802768,
+    "mean": 11.547134733333333,
+    "p90": 16.557947,
+    "p95": 17.61681,
+    "max": 17.797761
+  },
+  "latency_seconds_valid_core": null,
+  "per_fixture": {
+    "h01_paper": {
+      "attempts": 3,
+      "schema_valid": 0,
+      "all_fields_correct": 0,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        16.356874,
+        17.206796,
+        14.221703
+      ]
+    },
+    "h02_large": {
+      "attempts": 3,
+      "schema_valid": 0,
+      "all_fields_correct": 0,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        11.948669,
+        11.258932,
+        11.793198
+      ]
+    },
+    "h03_alias": {
+      "attempts": 3,
+      "schema_valid": 0,
+      "all_fields_correct": 0,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        11.503346,
+        14.151994,
+        15.276079
+      ]
+    },
+    "h04_tape": {
+      "attempts": 3,
+      "schema_valid": 0,
+      "all_fields_correct": 0,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        13.296875,
+        11.203714,
+        3.126798
+      ]
+    },
+    "h05_no_size": {
+      "attempts": 3,
+      "schema_valid": 0,
+      "all_fields_correct": 0,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        16.557947,
+        17.61681,
+        3.413761
+      ]
+    },
+    "h06_no_pack": {
+      "attempts": 3,
+      "schema_valid": 0,
+      "all_fields_correct": 0,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        14.083962,
+        14.215007,
+        3.290896
+      ]
+    },
+    "h07_not_medium": {
+      "attempts": 3,
+      "schema_valid": 0,
+      "all_fields_correct": 0,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        13.348212,
+        16.015388,
+        3.768299
+      ]
+    },
+    "h08_not_large": {
+      "attempts": 3,
+      "schema_valid": 0,
+      "all_fields_correct": 0,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        11.630101,
+        16.055445,
+        3.601112
+      ]
+    },
+    "h09_latex": {
+      "attempts": 3,
+      "schema_valid": 0,
+      "all_fields_correct": 0,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        11.693009,
+        12.308661,
+        2.944347
+      ]
+    },
+    "h10_damaged": {
+      "attempts": 3,
+      "schema_valid": 0,
+      "all_fields_correct": 0,
+      "proposed_skus": [
+        null,
+        null,
+        null
+      ],
+      "core_statuses": [
+        null,
+        null,
+        null
+      ],
+      "wrong_confident": 0,
+      "latencies_seconds": [
+        13.896137,
+        17.797761,
+        2.832209
+      ]
+    }
+  },
+  "stop_reason": null,
+  "freeze_verified_after_calls": true
+}

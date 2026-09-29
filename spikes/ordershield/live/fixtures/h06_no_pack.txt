@@ -1,0 +1,8 @@
+FICTIONAL requisition HX-206
+Customer account Cedar Care; currency EUR.
+Product wanted: Medium blue powder-free nitrile exam handwear
+The number of gloves inside each box is unspecified; do not assume a pack count.
+Selling unit: box
+Order quantity: 2
+Price per box: 8.00
+Net amount on requisition: 16.00

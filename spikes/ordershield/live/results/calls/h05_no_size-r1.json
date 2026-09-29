@@ -1,0 +1,171 @@
+{
+  "fixture": "h05_no_size",
+  "repeat": 1,
+  "mode": "LIVE_ONLY",
+  "request_sha256": "be22f242bbdd0da79d9d0b475020fd5cc3ab24a7862ec30c11a5b78b744a8605",
+  "provider": {
+    "provider": "codex_cli_saved_chatgpt_login",
+    "model_requested": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "model_revision_reported": null,
+    "started_at_utc": "2026-09-29T14:00:59.146835+00:00",
+    "elapsed_seconds": 16.557947,
+    "exit_code": 0,
+    "timed_out": false,
+    "auth_failure": false,
+    "session_id": "01a0ed77-feed-7f73-88d4-756e591dea7e",
+    "usage": {
+      "input_tokens": 10156,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 402,
+      "reasoning_output_tokens": 90
+    },
+    "final_text": "{\"customer\":{\"value\":\"Cedar Care\",\"quote\":\"SYNTHETIC request from Cedar Care\"},\"po_number\":{\"value\":\"HX-205\",\"quote\":\"Document HX-205; EUR amounts only.\"},\"currency\":{\"value\":\"EUR\",\"quote\":\"EUR amounts only.\"},\"declared_total\":{\"value\":\"40.00\",\"quote\":\"Total excluding taxes: 40.00\"},\"extraction_issues\":[\"HX-205 is labeled as a document identifier, not explicitly as a purchase order number.\"],\"lines\":[{\"description\":{\"value\":\"Blue powderless nitrile examination handwear, 100 pieces per box\",\"quote\":\"Blue powderless nitrile examination handwear, 100 pieces per box\"},\"quantity\":{\"value\":\"5\",\"quote\":\"Quantity requested: 5\"},\"sale_unit\":{\"value\":\"box\",\"quote\":\"Selling unit: box\"},\"unit_price\":{\"value\":\"8.00\",\"quote\":\"Unit charge: 8.00\"},\"candidates\":[{\"sku\":\"GLOVE-N-M\",\"score\":0.85,\"reason\":\"Matches blue powder-free nitrile examination gloves, box of 100; medium size is unconfirmed.\"},{\"sku\":\"GLOVE-N-L\",\"score\":0.85,\"reason\":\"Matches blue powder-free nitrile examination gloves, box of 100; large size is unconfirmed.\"}],\"ambiguous\":true,\"uncertainty\":\"Size selection was explicitly left blank. Both medium and large are plausible; price does not identify size.\"}]}",
+    "events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a0ed77-feed-7f73-88d4-756e591dea7e"
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "error",
+          "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in C:\\Users\\user\\.codex\\config.toml."
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "error",
+          "message": "Code Mode is unavailable because code-mode host is disabled. Code mode will fail closed; enable `features.code_mode_host` and install `codex-code-mode-host`."
+        }
+      },
+      {
+        "type": "turn.started"
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "agent_message",
+          "text": "{\"customer\":{\"value\":\"Cedar Care\",\"quote\":\"SYNTHETIC request from Cedar Care\"},\"po_number\":{\"value\":\"HX-205\",\"quote\":\"Document HX-205; EUR amounts only.\"},\"currency\":{\"value\":\"EUR\",\"quote\":\"EUR amounts only.\"},\"declared_total\":{\"value\":\"40.00\",\"quote\":\"Total excluding taxes: 40.00\"},\"extraction_issues\":[\"HX-205 is labeled as a document identifier, not explicitly as a purchase order number.\"],\"lines\":[{\"description\":{\"value\":\"Blue powderless nitrile examination handwear, 100 pieces per box\",\"quote\":\"Blue powderless nitrile examination handwear, 100 pieces per box\"},\"quantity\":{\"value\":\"5\",\"quote\":\"Quantity requested: 5\"},\"sale_unit\":{\"value\":\"box\",\"quote\":\"Selling unit: box\"},\"unit_price\":{\"value\":\"8.00\",\"quote\":\"Unit charge: 8.00\"},\"candidates\":[{\"sku\":\"GLOVE-N-M\",\"score\":0.85,\"reason\":\"Matches blue powder-free nitrile examination gloves, box of 100; medium size is unconfirmed.\"},{\"sku\":\"GLOVE-N-L\",\"score\":0.85,\"reason\":\"Matches blue powder-free nitrile examination gloves, box of 100; large size is unconfirmed.\"}],\"ambiguous\":true,\"uncertainty\":\"Size selection was explicitly left blank. Both medium and large are plausible; price does not identify size.\"}]}"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 10156,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 402,
+          "reasoning_output_tokens": 90
+        }
+      }
+    ],
+    "unparsed_stdout": [],
+    "stderr": "2026-09-29T14:00:59.378033Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n",
+    "tool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\OpenAI\\Codex\\bin\\faa963e871dd422c\\codex.EXE",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--json",
+      "--color",
+      "never",
+      "--model",
+      "gpt-6-astra",
+      "-c",
+      "model_reasoning_effort=\"high\"",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--enable",
+      "skip_host_skill_discovery",
+      "--disable",
+      "shell_tool",
+      "--disable",
+      "unified_exec",
+      "--disable",
+      "multi_agent",
+      "--disable",
+      "multi_agent_v2",
+      "--disable",
+      "apps",
+      "--disable",
+      "plugins",
+      "--disable",
+      "memories",
+      "--disable",
+      "browser_use",
+      "--disable",
+      "browser_use_external",
+      "--disable",
+      "computer_use",
+      "--disable",
+      "image_generation",
+      "--disable",
+      "code_mode",
+      "--disable",
+      "code_mode_host",
+      "--disable",
+      "sleep_tool",
+      "--disable",
+      "view_image",
+      "--disable",
+      "skill_search",
+      "--disable",
+      "hooks",
+      "--disable",
+      "unbounded_connection_retries",
+      "--cd",
+      "<isolated_temp>",
+      "--output-schema",
+      "<isolated_temp>\\schema.json",
+      "--output-last-message",
+      "<isolated_temp>\\final.txt",
+      "-"
+    ]
+  },
+  "outcome": "CONTAMINATED_TOOL_USE",
+  "score": {
+    "schema_valid": false,
+    "field_correct": 0,
+    "field_expected": 8,
+    "field_checks": {},
+    "all_fields_correct": false,
+    "provenance_valid": 0,
+    "provenance_expected": 8,
+    "nonnull_evidence_valid": 0,
+    "nonnull_evidence_expected": 8,
+    "all_provenance_valid": false,
+    "proposed_sku": null,
+    "sku_correct": false,
+    "confident_proposal": false,
+    "wrong_confident": false,
+    "review_success": false,
+    "ambiguous_clean": false,
+    "core_status": null,
+    "core_error": null,
+    "core_result": null,
+    "schema_error": "response: expected ['object']"
+  }
+}

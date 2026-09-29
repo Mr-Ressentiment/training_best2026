@@ -1,0 +1,8 @@
+SYNTHETIC request from Cedar Care
+Document HX-205; EUR amounts only.
+Requested goods: Blue powderless nitrile examination handwear, 100 pieces per box
+Size selection was left blank by the purchaser.
+Selling unit: box
+Quantity requested: 5
+Unit charge: 8.00
+Total excluding taxes: 40.00

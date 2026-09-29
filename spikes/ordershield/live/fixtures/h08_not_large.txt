@@ -1,0 +1,8 @@
+SYNTHETIC corrected purchase request
+Buyer Cedar Care -- PO HX-208 -- currency EUR
+Requested item: MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large
+Large gloves were ordered last month; that size must not be repeated here.
+Selling unit: box
+Count ordered: 3
+Each box: 8.00
+Net order amount: 24.00

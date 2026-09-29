@@ -1,0 +1,157 @@
+{
+  "fixture": "h08_not_large",
+  "repeat": 3,
+  "mode": "LIVE_ONLY",
+  "request_sha256": "c2d3e7a556651b61a3ee6c811f3821471e7e96f04b4a65bcb1d4842c5f496542",
+  "provider": {
+    "provider": "codex_cli_saved_chatgpt_login",
+    "model_requested": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "model_revision_reported": null,
+    "started_at_utc": "2026-09-29T14:05:44.460396+00:00",
+    "elapsed_seconds": 3.601112,
+    "exit_code": 1,
+    "timed_out": false,
+    "auth_failure": false,
+    "session_id": "01a0ed7c-5983-79d2-808d-500682afc14e",
+    "usage": null,
+    "final_text": null,
+    "events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a0ed7c-5983-79d2-808d-500682afc14e"
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "error",
+          "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in C:\\Users\\user\\.codex\\config.toml."
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "error",
+          "message": "Code Mode is unavailable because code-mode host is disabled. Code mode will fail closed; enable `features.code_mode_host` and install `codex-code-mode-host`."
+        }
+      },
+      {
+        "type": "turn.started"
+      },
+      {
+        "type": "error",
+        "message": "You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 7:46 PM."
+      },
+      {
+        "type": "turn.failed",
+        "error": {
+          "message": "You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 7:46 PM."
+        }
+      }
+    ],
+    "unparsed_stdout": [],
+    "stderr": "2026-09-29T14:05:44.712560Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n2026-09-29T14:05:46.176118Z  WARN codex_core::session_startup_prewarm: startup websocket prewarm setup failed: You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 7:46 PM.\n",
+    "tool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "command": [
+      "C:\\Users\\user\\AppData\\Local\\OpenAI\\Codex\\bin\\faa963e871dd422c\\codex.EXE",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--json",
+      "--color",
+      "never",
+      "--model",
+      "gpt-6-astra",
+      "-c",
+      "model_reasoning_effort=\"high\"",
+      "-c",
+      "approval_policy=\"never\"",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--enable",
+      "skip_host_skill_discovery",
+      "--disable",
+      "shell_tool",
+      "--disable",
+      "unified_exec",
+      "--disable",
+      "multi_agent",
+      "--disable",
+      "multi_agent_v2",
+      "--disable",
+      "apps",
+      "--disable",
+      "plugins",
+      "--disable",
+      "memories",
+      "--disable",
+      "browser_use",
+      "--disable",
+      "browser_use_external",
+      "--disable",
+      "computer_use",
+      "--disable",
+      "image_generation",
+      "--disable",
+      "code_mode",
+      "--disable",
+      "code_mode_host",
+      "--disable",
+      "sleep_tool",
+      "--disable",
+      "view_image",
+      "--disable",
+      "skill_search",
+      "--disable",
+      "hooks",
+      "--disable",
+      "unbounded_connection_retries",
+      "--cd",
+      "<isolated_temp>",
+      "--output-schema",
+      "<isolated_temp>\\schema.json",
+      "--output-last-message",
+      "<isolated_temp>\\final.txt",
+      "-"
+    ]
+  },
+  "outcome": "CONTAMINATED_TOOL_USE",
+  "score": {
+    "schema_valid": false,
+    "field_correct": 0,
+    "field_expected": 8,
+    "field_checks": {},
+    "all_fields_correct": false,
+    "provenance_valid": 0,
+    "provenance_expected": 8,
+    "nonnull_evidence_valid": 0,
+    "nonnull_evidence_expected": 8,
+    "all_provenance_valid": false,
+    "proposed_sku": null,
+    "sku_correct": false,
+    "confident_proposal": false,
+    "wrong_confident": false,
+    "review_success": false,
+    "ambiguous_clean": false,
+    "core_status": null,
+    "core_error": null,
+    "core_result": null,
+    "schema_error": "response: expected ['object']"
+  }
+}

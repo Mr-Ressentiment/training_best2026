@@ -1,0 +1,3407 @@
+[
+  {
+    "fixture": "h01_paper",
+    "repeat": 1,
+    "raw_evidence": "calls/h01_paper-r1.json",
+    "raw_sha256": "3df73438916653f1a52e70ce9871e04e1a7628ca751c148f9de01bfd485d047f",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "PAPER-A4-80",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Alder Office Supplies",
+        "po_number": "HX-201",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream",
+            "quantity": 7,
+            "sale_unit": "ream",
+            "unit_price": "5.00",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "PAPER-A4-80",
+              "confidence": 1,
+              "margin": 1,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "PAPER-A4-80",
+                  "score": 1,
+                  "reason": "Explicit SKU matches; A4, 80 g/m2, 500 leaves per ream agrees with the catalog product."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "35.00",
+            "tier_quantity": 7,
+            "tier_min_quantity": 1,
+            "expected_unit_price": "5.00",
+            "expected_line_total": "35.00",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "35.00",
+          "quoted_computed": "35.00",
+          "contract_expected": "35.00",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Alder Office Supplies",
+            "quote": "Account billed: Alder Office Supplies"
+          },
+          "po_number": {
+            "value": "HX-201",
+            "quote": "purchase-order reference HX-201"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "Money unit EUR"
+          },
+          "declared_total": {
+            "value": "35.00",
+            "quote": "Amount before taxes: 35.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream",
+                "quote": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream"
+              },
+              "quantity": {
+                "value": "7",
+                "quote": "Number ordered: 7"
+              },
+              "sale_unit": {
+                "value": "ream",
+                "quote": "Selling unit: ream"
+              },
+              "unit_price": {
+                "value": "5.00",
+                "quote": "Rate for one selling unit: 5.00"
+              },
+              "candidates": [
+                {
+                  "sku": "PAPER-A4-80",
+                  "score": 1,
+                  "reason": "Explicit SKU matches; A4, 80 g/m2, 500 leaves per ream agrees with the catalog product."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h01_paper",
+    "repeat": 2,
+    "raw_evidence": "calls/h01_paper-r2.json",
+    "raw_sha256": "566602247434ee7607b882d16bed728dc9a4905a2d9d70c791696fb743de82b2",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "PAPER-A4-80",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Alder Office Supplies",
+        "po_number": "HX-201",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream",
+            "quantity": 7,
+            "sale_unit": "ream",
+            "unit_price": "5.00",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "PAPER-A4-80",
+              "confidence": 1.0,
+              "margin": 1.0,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "PAPER-A4-80",
+                  "score": 1.0,
+                  "reason": "Explicit SKU and matching A4 size, 80 g/m2 weight, 500 sheets per ream, and selling unit."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "35.00",
+            "tier_quantity": 7,
+            "tier_min_quantity": 1,
+            "expected_unit_price": "5.00",
+            "expected_line_total": "35.00",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "35.00",
+          "quoted_computed": "35.00",
+          "contract_expected": "35.00",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Alder Office Supplies",
+            "quote": "Account billed: Alder Office Supplies"
+          },
+          "po_number": {
+            "value": "HX-201",
+            "quote": "purchase-order reference HX-201"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "Money unit EUR"
+          },
+          "declared_total": {
+            "value": "35.00",
+            "quote": "Amount before taxes: 35.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream",
+                "quote": "Requested article: PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream"
+              },
+              "quantity": {
+                "value": "7",
+                "quote": "Number ordered: 7"
+              },
+              "sale_unit": {
+                "value": "ream",
+                "quote": "Selling unit: ream"
+              },
+              "unit_price": {
+                "value": "5.00",
+                "quote": "Rate for one selling unit: 5.00"
+              },
+              "candidates": [
+                {
+                  "sku": "PAPER-A4-80",
+                  "score": 1.0,
+                  "reason": "Explicit SKU and matching A4 size, 80 g/m2 weight, 500 sheets per ream, and selling unit."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h01_paper",
+    "repeat": 3,
+    "raw_evidence": "calls/h01_paper-r3.json",
+    "raw_sha256": "c5442b5a85da646e9b43e195edcefcf0e977ee1686a7fb2187b16e3ce57c3c7f",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "PAPER-A4-80",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Alder Office Supplies",
+        "po_number": "HX-201",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream",
+            "quantity": 7,
+            "sale_unit": "ream",
+            "unit_price": "5.00",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "PAPER-A4-80",
+              "confidence": 1,
+              "margin": 1,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "PAPER-A4-80",
+                  "score": 1,
+                  "reason": "Explicit SKU matches; A4, 80 g/m2, 500 leaves per ream identify the catalog product."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "35.00",
+            "tier_quantity": 7,
+            "tier_min_quantity": 1,
+            "expected_unit_price": "5.00",
+            "expected_line_total": "35.00",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "35.00",
+          "quoted_computed": "35.00",
+          "contract_expected": "35.00",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Alder Office Supplies",
+            "quote": "Alder Office Supplies"
+          },
+          "po_number": {
+            "value": "HX-201",
+            "quote": "purchase-order reference HX-201"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "Money unit EUR"
+          },
+          "declared_total": {
+            "value": "35.00",
+            "quote": "Amount before taxes: 35.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream",
+                "quote": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream"
+              },
+              "quantity": {
+                "value": "7",
+                "quote": "Number ordered: 7"
+              },
+              "sale_unit": {
+                "value": "ream",
+                "quote": "Selling unit: ream"
+              },
+              "unit_price": {
+                "value": "5.00",
+                "quote": "Rate for one selling unit: 5.00"
+              },
+              "candidates": [
+                {
+                  "sku": "PAPER-A4-80",
+                  "score": 1,
+                  "reason": "Explicit SKU matches; A4, 80 g/m2, 500 leaves per ream identify the catalog product."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h02_large",
+    "repeat": 1,
+    "raw_evidence": "calls/h02_large-r1.json",
+    "raw_sha256": "b1ba261630a831418d320d25d6006a441394658dd40361139c1926e711f6a40f",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "GLOVE-N-L",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Cedar Care",
+        "po_number": "HX-202",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Blue powder-free nitrile exam gloves, large, box of 100",
+            "quantity": 6,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "GLOVE-N-L",
+              "confidence": 1,
+              "margin": 1,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 1,
+                  "reason": "Exact description match, including material, large size, and box of 100."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "48.00",
+            "tier_quantity": 6,
+            "tier_min_quantity": 1,
+            "expected_unit_price": "8.00",
+            "expected_line_total": "48.00",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "48.00",
+          "quoted_computed": "48.00",
+          "contract_expected": "48.00",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-202",
+            "quote": "HX-202"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "48.00",
+            "quote": "48.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "Blue powder-free nitrile exam gloves, large, box of 100",
+                "quote": "Blue powder-free nitrile exam gloves, large, box of 100"
+              },
+              "quantity": {
+                "value": "6",
+                "quote": "6"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 1,
+                  "reason": "Exact description match, including material, large size, and box of 100."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h02_large",
+    "repeat": 2,
+    "raw_evidence": "calls/h02_large-r2.json",
+    "raw_sha256": "b6ba6ca3766420b87904564d4bcbab14f1cbbffd5680d63bec150b13cb1cee9b",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "GLOVE-N-L",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Cedar Care",
+        "po_number": "HX-202",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Blue powder-free nitrile exam gloves, large, box of 100",
+            "quantity": 6,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "GLOVE-N-L",
+              "confidence": 1,
+              "margin": 1,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 1,
+                  "reason": "Exact match for blue powder-free nitrile exam gloves, large, box of 100, sold by the box."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "48.00",
+            "tier_quantity": 6,
+            "tier_min_quantity": 1,
+            "expected_unit_price": "8.00",
+            "expected_line_total": "48.00",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "48.00",
+          "quoted_computed": "48.00",
+          "contract_expected": "48.00",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-202",
+            "quote": "HX-202"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "48.00",
+            "quote": "48.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "Blue powder-free nitrile exam gloves, large, box of 100",
+                "quote": "Blue powder-free nitrile exam gloves, large, box of 100"
+              },
+              "quantity": {
+                "value": "6",
+                "quote": "6"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "Selling unit = box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 1,
+                  "reason": "Exact match for blue powder-free nitrile exam gloves, large, box of 100, sold by the box."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h02_large",
+    "repeat": 3,
+    "raw_evidence": "calls/h02_large-r3.json",
+    "raw_sha256": "5c6b38ba3cfdc7fda3823bf0a3f27f7c75cf6ef3510d8870c59c0da3d47fe276",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "GLOVE-N-L",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Cedar Care",
+        "po_number": "HX-202",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Blue powder-free nitrile exam gloves, large, box of 100",
+            "quantity": 6,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "GLOVE-N-L",
+              "confidence": 1,
+              "margin": 1,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 1,
+                  "reason": "Exact match for blue powder-free nitrile exam gloves, large, box of 100, sold by the box."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "48.00",
+            "tier_quantity": 6,
+            "tier_min_quantity": 1,
+            "expected_unit_price": "8.00",
+            "expected_line_total": "48.00",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "48.00",
+          "quoted_computed": "48.00",
+          "contract_expected": "48.00",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-202",
+            "quote": "HX-202"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "48.00",
+            "quote": "48.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "Blue powder-free nitrile exam gloves, large, box of 100",
+                "quote": "Blue powder-free nitrile exam gloves, large, box of 100"
+              },
+              "quantity": {
+                "value": "6",
+                "quote": "6"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 1,
+                  "reason": "Exact match for blue powder-free nitrile exam gloves, large, box of 100, sold by the box."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h03_alias",
+    "repeat": 1,
+    "raw_evidence": "calls/h03_alias-r1.json",
+    "raw_sha256": "7c4d4b45f416bfd8c47132282e56694dceed4f973cd44e851e2e5db047e1d87a",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_REJECTED",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 6,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 6,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": false,
+      "proposed_sku": "GLOVE-N-M",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": null,
+      "core_error": "line 1.sale_unit: value is not supported by quote",
+      "core_result": null
+    }
+  },
+  {
+    "fixture": "h03_alias",
+    "repeat": 2,
+    "raw_evidence": "calls/h03_alias-r2.json",
+    "raw_sha256": "df82003ea663efa384bd224a9f6fab60e16c9a082e37151040164448cd38f209",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_REJECTED",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 7,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 7,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": false,
+      "proposed_sku": "GLOVE-N-M",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": null,
+      "core_error": "line 1.sale_unit: value is not supported by quote",
+      "core_result": null
+    }
+  },
+  {
+    "fixture": "h03_alias",
+    "repeat": 3,
+    "raw_evidence": "calls/h03_alias-r3.json",
+    "raw_sha256": "67fc6ba60e344ae1fafd7995ff45775ab7be28f18c016fe9bba99a454d8d2222",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_REJECTED",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 5,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 5,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": false,
+      "proposed_sku": "GLOVE-N-M",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": null,
+      "core_error": "declared_total: value is not supported by quote",
+      "core_result": null
+    }
+  },
+  {
+    "fixture": "h04_tape",
+    "repeat": 1,
+    "raw_evidence": "calls/h04_tape-r1.json",
+    "raw_sha256": "ba981e5b99c6709497fb58b11f326a20a31ce756aca08abcd15ef26555bb50c7",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "TAPE-48",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Harbor Logistics",
+        "po_number": "HX-204",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m",
+            "quantity": 12,
+            "sale_unit": "roll",
+            "unit_price": "1.80",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "TAPE-48",
+              "confidence": 0.99,
+              "margin": 0.99,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "TAPE-48",
+                  "score": 0.99,
+                  "reason": "See-through PP carton-sealing tape is equivalent to transparent polypropylene packing tape; dimensions 48 mm x 66 m and selling unit roll match exactly."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "21.60",
+            "tier_quantity": 12,
+            "tier_min_quantity": 10,
+            "expected_unit_price": "1.80",
+            "expected_line_total": "21.60",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "21.60",
+          "quoted_computed": "21.60",
+          "contract_expected": "21.60",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Harbor Logistics",
+            "quote": "Harbor Logistics / Purchasing"
+          },
+          "po_number": {
+            "value": "HX-204",
+            "quote": "PO REF HX-204"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "Currency EUR"
+          },
+          "declared_total": {
+            "value": "21.60",
+            "quote": "Net merchandise amount: 21.60"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m",
+                "quote": "Requested goods: See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m"
+              },
+              "quantity": {
+                "value": "12",
+                "quote": "Units needed: 12"
+              },
+              "sale_unit": {
+                "value": "roll",
+                "quote": "Selling unit: roll"
+              },
+              "unit_price": {
+                "value": "1.80",
+                "quote": "Price per selling unit: 1.80"
+              },
+              "candidates": [
+                {
+                  "sku": "TAPE-48",
+                  "score": 0.99,
+                  "reason": "See-through PP carton-sealing tape is equivalent to transparent polypropylene packing tape; dimensions 48 mm x 66 m and selling unit roll match exactly."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h04_tape",
+    "repeat": 2,
+    "raw_evidence": "calls/h04_tape-r2.json",
+    "raw_sha256": "aed47546af9647858e54164625e638b63be55c67df9e8f9c579017c429aa936e",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "TAPE-48",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Harbor Logistics",
+        "po_number": "HX-204",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m",
+            "quantity": 12,
+            "sale_unit": "roll",
+            "unit_price": "1.80",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "TAPE-48",
+              "confidence": 0.99,
+              "margin": 0.99,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "TAPE-48",
+                  "score": 0.99,
+                  "reason": "See-through PP carton-sealing tape is equivalent to transparent polypropylene packing tape; width 48 mm, length 66 m and selling unit roll match."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "21.60",
+            "tier_quantity": 12,
+            "tier_min_quantity": 10,
+            "expected_unit_price": "1.80",
+            "expected_line_total": "21.60",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "21.60",
+          "quoted_computed": "21.60",
+          "contract_expected": "21.60",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Harbor Logistics",
+            "quote": "Harbor Logistics"
+          },
+          "po_number": {
+            "value": "HX-204",
+            "quote": "HX-204"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "21.60",
+            "quote": "21.60"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m",
+                "quote": "See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m"
+              },
+              "quantity": {
+                "value": "12",
+                "quote": "12"
+              },
+              "sale_unit": {
+                "value": "roll",
+                "quote": "roll"
+              },
+              "unit_price": {
+                "value": "1.80",
+                "quote": "1.80"
+              },
+              "candidates": [
+                {
+                  "sku": "TAPE-48",
+                  "score": 0.99,
+                  "reason": "See-through PP carton-sealing tape is equivalent to transparent polypropylene packing tape; width 48 mm, length 66 m and selling unit roll match."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h04_tape",
+    "repeat": 3,
+    "raw_evidence": "calls/h04_tape-r3.json",
+    "raw_sha256": "16a5f5027783310a8d76d2b262efef06333ff4a73b80d55e7844e7578713e48e",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "PROVIDER_ERROR",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": false,
+      "field_correct": 0,
+      "field_expected": 8,
+      "field_checks": {},
+      "all_fields_correct": false,
+      "provenance_valid": 0,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 0,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": false,
+      "proposed_sku": null,
+      "sku_correct": false,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": null,
+      "core_error": null,
+      "core_result": null,
+      "schema_error": "response: expected ['object']"
+    }
+  },
+  {
+    "fixture": "h05_no_size",
+    "repeat": 1,
+    "raw_evidence": "calls/h05_no_size-r1.json",
+    "raw_sha256": "468ecf4a586a29533bd15f750502039222d64519e5e1a5525f749a0881cec8d9",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": null,
+      "sku_correct": true,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": true,
+      "ambiguous_clean": false,
+      "core_status": "HUMAN_REVIEW",
+      "core_error": null,
+      "core_result": {
+        "status": "HUMAN_REVIEW",
+        "customer": "Cedar Care",
+        "po_number": "HX-205",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Blue powderless nitrile examination handwear, 100 pieces per box",
+            "quantity": 5,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "HUMAN_REVIEW",
+              "sku": null,
+              "confidence": 0.85,
+              "margin": 0.0,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 0.85,
+                  "reason": "Matches blue powder-free nitrile examination gloves, box of 100; medium size is unconfirmed."
+                },
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 0.85,
+                  "reason": "Matches blue powder-free nitrile examination gloves, box of 100; large size is unconfirmed."
+                }
+              ],
+              "uncertainty": "Size selection was explicitly left blank. Both medium and large are plausible; price does not identify size."
+            },
+            "unit_valid": false,
+            "quoted_line_total": "40.00",
+            "tier_quantity": null,
+            "tier_min_quantity": null,
+            "expected_unit_price": null,
+            "expected_line_total": null,
+            "price_delta": null,
+            "price_status": "NOT_CHECKED"
+          }
+        ],
+        "issues": [
+          {
+            "code": "EXTRACTION_UNCERTAINTY",
+            "line": null,
+            "detail": "HX-205 is labeled as a document identifier, not explicitly as a purchase order number."
+          },
+          {
+            "code": "SKU_REVIEW",
+            "line": 1,
+            "detail": "Size selection was explicitly left blank. Both medium and large are plausible; price does not identify size."
+          }
+        ],
+        "totals": {
+          "declared": "40.00",
+          "quoted_computed": "40.00",
+          "contract_expected": null,
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "SYNTHETIC request from Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-205",
+            "quote": "Document HX-205; EUR amounts only."
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR amounts only."
+          },
+          "declared_total": {
+            "value": "40.00",
+            "quote": "Total excluding taxes: 40.00"
+          },
+          "extraction_issues": [
+            "HX-205 is labeled as a document identifier, not explicitly as a purchase order number."
+          ],
+          "lines": [
+            {
+              "description": {
+                "value": "Blue powderless nitrile examination handwear, 100 pieces per box",
+                "quote": "Blue powderless nitrile examination handwear, 100 pieces per box"
+              },
+              "quantity": {
+                "value": "5",
+                "quote": "Quantity requested: 5"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "Selling unit: box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "Unit charge: 8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 0.85,
+                  "reason": "Matches blue powder-free nitrile examination gloves, box of 100; medium size is unconfirmed."
+                },
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 0.85,
+                  "reason": "Matches blue powder-free nitrile examination gloves, box of 100; large size is unconfirmed."
+                }
+              ],
+              "ambiguous": true,
+              "uncertainty": "Size selection was explicitly left blank. Both medium and large are plausible; price does not identify size."
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h05_no_size",
+    "repeat": 2,
+    "raw_evidence": "calls/h05_no_size-r2.json",
+    "raw_sha256": "d105a84a1fea4f46f2ae67d9aef3490f014e5b1f1d333bad33d7db599af5da49",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": null,
+      "sku_correct": true,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": true,
+      "ambiguous_clean": false,
+      "core_status": "HUMAN_REVIEW",
+      "core_error": null,
+      "core_result": {
+        "status": "HUMAN_REVIEW",
+        "customer": "Cedar Care",
+        "po_number": "HX-205",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Blue powderless nitrile examination handwear, 100 pieces per box",
+            "quantity": 5,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "HUMAN_REVIEW",
+              "sku": null,
+              "confidence": 0.9,
+              "margin": 0.0,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 0.9,
+                  "reason": "Matches blue powder-free nitrile examination gloves, box of 100; medium size is unconfirmed."
+                },
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 0.9,
+                  "reason": "Matches blue powder-free nitrile examination gloves, box of 100; large size is unconfirmed."
+                }
+              ],
+              "uncertainty": "The purchaser left size blank. Both medium and large are plausible; price does not establish size."
+            },
+            "unit_valid": false,
+            "quoted_line_total": "40.00",
+            "tier_quantity": null,
+            "tier_min_quantity": null,
+            "expected_unit_price": null,
+            "expected_line_total": null,
+            "price_delta": null,
+            "price_status": "NOT_CHECKED"
+          }
+        ],
+        "issues": [
+          {
+            "code": "SKU_REVIEW",
+            "line": 1,
+            "detail": "The purchaser left size blank. Both medium and large are plausible; price does not establish size."
+          }
+        ],
+        "totals": {
+          "declared": "40.00",
+          "quoted_computed": "40.00",
+          "contract_expected": null,
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-205",
+            "quote": "Document HX-205"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "40.00",
+            "quote": "Total excluding taxes: 40.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "Blue powderless nitrile examination handwear, 100 pieces per box",
+                "quote": "Blue powderless nitrile examination handwear, 100 pieces per box"
+              },
+              "quantity": {
+                "value": "5",
+                "quote": "Quantity requested: 5"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "Selling unit: box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "Unit charge: 8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 0.9,
+                  "reason": "Matches blue powder-free nitrile examination gloves, box of 100; medium size is unconfirmed."
+                },
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 0.9,
+                  "reason": "Matches blue powder-free nitrile examination gloves, box of 100; large size is unconfirmed."
+                }
+              ],
+              "ambiguous": true,
+              "uncertainty": "The purchaser left size blank. Both medium and large are plausible; price does not establish size."
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h05_no_size",
+    "repeat": 3,
+    "raw_evidence": "calls/h05_no_size-r3.json",
+    "raw_sha256": "932f88c95717ea19b9efe3470288a9bd85430e58ce7fbe7bae84176ca1a3e886",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "PROVIDER_ERROR",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": false,
+      "field_correct": 0,
+      "field_expected": 8,
+      "field_checks": {},
+      "all_fields_correct": false,
+      "provenance_valid": 0,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 0,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": false,
+      "proposed_sku": null,
+      "sku_correct": false,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": null,
+      "core_error": null,
+      "core_result": null,
+      "schema_error": "response: expected ['object']"
+    }
+  },
+  {
+    "fixture": "h06_no_pack",
+    "repeat": 1,
+    "raw_evidence": "calls/h06_no_pack-r1.json",
+    "raw_sha256": "0affa5013e34958ba6e79feeebcdd3d867ab5d1c4aa448a4e512d7f608252adc",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": null,
+      "sku_correct": true,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": true,
+      "ambiguous_clean": false,
+      "core_status": "HUMAN_REVIEW",
+      "core_error": null,
+      "core_result": {
+        "status": "HUMAN_REVIEW",
+        "customer": "Cedar Care",
+        "po_number": "HX-206",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Medium blue powder-free nitrile exam handwear",
+            "quantity": 2,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "HUMAN_REVIEW",
+              "sku": null,
+              "confidence": 0.85,
+              "margin": 0.85,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 0.85,
+                  "reason": "Matches medium size, blue color, powder-free nitrile material, exam use and box sale unit. Catalog pack contains 100 gloves; requested pack count is unspecified."
+                }
+              ],
+              "uncertainty": "Gloves per box are unspecified, so equivalence to the catalog box of 100 cannot be confirmed."
+            },
+            "unit_valid": false,
+            "quoted_line_total": "16.00",
+            "tier_quantity": null,
+            "tier_min_quantity": null,
+            "expected_unit_price": null,
+            "expected_line_total": null,
+            "price_delta": null,
+            "price_status": "NOT_CHECKED"
+          }
+        ],
+        "issues": [
+          {
+            "code": "SKU_REVIEW",
+            "line": 1,
+            "detail": "Gloves per box are unspecified, so equivalence to the catalog box of 100 cannot be confirmed."
+          }
+        ],
+        "totals": {
+          "declared": "16.00",
+          "quoted_computed": "16.00",
+          "contract_expected": null,
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-206",
+            "quote": "HX-206"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "16.00",
+            "quote": "16.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "Medium blue powder-free nitrile exam handwear",
+                "quote": "Medium blue powder-free nitrile exam handwear"
+              },
+              "quantity": {
+                "value": "2",
+                "quote": "2"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 0.85,
+                  "reason": "Matches medium size, blue color, powder-free nitrile material, exam use and box sale unit. Catalog pack contains 100 gloves; requested pack count is unspecified."
+                }
+              ],
+              "ambiguous": true,
+              "uncertainty": "Gloves per box are unspecified, so equivalence to the catalog box of 100 cannot be confirmed."
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h06_no_pack",
+    "repeat": 2,
+    "raw_evidence": "calls/h06_no_pack-r2.json",
+    "raw_sha256": "626d91f361a2a2f4186238d179f7ec570f7072981e33399692e8bcdb67daf5cd",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": null,
+      "sku_correct": true,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": true,
+      "ambiguous_clean": false,
+      "core_status": "HUMAN_REVIEW",
+      "core_error": null,
+      "core_result": {
+        "status": "HUMAN_REVIEW",
+        "customer": "Cedar Care",
+        "po_number": "HX-206",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Medium blue powder-free nitrile exam handwear",
+            "quantity": 2,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "HUMAN_REVIEW",
+              "sku": null,
+              "confidence": 0.85,
+              "margin": 0.85,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 0.85,
+                  "reason": "Matches medium size, blue color, powder-free nitrile material and exam use. Catalog box contains 100 gloves; source pack count is unspecified."
+                }
+              ],
+              "uncertainty": "Gloves per box are unspecified, so equivalence to the catalog box of 100 cannot be confirmed."
+            },
+            "unit_valid": false,
+            "quoted_line_total": "16.00",
+            "tier_quantity": null,
+            "tier_min_quantity": null,
+            "expected_unit_price": null,
+            "expected_line_total": null,
+            "price_delta": null,
+            "price_status": "NOT_CHECKED"
+          }
+        ],
+        "issues": [
+          {
+            "code": "SKU_REVIEW",
+            "line": 1,
+            "detail": "Gloves per box are unspecified, so equivalence to the catalog box of 100 cannot be confirmed."
+          }
+        ],
+        "totals": {
+          "declared": "16.00",
+          "quoted_computed": "16.00",
+          "contract_expected": null,
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-206",
+            "quote": "HX-206"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "16.00",
+            "quote": "Net amount on requisition: 16.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "Medium blue powder-free nitrile exam handwear",
+                "quote": "Medium blue powder-free nitrile exam handwear"
+              },
+              "quantity": {
+                "value": "2",
+                "quote": "Order quantity: 2"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "Selling unit: box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "Price per box: 8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 0.85,
+                  "reason": "Matches medium size, blue color, powder-free nitrile material and exam use. Catalog box contains 100 gloves; source pack count is unspecified."
+                }
+              ],
+              "ambiguous": true,
+              "uncertainty": "Gloves per box are unspecified, so equivalence to the catalog box of 100 cannot be confirmed."
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h06_no_pack",
+    "repeat": 3,
+    "raw_evidence": "calls/h06_no_pack-r3.json",
+    "raw_sha256": "8e9d04ea0c015971fa9ef2014ea22fc7e467e048a97c4e87935b3840a1ff24f3",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "PROVIDER_ERROR",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": false,
+      "field_correct": 0,
+      "field_expected": 8,
+      "field_checks": {},
+      "all_fields_correct": false,
+      "provenance_valid": 0,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 0,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": false,
+      "proposed_sku": null,
+      "sku_correct": false,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": null,
+      "core_error": null,
+      "core_result": null,
+      "schema_error": "response: expected ['object']"
+    }
+  },
+  {
+    "fixture": "h07_not_medium",
+    "repeat": 1,
+    "raw_evidence": "calls/h07_not_medium-r1.json",
+    "raw_sha256": "78c90bca12b34eea3bd2f5d1bb3cbf62e058edf32b986b187254db3fca8c332b",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "GLOVE-N-L",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Cedar Care",
+        "po_number": "HX-207",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium",
+            "quantity": 2,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "GLOVE-N-L",
+              "confidence": 0.99,
+              "margin": 0.99,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 0.99,
+                  "reason": "Matches blue powder-free nitrile clinical/exam gloves, large size, and box of 100. Medium is explicitly excluded."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "16.00",
+            "tier_quantity": 2,
+            "tier_min_quantity": 1,
+            "expected_unit_price": "8.00",
+            "expected_line_total": "16.00",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "16.00",
+          "quoted_computed": "16.00",
+          "contract_expected": "16.00",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-207",
+            "quote": "HX-207"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "16.00",
+            "quote": "16.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium",
+                "quote": "Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium"
+              },
+              "quantity": {
+                "value": "2",
+                "quote": "2"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 0.99,
+                  "reason": "Matches blue powder-free nitrile clinical/exam gloves, large size, and box of 100. Medium is explicitly excluded."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h07_not_medium",
+    "repeat": 2,
+    "raw_evidence": "calls/h07_not_medium-r2.json",
+    "raw_sha256": "d5cc27ac9c10f6c1bc98625c7bd881a6c84597f62917c993149c90ff5a2cb81e",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "GLOVE-N-L",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Cedar Care",
+        "po_number": "HX-207",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium",
+            "quantity": 2,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "GLOVE-N-L",
+              "confidence": 0.99,
+              "margin": 0.99,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 0.99,
+                  "reason": "Matches blue powder-free nitrile gloves, large size, and box of 100. Medium is explicitly excluded."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "16.00",
+            "tier_quantity": 2,
+            "tier_min_quantity": 1,
+            "expected_unit_price": "8.00",
+            "expected_line_total": "16.00",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "16.00",
+          "quoted_computed": "16.00",
+          "contract_expected": "16.00",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-207",
+            "quote": "HX-207"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "16.00",
+            "quote": "16.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium",
+                "quote": "Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium"
+              },
+              "quantity": {
+                "value": "2",
+                "quote": "2"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-L",
+                  "score": 0.99,
+                  "reason": "Matches blue powder-free nitrile gloves, large size, and box of 100. Medium is explicitly excluded."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h07_not_medium",
+    "repeat": 3,
+    "raw_evidence": "calls/h07_not_medium-r3.json",
+    "raw_sha256": "0684ae5be7277fdd9c9cb7b5cee98d3772925ad8287734eb6e7c58d9e6c963b4",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "PROVIDER_ERROR",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": false,
+      "field_correct": 0,
+      "field_expected": 8,
+      "field_checks": {},
+      "all_fields_correct": false,
+      "provenance_valid": 0,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 0,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": false,
+      "proposed_sku": null,
+      "sku_correct": false,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": null,
+      "core_error": null,
+      "core_result": null,
+      "schema_error": "response: expected ['object']"
+    }
+  },
+  {
+    "fixture": "h08_not_large",
+    "repeat": 1,
+    "raw_evidence": "calls/h08_not_large-r1.json",
+    "raw_sha256": "25a14e8133c9ec59bea494fdaf66c61d157a1617be66b4a9006e575dcadb0b15",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "GLOVE-N-M",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Cedar Care",
+        "po_number": "HX-208",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large",
+            "quantity": 3,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "GLOVE-N-M",
+              "confidence": 1.0,
+              "margin": 1.0,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 1.0,
+                  "reason": "Matches medium size, blue nitrile exam gloves, powder-free wording, and box of 100. Large is explicitly excluded."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "24.00",
+            "tier_quantity": 3,
+            "tier_min_quantity": 1,
+            "expected_unit_price": "8.00",
+            "expected_line_total": "24.00",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "24.00",
+          "quoted_computed": "24.00",
+          "contract_expected": "24.00",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-208",
+            "quote": "HX-208"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "24.00",
+            "quote": "24.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large",
+                "quote": "MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large"
+              },
+              "quantity": {
+                "value": "3",
+                "quote": "Count ordered: 3"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "Selling unit: box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "Each box: 8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 1.0,
+                  "reason": "Matches medium size, blue nitrile exam gloves, powder-free wording, and box of 100. Large is explicitly excluded."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h08_not_large",
+    "repeat": 2,
+    "raw_evidence": "calls/h08_not_large-r2.json",
+    "raw_sha256": "76d2eeb9522ab26960612ba33774cd0c098667cff17286f9ed7a3d997beb06b2",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": "GLOVE-N-M",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "CLEAN_DRAFT",
+      "core_error": null,
+      "core_result": {
+        "status": "CLEAN_DRAFT",
+        "customer": "Cedar Care",
+        "po_number": "HX-208",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large",
+            "quantity": 3,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "PROPOSED",
+              "sku": "GLOVE-N-M",
+              "confidence": 0.99,
+              "margin": 0.99,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 0.99,
+                  "reason": "Matches medium size, blue nitrile examination gloves, powder-free wording, and box of 100. Large is explicitly excluded."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": "24.00",
+            "tier_quantity": 3,
+            "tier_min_quantity": 1,
+            "expected_unit_price": "8.00",
+            "expected_line_total": "24.00",
+            "price_delta": "0.00",
+            "price_status": "PASS"
+          }
+        ],
+        "issues": [],
+        "totals": {
+          "declared": "24.00",
+          "quoted_computed": "24.00",
+          "contract_expected": "24.00",
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-208",
+            "quote": "HX-208"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "24.00",
+            "quote": "Net order amount: 24.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large",
+                "quote": "MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large"
+              },
+              "quantity": {
+                "value": "3",
+                "quote": "Count ordered: 3"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "Selling unit: box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "Each box: 8.00"
+              },
+              "candidates": [
+                {
+                  "sku": "GLOVE-N-M",
+                  "score": 0.99,
+                  "reason": "Matches medium size, blue nitrile examination gloves, powder-free wording, and box of 100. Large is explicitly excluded."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h08_not_large",
+    "repeat": 3,
+    "raw_evidence": "calls/h08_not_large-r3.json",
+    "raw_sha256": "1c1e85f113c53ee769b4a6e166332ca11ff67261d4b399b587ffe0d1d759d0c6",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "PROVIDER_ERROR",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": false,
+      "field_correct": 0,
+      "field_expected": 8,
+      "field_checks": {},
+      "all_fields_correct": false,
+      "provenance_valid": 0,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 0,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": false,
+      "proposed_sku": null,
+      "sku_correct": false,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": null,
+      "core_error": null,
+      "core_result": null,
+      "schema_error": "response: expected ['object']"
+    }
+  },
+  {
+    "fixture": "h09_latex",
+    "repeat": 1,
+    "raw_evidence": "calls/h09_latex-r1.json",
+    "raw_sha256": "5669265e07d1a666fcc8cc57a1b2772f8ef20d6bdc326422b24540d504459537",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": null,
+      "sku_correct": true,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": true,
+      "ambiguous_clean": false,
+      "core_status": "HUMAN_REVIEW",
+      "core_error": null,
+      "core_result": {
+        "status": "HUMAN_REVIEW",
+        "customer": "Cedar Care",
+        "po_number": "HX-209",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Medium blue LATEX examination gloves without powder, 100 per box",
+            "quantity": 4,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "HUMAN_REVIEW",
+              "sku": null,
+              "confidence": null,
+              "margin": null,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [],
+              "uncertainty": "No equivalent catalog product: latex is explicitly required and nitrile substitution is prohibited; both catalog glove products are nitrile."
+            },
+            "unit_valid": false,
+            "quoted_line_total": "32.00",
+            "tier_quantity": null,
+            "tier_min_quantity": null,
+            "expected_unit_price": null,
+            "expected_line_total": null,
+            "price_delta": null,
+            "price_status": "NOT_CHECKED"
+          }
+        ],
+        "issues": [
+          {
+            "code": "SKU_REVIEW",
+            "line": 1,
+            "detail": "No equivalent catalog product: latex is explicitly required and nitrile substitution is prohibited; both catalog glove products are nitrile."
+          }
+        ],
+        "totals": {
+          "declared": "32.00",
+          "quoted_computed": "32.00",
+          "contract_expected": null,
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-209",
+            "quote": "HX-209"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "32.00",
+            "quote": "32.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "Medium blue LATEX examination gloves without powder, 100 per box",
+                "quote": "Medium blue LATEX examination gloves without powder, 100 per box"
+              },
+              "quantity": {
+                "value": "4",
+                "quote": "4"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "8.00"
+              },
+              "candidates": [],
+              "ambiguous": true,
+              "uncertainty": "No equivalent catalog product: latex is explicitly required and nitrile substitution is prohibited; both catalog glove products are nitrile."
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h09_latex",
+    "repeat": 2,
+    "raw_evidence": "calls/h09_latex-r2.json",
+    "raw_sha256": "b1b8652fbd1d944fc61e57376620cd1d90421e47d7b838a48b62f7d6abf6cbab",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 8,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": true,
+      "proposed_sku": null,
+      "sku_correct": true,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": true,
+      "ambiguous_clean": false,
+      "core_status": "HUMAN_REVIEW",
+      "core_error": null,
+      "core_result": {
+        "status": "HUMAN_REVIEW",
+        "customer": "Cedar Care",
+        "po_number": "HX-209",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Medium blue LATEX examination gloves without powder, 100 per box",
+            "quantity": 4,
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "match": {
+              "status": "HUMAN_REVIEW",
+              "sku": null,
+              "confidence": null,
+              "margin": null,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [],
+              "uncertainty": "No equivalent catalog product: latex is explicitly required and nitrile substitution is prohibited. Both catalog glove products are nitrile."
+            },
+            "unit_valid": false,
+            "quoted_line_total": "32.00",
+            "tier_quantity": null,
+            "tier_min_quantity": null,
+            "expected_unit_price": null,
+            "expected_line_total": null,
+            "price_delta": null,
+            "price_status": "NOT_CHECKED"
+          }
+        ],
+        "issues": [
+          {
+            "code": "SKU_REVIEW",
+            "line": 1,
+            "detail": "No equivalent catalog product: latex is explicitly required and nitrile substitution is prohibited. Both catalog glove products are nitrile."
+          }
+        ],
+        "totals": {
+          "declared": "32.00",
+          "quoted_computed": "32.00",
+          "contract_expected": null,
+          "quoted_minus_declared": "0.00"
+        },
+        "extraction": {
+          "customer": {
+            "value": "Cedar Care",
+            "quote": "Cedar Care"
+          },
+          "po_number": {
+            "value": "HX-209",
+            "quote": "HX-209"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "EUR"
+          },
+          "declared_total": {
+            "value": "32.00",
+            "quote": "32.00"
+          },
+          "extraction_issues": [],
+          "lines": [
+            {
+              "description": {
+                "value": "Medium blue LATEX examination gloves without powder, 100 per box",
+                "quote": "Medium blue LATEX examination gloves without powder, 100 per box"
+              },
+              "quantity": {
+                "value": "4",
+                "quote": "4"
+              },
+              "sale_unit": {
+                "value": "box",
+                "quote": "Selling unit: box"
+              },
+              "unit_price": {
+                "value": "8.00",
+                "quote": "8.00"
+              },
+              "candidates": [],
+              "ambiguous": true,
+              "uncertainty": "No equivalent catalog product: latex is explicitly required and nitrile substitution is prohibited. Both catalog glove products are nitrile."
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h09_latex",
+    "repeat": 3,
+    "raw_evidence": "calls/h09_latex-r3.json",
+    "raw_sha256": "b7de7a0f843f6287474959fca1237090db995726602bd70031066dc15cafd76d",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "PROVIDER_ERROR",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": false,
+      "field_correct": 0,
+      "field_expected": 8,
+      "field_checks": {},
+      "all_fields_correct": false,
+      "provenance_valid": 0,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 0,
+      "nonnull_evidence_expected": 8,
+      "all_provenance_valid": false,
+      "proposed_sku": null,
+      "sku_correct": false,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": null,
+      "core_error": null,
+      "core_result": null,
+      "schema_error": "response: expected ['object']"
+    }
+  },
+  {
+    "fixture": "h10_damaged",
+    "repeat": 1,
+    "raw_evidence": "calls/h10_damaged-r1.json",
+    "raw_sha256": "4c1295f44efd200adfb80fb03c6af6a1b9d8c22796b4cde6b865057aa7271164",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 4,
+      "nonnull_evidence_expected": 4,
+      "all_provenance_valid": true,
+      "proposed_sku": "PAPER-A4-80",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "HUMAN_REVIEW",
+      "core_error": null,
+      "core_result": {
+        "status": "HUMAN_REVIEW",
+        "customer": null,
+        "po_number": "HX-210",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "White A4 printer sheets; 80 gsm; sealed ream of 500",
+            "quantity": null,
+            "sale_unit": "ream",
+            "unit_price": null,
+            "match": {
+              "status": "PROPOSED",
+              "sku": "PAPER-A4-80",
+              "confidence": 0.99,
+              "margin": 0.99,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "PAPER-A4-80",
+                  "score": 0.99,
+                  "reason": "A4 printer paper, 80 gsm, and a ream of 500 sheets uniquely match this catalog product."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": null,
+            "tier_quantity": null,
+            "tier_min_quantity": null,
+            "expected_unit_price": null,
+            "expected_line_total": null,
+            "price_delta": null,
+            "price_status": "NOT_CHECKED"
+          }
+        ],
+        "issues": [
+          {
+            "code": "MISSING_FIELD",
+            "line": null,
+            "detail": "customer"
+          },
+          {
+            "code": "MISSING_FIELD",
+            "line": null,
+            "detail": "declared_total"
+          },
+          {
+            "code": "UNKNOWN_CUSTOMER",
+            "line": null,
+            "detail": "No synthetic customer contract; price checks unavailable"
+          },
+          {
+            "code": "EXTRACTION_UNCERTAINTY",
+            "line": null,
+            "detail": "Customer cannot be recovered: PURCHASER: [section torn away]."
+          },
+          {
+            "code": "EXTRACTION_UNCERTAINTY",
+            "line": null,
+            "detail": "Quantity is marked [unreadable]."
+          },
+          {
+            "code": "EXTRACTION_UNCERTAINTY",
+            "line": null,
+            "detail": "Unit price is marked [unreadable]."
+          },
+          {
+            "code": "EXTRACTION_UNCERTAINTY",
+            "line": null,
+            "detail": "Declared total cannot be recovered: Net amount: [bottom of page missing]."
+          },
+          {
+            "code": "MISSING_FIELD",
+            "line": 1,
+            "detail": "quantity"
+          },
+          {
+            "code": "MISSING_FIELD",
+            "line": 1,
+            "detail": "unit_price"
+          }
+        ],
+        "totals": {
+          "declared": null,
+          "quoted_computed": null,
+          "contract_expected": null,
+          "quoted_minus_declared": null
+        },
+        "extraction": {
+          "customer": {
+            "value": null,
+            "quote": ""
+          },
+          "po_number": {
+            "value": "HX-210",
+            "quote": "Purchase order HX-210"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "CURRENCY EUR"
+          },
+          "declared_total": {
+            "value": null,
+            "quote": ""
+          },
+          "extraction_issues": [
+            "Customer cannot be recovered: PURCHASER: [section torn away].",
+            "Quantity is marked [unreadable].",
+            "Unit price is marked [unreadable].",
+            "Declared total cannot be recovered: Net amount: [bottom of page missing]."
+          ],
+          "lines": [
+            {
+              "description": {
+                "value": "White A4 printer sheets; 80 gsm; sealed ream of 500",
+                "quote": "White A4 printer sheets; 80 gsm; sealed ream of 500"
+              },
+              "quantity": {
+                "value": null,
+                "quote": ""
+              },
+              "sale_unit": {
+                "value": "ream",
+                "quote": "Selling unit: ream"
+              },
+              "unit_price": {
+                "value": null,
+                "quote": ""
+              },
+              "candidates": [
+                {
+                  "sku": "PAPER-A4-80",
+                  "score": 0.99,
+                  "reason": "A4 printer paper, 80 gsm, and a ream of 500 sheets uniquely match this catalog product."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h10_damaged",
+    "repeat": 2,
+    "raw_evidence": "calls/h10_damaged-r2.json",
+    "raw_sha256": "96ef8bae8e5f6a608fa525ae3087f178454a8a5cf32c63e156eb90fac8f592d9",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "CORE_RESULT",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": true,
+      "field_correct": 8,
+      "field_expected": 8,
+      "field_checks": {
+        "customer": true,
+        "po_number": true,
+        "currency": true,
+        "declared_total": true,
+        "line.description": true,
+        "line.quantity": true,
+        "line.sale_unit": true,
+        "line.unit_price": true
+      },
+      "all_fields_correct": true,
+      "provenance_valid": 8,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 4,
+      "nonnull_evidence_expected": 4,
+      "all_provenance_valid": true,
+      "proposed_sku": "PAPER-A4-80",
+      "sku_correct": true,
+      "confident_proposal": true,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": "HUMAN_REVIEW",
+      "core_error": null,
+      "core_result": {
+        "status": "HUMAN_REVIEW",
+        "customer": null,
+        "po_number": "HX-210",
+        "currency": "EUR",
+        "lines": [
+          {
+            "line": 1,
+            "description": "White A4 printer sheets; 80 gsm; sealed ream of 500",
+            "quantity": null,
+            "sale_unit": "ream",
+            "unit_price": null,
+            "match": {
+              "status": "PROPOSED",
+              "sku": "PAPER-A4-80",
+              "confidence": 0.99,
+              "margin": 0.99,
+              "confidence_kind": "uncalibrated_model_score",
+              "candidates": [
+                {
+                  "sku": "PAPER-A4-80",
+                  "score": 0.99,
+                  "reason": "A4 printer paper, 80 gsm, 500 sheets per ream uniquely matches this catalog product."
+                }
+              ],
+              "uncertainty": ""
+            },
+            "unit_valid": true,
+            "quoted_line_total": null,
+            "tier_quantity": null,
+            "tier_min_quantity": null,
+            "expected_unit_price": null,
+            "expected_line_total": null,
+            "price_delta": null,
+            "price_status": "NOT_CHECKED"
+          }
+        ],
+        "issues": [
+          {
+            "code": "MISSING_FIELD",
+            "line": null,
+            "detail": "customer"
+          },
+          {
+            "code": "MISSING_FIELD",
+            "line": null,
+            "detail": "declared_total"
+          },
+          {
+            "code": "UNKNOWN_CUSTOMER",
+            "line": null,
+            "detail": "No synthetic customer contract; price checks unavailable"
+          },
+          {
+            "code": "EXTRACTION_UNCERTAINTY",
+            "line": null,
+            "detail": "Customer is unavailable: PURCHASER section torn away."
+          },
+          {
+            "code": "EXTRACTION_UNCERTAINTY",
+            "line": null,
+            "detail": "Line 1 quantity is marked [unreadable]."
+          },
+          {
+            "code": "EXTRACTION_UNCERTAINTY",
+            "line": null,
+            "detail": "Line 1 unit price is marked [unreadable]."
+          },
+          {
+            "code": "EXTRACTION_UNCERTAINTY",
+            "line": null,
+            "detail": "Declared total is unavailable: Net amount marked [bottom of page missing]."
+          },
+          {
+            "code": "MISSING_FIELD",
+            "line": 1,
+            "detail": "quantity"
+          },
+          {
+            "code": "MISSING_FIELD",
+            "line": 1,
+            "detail": "unit_price"
+          }
+        ],
+        "totals": {
+          "declared": null,
+          "quoted_computed": null,
+          "contract_expected": null,
+          "quoted_minus_declared": null
+        },
+        "extraction": {
+          "customer": {
+            "value": null,
+            "quote": ""
+          },
+          "po_number": {
+            "value": "HX-210",
+            "quote": "Purchase order HX-210"
+          },
+          "currency": {
+            "value": "EUR",
+            "quote": "CURRENCY EUR"
+          },
+          "declared_total": {
+            "value": null,
+            "quote": ""
+          },
+          "extraction_issues": [
+            "Customer is unavailable: PURCHASER section torn away.",
+            "Line 1 quantity is marked [unreadable].",
+            "Line 1 unit price is marked [unreadable].",
+            "Declared total is unavailable: Net amount marked [bottom of page missing]."
+          ],
+          "lines": [
+            {
+              "description": {
+                "value": "White A4 printer sheets; 80 gsm; sealed ream of 500",
+                "quote": "White A4 printer sheets; 80 gsm; sealed ream of 500"
+              },
+              "quantity": {
+                "value": null,
+                "quote": ""
+              },
+              "sale_unit": {
+                "value": "ream",
+                "quote": "Selling unit: ream"
+              },
+              "unit_price": {
+                "value": null,
+                "quote": ""
+              },
+              "candidates": [
+                {
+                  "sku": "PAPER-A4-80",
+                  "score": 0.99,
+                  "reason": "A4 printer paper, 80 gsm, 500 sheets per ream uniquely matches this catalog product."
+                }
+              ],
+              "ambiguous": false,
+              "uncertainty": ""
+            }
+          ]
+        },
+        "human_confirmation_required": true,
+        "action": "RECONCILIATION_DRAFT_ONLY"
+      }
+    }
+  },
+  {
+    "fixture": "h10_damaged",
+    "repeat": 3,
+    "raw_evidence": "calls/h10_damaged-r3.json",
+    "raw_sha256": "e0fe7d27a289821b4b3027b98cde8570164b6c456d669bec49c220030f30e451",
+    "original_outcome": "CONTAMINATED_TOOL_USE",
+    "audited_outcome": "PROVIDER_ERROR",
+    "excluded_nontool_events": [
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      },
+      {
+        "event": "item.completed",
+        "item_type": "error"
+      }
+    ],
+    "score": {
+      "schema_valid": false,
+      "field_correct": 0,
+      "field_expected": 8,
+      "field_checks": {},
+      "all_fields_correct": false,
+      "provenance_valid": 0,
+      "provenance_expected": 8,
+      "nonnull_evidence_valid": 0,
+      "nonnull_evidence_expected": 4,
+      "all_provenance_valid": false,
+      "proposed_sku": null,
+      "sku_correct": false,
+      "confident_proposal": false,
+      "wrong_confident": false,
+      "review_success": false,
+      "ambiguous_clean": false,
+      "core_status": null,
+      "core_error": null,
+      "core_result": null,
+      "schema_error": "response: expected ['object']"
+    }
+  }
+]
