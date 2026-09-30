@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
 from typing import Any, Callable, Generator
@@ -140,15 +141,14 @@ def in_memory_db_engine():
 def db_session(in_memory_db_engine) -> Generator[Session, None, None]:
     """Provide a transactional database session rolled back after every test.
 
-    Dynamically binds ORM models from `app.models.entities` if present.
+    Binds ORM models from `app.models.entities` if that module is implemented.
+    Errors inside an existing entities module are raised rather than swallowed.
     """
     base_class = None
-    try:
-        from app.models import entities  # type: ignore
+    if importlib.util.find_spec("app.models.entities") is not None:
+        from app.models.entities import Base  # type: ignore
 
-        base_class = getattr(entities, "Base", None)
-    except (ImportError, AttributeError):
-        pass
+        base_class = Base
 
     if base_class is not None:
         base_class.metadata.create_all(bind=in_memory_db_engine)
@@ -174,36 +174,32 @@ def db_session(in_memory_db_engine) -> Generator[Session, None, None]:
 
 @pytest.fixture
 def app_instance() -> FastAPI:
-    """Return the FastAPI application instance or a fallback test app."""
-    try:
-        from app.main import app  # type: ignore
+    """Return the FastAPI application instance or a fallback test app if not implemented."""
+    if importlib.util.find_spec("app.main") is None:
+        # Fallback placeholder only when app/main.py is genuinely absent
+        return FastAPI(title="OrderShield Test Fallback")
 
-        return app
-    except (ImportError, AttributeError):
-        # Fallback placeholder until T022 implements app/main.py
-        fallback_app = FastAPI(title="OrderShield Test Fallback")
-        return fallback_app
+    from app.main import app  # type: ignore
+
+    return app
 
 
 @pytest.fixture
 def client(app_instance: FastAPI, db_session: Session) -> Generator[TestClient, None, None]:
     """FastAPI TestClient with database session dependency override applied."""
     get_db_fn = None
-    try:
+    if importlib.util.find_spec("app.database") is not None:
         from app.database import get_db  # type: ignore
 
         get_db_fn = get_db
-    except (ImportError, AttributeError):
-        pass
-
-    if get_db_fn is not None:
         app_instance.dependency_overrides[get_db_fn] = lambda: db_session
 
-    with TestClient(app_instance) as test_client:
-        yield test_client
-
-    if get_db_fn is not None:
-        app_instance.dependency_overrides.pop(get_db_fn, None)
+    try:
+        with TestClient(app_instance) as test_client:
+            yield test_client
+    finally:
+        if get_db_fn is not None:
+            app_instance.dependency_overrides.pop(get_db_fn, None)
 
 
 # -----------------------------------------------------------------------------
@@ -217,7 +213,7 @@ class MockAIProvider:
     Enables testing:
     - Bounded client timeout abortion (simulating >15s delay);
     - Immediate failure handling (simulating target <=5s transport/auth/quota errors);
-    - Untrusted schema validation errors (malformed or incomplete JSON);
+    - Untrusted schema validation errors (incomplete or unexpected fields);
     - Deterministic extraction payload return without network dependency;
     - Zero automatic failover assertion.
     """
@@ -239,7 +235,6 @@ class MockAIProvider:
         self.simulate_timeout: bool = False
         self.simulate_auth_error: bool = False
         self.simulate_connection_error: bool = False
-        self.simulate_invalid_json: bool = False
         self.simulate_schema_error: bool = False
 
     def extract(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
@@ -257,12 +252,8 @@ class MockAIProvider:
         if self.simulate_connection_error:
             raise ConnectionError("Connection refused: upstream AI provider unreachable")
 
-        if self.simulate_invalid_json:
-            # Return malformed structure violating Pydantic schema
-            return {"invalid_json_stream": "```not-valid-json{"}
-
         if self.simulate_schema_error:
-            # Missing mandatory fields
+            # Missing mandatory fields / schema-invalid payload
             return {"unexpected_field": 123}
 
         return self.default_payload

@@ -2,7 +2,7 @@
   "fixture_id": "fixture-discrepancy-apex",
   "name": "Discrepancy Apex Purchase Order",
   "document_filename": "po_discrepancy_apex.txt",
-  "description": "Discrepancy PO intake scenario for Apex Distribution with PriceMismatch and ambiguous SKU / MOQ breach.",
+  "description": "Discrepancy PO intake scenario for Apex Distribution with PriceMismatch and ambiguous SKU requiring operator resolution.",
   "extraction": {
     "customer_name": "Apex Distribution",
     "customer_id": "CUST-APEX",
