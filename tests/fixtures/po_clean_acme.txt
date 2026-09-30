@@ -1,0 +1,13 @@
+PURCHASE ORDER
+Customer: Acme Industrial Supplies
+Account: CUST-ACME
+PO Number: PO-10023
+Date: 2026-09-29
+
+Item Description                         Qty   Unit Price   Line Total
+----------------------------------------------------------------------
+18in stretch film heavy duty              10       $25.00      $250.00
+Standard Pallet Wrap 15in 65ga             5       $20.00      $100.00
+----------------------------------------------------------------------
+Subtotal: $350.00
+Total: $350.00
