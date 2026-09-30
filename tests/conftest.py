@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import importlib.util
+import importlib
 import json
+import socket
+import threading
 from pathlib import Path
 from typing import Any, Callable, Generator
 from unittest.mock import MagicMock
@@ -263,3 +266,55 @@ class MockAIProvider:
 def mock_ai_provider() -> MockAIProvider:
     """Fixture providing a configurable MockAIProvider instance."""
     return MockAIProvider()
+
+
+# -----------------------------------------------------------------------------
+# P1 Tests-First Infrastructure (No Production Stubs)
+# -----------------------------------------------------------------------------
+
+
+@pytest.fixture
+def no_external_network(monkeypatch):
+    """Fail closed if a controlled P1 test attempts an actual network connection."""
+    original_connect = socket.socket.connect
+    original_socketpair = socket.socketpair
+    internal_pipe = threading.local()
+
+    def forbidden_connection(*args, **kwargs):
+        raise AssertionError("P1 contract tests must not make external network calls")
+
+    def guarded_connect(sock, address):
+        if getattr(internal_pipe, "active", False):
+            return original_connect(sock, address)
+        return forbidden_connection()
+
+    def event_loop_socketpair(*args, **kwargs):
+        # Windows implements socketpair using loopback sockets. Permit only that
+        # standard-library operation on its own thread, never provider traffic.
+        internal_pipe.active = True
+        try:
+            return original_socketpair(*args, **kwargs)
+        finally:
+            internal_pipe.active = False
+
+    monkeypatch.setattr(socket, "socketpair", event_loop_socketpair)
+    monkeypatch.setattr(socket, "getaddrinfo", forbidden_connection)
+    monkeypatch.setattr(socket, "create_connection", forbidden_connection)
+    monkeypatch.setattr(socket.socket, "connect", guarded_connect)
+    monkeypatch.setattr(socket.socket, "connect_ex", forbidden_connection)
+
+
+@pytest.fixture
+def require_ai_provider():
+    """Defer missing T017 detection to the test body, keeping collection valid."""
+    def load_boundary():
+        module_name = "app.services.ai_provider"
+        if importlib.util.find_spec(module_name) is None:
+            pytest.fail(
+                "T017 boundary missing: app/services/ai_provider.py is not implemented",
+                pytrace=False,
+            )
+        # Errors *within* an existing module must remain visible.
+        return importlib.import_module(module_name)
+
+    return load_boundary
