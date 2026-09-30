@@ -1,0 +1,66 @@
+name: Gitleaks
+
+on:
+  pull_request:
+    branches:
+      - 001-ordershield-po-reconciliation
+      - main
+  push:
+    branches:
+      - 001-ordershield-po-reconciliation
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GITLEAKS_IMAGE: ghcr.io/gitleaks/gitleaks:v8.30.0@sha256:691af3c7c5a48b16f187ce3446d5f194838f91238f27270ed36eef6359a574d9
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Verify Gitleaks version
+        run: docker run --rm "$GITLEAKS_IMAGE" version
+
+      - name: Verify detector with synthetic canary
+        shell: bash
+        run: |
+          set +e
+
+          printf 'token = "ghp_%s%s"\n' \
+            'abcdefghijklmnopqrstuvwxyz' \
+            '1234567890' |
+            docker run --rm -i "$GITLEAKS_IMAGE" \
+              --redact \
+              --no-banner \
+              --exit-code 42 \
+              stdin
+
+          status=$?
+          set -e
+
+          if [ "$status" -ne 42 ]; then
+            echo "::error::Gitleaks detector self-test failed; expected exit code 42, got $status"
+            exit 1
+          fi
+
+          echo "Gitleaks detector self-test passed (exit code: $status)"
+
+      - name: Scan repository history
+        run: |
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}:/repo" \
+            -w /repo \
+            "$GITLEAKS_IMAGE" \
+            --redact \
+            --no-banner \
+            --verbose \
+            git .
