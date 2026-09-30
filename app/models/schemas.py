@@ -130,15 +130,15 @@ class _LineTotalProvenance(FieldProvenanceSchema):
 
 
 class HeaderProvenanceSchema(_StrictSchema):
-    customer_name: _CustomerNameProvenance
-    po_number: _PONumberProvenance
+    customer_name: _CustomerNameProvenance | None
+    po_number: _PONumberProvenance | None
 
 
 class LineItemProvenanceSchema(_StrictSchema):
     customer_description: _DescriptionProvenance
-    extracted_quantity: _QuantityProvenance
-    extracted_unit_price: _UnitPriceProvenance
-    extracted_line_total: _LineTotalProvenance
+    extracted_quantity: _QuantityProvenance | None
+    extracted_unit_price: _UnitPriceProvenance | None
+    extracted_line_total: _LineTotalProvenance | None
 
 
 class CandidateSKUSchema(_StrictSchema):
@@ -153,15 +153,26 @@ class CandidateSKUSchema(_StrictSchema):
 class AILineItemPayload(_StrictSchema):
     line_number: PositiveInt
     customer_description: NonEmptyText
-    extracted_quantity: PositiveInt
-    extracted_unit_price: Money
-    extracted_line_total: Money
+    # Explicit null means not extracted; keys remain required, without defaults.
+    extracted_quantity: PositiveInt | None
+    extracted_unit_price: Money | None
+    extracted_line_total: Money | None
     matched_sku: NonEmptyText | None
     sku_confidence: Literal["High", "Ambiguous", "Unrecognized"]
     sku_resolution_source: Literal["AI_HIGH_CONFIDENCE", "NONE"]
     candidate_skus: list[CandidateSKUSchema]
     matching_rationale: NonEmptyText
     field_provenance: LineItemProvenanceSchema
+
+    @model_validator(mode="after")
+    def _validate_field_provenance(self) -> "AILineItemPayload":
+        for field in (
+            "customer_description", "extracted_quantity",
+            "extracted_unit_price", "extracted_line_total",
+        ):
+            if (getattr(self, field) is None) != (getattr(self.field_provenance, field) is None):
+                raise ValueError(f"{field} value and provenance must both be null or both present")
+        return self
 
     @model_validator(mode="after")
     def _validate_sku_state(self) -> "AILineItemPayload":
@@ -177,13 +188,22 @@ class AILineItemPayload(_StrictSchema):
 
 
 class AIExtractionPayload(_StrictSchema):
-    customer_name: NonEmptyText
+    """Accept incomplete extraction; readiness is decided downstream."""
+
+    customer_name: NonEmptyText | None
     # An unverified extraction hint, not a verified customer/contract lookup.
     # Resolved customer identity remains a downstream readiness prerequisite.
     customer_id: NonEmptyText | None = None
-    po_number: NonEmptyText
+    po_number: NonEmptyText | None
     header_provenance: HeaderProvenanceSchema
     line_items: Annotated[list[AILineItemPayload], Field(min_length=1)]
+
+    @model_validator(mode="after")
+    def _validate_header_provenance(self) -> "AIExtractionPayload":
+        for field in ("customer_name", "po_number"):
+            if (getattr(self, field) is None) != (getattr(self.header_provenance, field) is None):
+                raise ValueError(f"{field} value and provenance must both be null or both present")
+        return self
 
 
 class ErrorResponse(_StrictSchema):

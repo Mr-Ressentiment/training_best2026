@@ -102,7 +102,7 @@ def test_money_is_independent_of_decimal_context():
 @pytest.mark.parametrize("value", [
     "25.001", "-0.01", "NaN", "sNaN", "Infinity", "-Infinity", "nonsense",
     Decimal("25.001"), Decimal("NaN"), Decimal("Infinity"),
-    Decimal("-Infinity"), 25.0, True, None,
+    Decimal("-Infinity"), 25.0, True,
 ])
 @pytest.mark.parametrize("field", ["extracted_unit_price", "extracted_line_total"])
 def test_invalid_money_is_rejected(value, field, line):
@@ -316,6 +316,123 @@ def test_customer_id_can_be_supplied_missing_or_unresolved(payload):
     assert AIExtractionPayload.model_validate(payload).customer_id is None
 
 
+@pytest.mark.parametrize("missing_fields", [
+    ("customer_name",), ("po_number",), ("customer_name", "po_number"),
+])
+def test_incomplete_headers_preserve_nulls(missing_fields, payload):
+    payload["customer_id"] = None
+    for field in missing_fields:
+        payload[field] = None
+        payload["header_provenance"][field] = None
+    model = AIExtractionPayload.model_validate(payload)
+    dumped = json.loads(model.model_dump_json())
+    assert dumped == payload
+    assert AIExtractionPayload.model_validate_json(json.dumps(payload)) == model
+    assert model.customer_id is None
+    for field in missing_fields:
+        assert getattr(model, field) is None
+        assert getattr(model.header_provenance, field) is None
+
+
+@pytest.mark.parametrize("missing_fields", [
+    ("extracted_quantity",), ("extracted_unit_price",), ("extracted_line_total",),
+    ("extracted_quantity", "extracted_unit_price"),
+    ("extracted_quantity", "extracted_line_total"),
+    ("extracted_unit_price", "extracted_line_total"),
+    ("extracted_quantity", "extracted_unit_price", "extracted_line_total"),
+])
+@pytest.mark.parametrize("confidence", ["High", "Ambiguous", "Unrecognized"])
+def test_incomplete_lines_preserve_nulls_and_sku_state(missing_fields, confidence, line):
+    if confidence == "Ambiguous":
+        line = ambiguous(line)
+    elif confidence == "Unrecognized":
+        line.update(sku_confidence="Unrecognized", matched_sku=None, sku_resolution_source="NONE")
+    for field in missing_fields:
+        line[field] = None
+        line["field_provenance"][field] = None
+    model = AILineItemPayload.model_validate(line)
+    assert json.loads(model.model_dump_json()) == line
+    assert AILineItemPayload.model_validate_json(json.dumps(line)) == model
+    assert model.sku_confidence == confidence
+    assert model.matched_sku == line["matched_sku"]
+    assert model.sku_resolution_source == line["sku_resolution_source"]
+    for field in missing_fields:
+        assert getattr(model, field) is None
+        assert model.model_dump()[field] is None
+        assert getattr(model.field_provenance, field) is None
+
+
+@pytest.mark.parametrize("field", [
+    "customer_name", "po_number", "customer_description", "extracted_quantity",
+    "extracted_unit_price", "extracted_line_total",
+])
+def test_present_value_requires_nonnull_provenance(field, payload):
+    if field in ("customer_name", "po_number"):
+        payload["header_provenance"][field] = None
+    else:
+        payload["line_items"][0]["field_provenance"][field] = None
+    with pytest.raises(ValidationError):
+        AIExtractionPayload.model_validate(payload)
+
+
+@pytest.mark.parametrize("field", [
+    "customer_name", "po_number", "extracted_quantity", "extracted_unit_price", "extracted_line_total",
+])
+@pytest.mark.parametrize("snippet", ["[unreadable]", "otherwise valid source evidence"])
+def test_null_value_rejects_fabricated_provenance(field, snippet, payload):
+    if field in ("customer_name", "po_number"):
+        target, evidence = payload, payload["header_provenance"]
+    else:
+        target = payload["line_items"][0]
+        evidence = target["field_provenance"]
+    target[field] = None
+    evidence[field]["verbatim_snippet"] = snippet
+    with pytest.raises(ValidationError):
+        AIExtractionPayload.model_validate(payload)
+
+
+@pytest.mark.parametrize("field", [
+    "customer_name", "po_number", "extracted_quantity", "extracted_unit_price", "extracted_line_total",
+])
+@pytest.mark.parametrize("omit", ["value", "provenance"])
+def test_null_value_and_provenance_keys_remain_required(field, omit, payload):
+    if field in ("customer_name", "po_number"):
+        target, evidence = payload, payload["header_provenance"]
+    else:
+        target = payload["line_items"][0]
+        evidence = target["field_provenance"]
+    target[field] = None
+    evidence[field] = None
+    del (target if omit == "value" else evidence)[field]
+    with pytest.raises(ValidationError):
+        AIExtractionPayload.model_validate(payload)
+
+
+@pytest.mark.parametrize("description", [None, "", "   "])
+def test_incomplete_line_still_requires_description(description, line):
+    line["customer_description"] = description
+    for field in ("extracted_quantity", "extracted_unit_price", "extracted_line_total"):
+        line[field] = None
+        line["field_provenance"][field] = None
+    with pytest.raises(ValidationError):
+        AILineItemPayload.model_validate(line)
+
+
+@pytest.mark.parametrize("change", [
+    {"sku_resolution_source": "OPERATOR_SELECTED"},
+    {"matched_sku": None},
+    {"sku_resolution_source": "NONE"},
+    {"contract_price": "25.00"},
+])
+def test_incomplete_line_preserves_authority_boundary(change, line):
+    for field in ("extracted_quantity", "extracted_unit_price", "extracted_line_total"):
+        line[field] = None
+        line["field_provenance"][field] = None
+    line.update(change)
+    with pytest.raises(ValidationError):
+        AILineItemPayload.model_validate(line)
+
+
 @pytest.mark.parametrize("model", [SourceGroundingMismatchError, TerminalDraftConflictError])
 def test_typed_errors(model):
     result = model(message="Human-readable diagnostic")
@@ -342,7 +459,7 @@ def test_common_error():
 def test_json_schema_exposes_locations_and_string_money():
     schema = AIExtractionPayload.model_json_schema(mode="serialization")
     money = schema["$defs"]["AILineItemPayload"]["properties"]["extracted_unit_price"]
-    assert money["type"] == "string"
+    assert money["anyOf"] == [{"type": "string"}, {"type": "null"}]
     location = schema["$defs"]["LocationDataSchema"]
     assert location["discriminator"]["propertyName"] == "type"
     assert len(location["oneOf"]) == 2
