@@ -35,9 +35,13 @@ jobs:
         run: |
           set +e
 
-          printf 'token = "ghp_%s%s"\n' \
-            'abcdefghijklmnopqrstuvwxyz' \
-            '1234567890' |
+          suffix="$(
+            printf '%s' 'ordershield-gitleaks-canary-v1' |
+              sha256sum |
+              cut -c1-36
+          )"
+
+          printf 'token = "ghp_%s"\n' "$suffix" |
             docker run --rm -i "$GITLEAKS_IMAGE" \
               --redact \
               --no-banner \
@@ -52,7 +56,7 @@ jobs:
             exit 1
           fi
 
-          echo "Gitleaks detector self-test passed (exit code: $status)"
+          echo "Gitleaks detector self-test passed"
 
       - name: Scan repository history
         run: |
