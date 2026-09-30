@@ -92,12 +92,18 @@ class PurchaseOrderDocument(Base):
         default=lambda: datetime.now(timezone.utc),
     )
 
-    drafts = relationship("OrderDraft", back_populates="document")
+    __table_args__ = (
+        CheckConstraint(
+            "content_type IN ('text/plain', 'application/pdf')",
+            name="ck_purchase_order_document_content_type",
+        ),
+        CheckConstraint(
+            "status IN ('Ingested', 'Failed')",
+            name="ck_purchase_order_document_status",
+        ),
+    )
 
-    @property
-    def draft(self):
-        """Single-draft convenience accessor for 1:1 navigation."""
-        return self.drafts[0] if self.drafts else None
+    draft = relationship("OrderDraft", back_populates="document", uselist=False)
 
 
 class OrderDraft(Base):
@@ -106,7 +112,7 @@ class OrderDraft(Base):
     __tablename__ = "order_drafts"
 
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    document_id = Column(String, ForeignKey("purchase_order_documents.id"), nullable=False)
+    document_id = Column(String, ForeignKey("purchase_order_documents.id"), nullable=False, unique=True)
     customer_id = Column(String, nullable=True)
     customer_name_extracted = Column(String, nullable=True)
     po_number_extracted = Column(String, nullable=True)
@@ -126,7 +132,14 @@ class OrderDraft(Base):
         onupdate=lambda: datetime.now(timezone.utc),
     )
 
-    document = relationship("PurchaseOrderDocument", back_populates="drafts")
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('Ingested', 'Needs Review', 'Ready for Approval', 'Approved', 'Rejected')",
+            name="ck_order_draft_status",
+        ),
+    )
+
+    document = relationship("PurchaseOrderDocument", back_populates="draft")
     line_items = relationship("DraftLineItem", back_populates="draft")
     provenance_records = relationship("FieldProvenance", back_populates="draft")
     discrepancy_flags = relationship("DiscrepancyFlag", back_populates="draft")
@@ -177,6 +190,15 @@ class DraftLineItem(Base):
 
     __table_args__ = (
         CheckConstraint("line_number >= 1", name="ck_draft_line_item_line_number"),
+        CheckConstraint(
+            "sku_confidence IS NULL OR sku_confidence IN ('High', 'Ambiguous', 'Unrecognized')",
+            name="ck_draft_line_item_sku_confidence",
+        ),
+        CheckConstraint(
+            "sku_resolution_source IN ('NONE', 'AI_HIGH_CONFIDENCE', 'OPERATOR_SELECTED')",
+            name="ck_draft_line_item_sku_resolution_source",
+        ),
+        CheckConstraint("status IN ('Active', 'Removed')", name="ck_draft_line_item_status"),
     )
 
     draft = relationship("OrderDraft", back_populates="line_items")
@@ -208,6 +230,10 @@ class FieldProvenance(Base):
     location_type = Column(String, nullable=False)
     location_data_json = Column(Text, nullable=False)
 
+    __table_args__ = (
+        CheckConstraint("location_type IN ('txt', 'pdf')", name="ck_field_provenance_location_type"),
+    )
+
     draft = relationship("OrderDraft", back_populates="provenance_records")
     line_item = relationship("DraftLineItem", back_populates="provenance_records")
 
@@ -226,6 +252,18 @@ class DiscrepancyFlag(Base):
     requested_value = Column(String, nullable=False)
     explanation = Column(Text, nullable=False)
     resolution_state = Column(String, nullable=False, default="Unresolved")
+
+    __table_args__ = (
+        CheckConstraint(
+            "discrepancy_type IN ('PriceMismatch', 'QuantityOrPackagingBreach', 'ArithmeticMismatch', 'CatalogMatchingMismatch')",
+            name="ck_discrepancy_flag_discrepancy_type",
+        ),
+        CheckConstraint("severity IN ('Blocking', 'Warning')", name="ck_discrepancy_flag_severity"),
+        CheckConstraint(
+            "resolution_state IN ('Unresolved', 'ResolvedByCorrection', 'ResolvedByLineRemoval')",
+            name="ck_discrepancy_flag_resolution_state",
+        ),
+    )
 
     draft = relationship("OrderDraft", back_populates="discrepancy_flags")
     line_item = relationship("DraftLineItem", back_populates="discrepancy_flags")
@@ -248,7 +286,7 @@ class VerifiedOrderRecord(Base):
         nullable=False,
         default=lambda: datetime.now(timezone.utc),
     )
-    is_replay_mode = Column(Boolean, nullable=False, default=False)
+    is_replay_mode = Column(Boolean, nullable=False)
     line_items_snapshot_json = Column(Text, nullable=False)
 
     draft = relationship("OrderDraft", back_populates="verified_order")

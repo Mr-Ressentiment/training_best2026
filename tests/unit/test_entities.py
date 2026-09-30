@@ -241,7 +241,13 @@ def test_verified_order_duplicate_order_number_rejected(db_session):
         raw_text="Customer: Acme Corp",
         status="Ingested",
     )
-    db_session.add(doc)
+    doc2 = PurchaseOrderDocument(
+        filename="po3.txt",
+        content_type="text/plain",
+        raw_text="Customer: Acme Corp",
+        status="Ingested",
+    )
+    db_session.add_all([doc, doc2])
     db_session.commit()
 
     draft1 = OrderDraft(
@@ -250,7 +256,7 @@ def test_verified_order_duplicate_order_number_rejected(db_session):
         status="Ready for Approval",
     )
     draft2 = OrderDraft(
-        document_id=doc.id,
+        document_id=doc2.id,
         customer_id="CUST-001",
         status="Ready for Approval",
     )
@@ -429,3 +435,119 @@ def test_reconciliation_domain_full_graph_navigation(db_session):
     assert draft.verified_record.order_number == "VO-2026-0001"
     assert len(draft.audit) == 1
     assert draft.audit[0].event_type == "OrderApproved"
+
+
+PERSISTENCE_DOMAINS = [
+    (PurchaseOrderDocument, "content_type", ("text/plain", "application/pdf"), "image/jpeg"),
+    (PurchaseOrderDocument, "status", ("Ingested", "Failed"), "BANANA"),
+    (OrderDraft, "status", ("Ingested", "Needs Review", "Ready for Approval", "Approved", "Rejected"), "BANANA"),
+    (DraftLineItem, "sku_confidence", ("High", "Ambiguous", "Unrecognized", None), "Certain"),
+    (DraftLineItem, "sku_resolution_source", ("NONE", "AI_HIGH_CONFIDENCE", "OPERATOR_SELECTED"), "MAGIC"),
+    (DraftLineItem, "status", ("Active", "Removed"), "DELETED"),
+    (FieldProvenance, "location_type", ("txt", "pdf"), "jpeg"),
+    (DiscrepancyFlag, "discrepancy_type", ("PriceMismatch", "QuantityOrPackagingBreach", "ArithmeticMismatch", "CatalogMatchingMismatch"), "CreditLimit"),
+    (DiscrepancyFlag, "severity", ("Blocking", "Warning"), "Info"),
+    (DiscrepancyFlag, "resolution_state", ("Unresolved", "ResolvedByCorrection", "ResolvedByLineRemoval"), "DELETED"),
+]
+
+
+@pytest.fixture
+def valid_domain_records():
+    """Minimal valid records whose related parents are persisted with each target."""
+    document = PurchaseOrderDocument(
+        filename="po.txt", content_type="text/plain", raw_text="PO-1", status="Ingested",
+    )
+    draft = OrderDraft(document=document)
+    return {
+        PurchaseOrderDocument: document,
+        OrderDraft: draft,
+        DraftLineItem: DraftLineItem(draft=draft, line_number=1, customer_description="Box"),
+        FieldProvenance: FieldProvenance(
+            draft=draft, field_name="po_number", verbatim_snippet="PO-1",
+            location_type="txt", location_data_json='{"type": "txt", "line_number": 1, "char_offset": 0}',
+        ),
+        DiscrepancyFlag: DiscrepancyFlag(
+            draft=draft, discrepancy_type="PriceMismatch", expected_value="100",
+            requested_value="200", explanation="Price differs",
+        ),
+    }
+
+
+@pytest.mark.parametrize(
+    "model,field,value",
+    [pytest.param(model, field, invalid, id=f"{model.__name__}.{field}")
+     for model, field, valid, invalid in PERSISTENCE_DOMAINS],
+)
+def test_invalid_persistence_domain_rejected(db_session, valid_domain_records, model, field, value):
+    record = valid_domain_records[model]
+    setattr(record, field, value)
+    db_session.add(record)
+    with pytest.raises(IntegrityError, match="CHECK constraint failed"):
+        db_session.commit()
+    db_session.rollback()
+
+
+@pytest.mark.parametrize(
+    "model,field,value",
+    [pytest.param(model, field, value, id=f"{model.__name__}.{field}={value}")
+     for model, field, valid, invalid in PERSISTENCE_DOMAINS for value in valid],
+)
+def test_valid_persistence_domain_allowed(db_session, valid_domain_records, model, field, value):
+    record = valid_domain_records[model]
+    setattr(record, field, value)
+    db_session.add(record)
+    db_session.commit()
+    db_session.refresh(record)
+    assert getattr(record, field) == value
+
+
+def test_document_has_at_most_one_draft(db_session):
+    document = PurchaseOrderDocument(
+        filename="po.txt", content_type="text/plain", raw_text="PO-1", status="Ingested",
+    )
+    db_session.add(document)
+    db_session.commit()
+    assert document.draft is None
+
+    draft = OrderDraft(document=document)
+    db_session.add(draft)
+    db_session.commit()
+    db_session.expire_all()
+    assert document.draft is draft
+    assert draft.document is document
+    assert draft.is_replay_mode is False
+
+    # Use the FK directly so ORM reassignment cannot detach the original draft.
+    db_session.add(OrderDraft(document_id=document.id))
+    with pytest.raises(IntegrityError, match="UNIQUE constraint failed: order_drafts.document_id"):
+        db_session.commit()
+    db_session.rollback()
+    assert db_session.query(OrderDraft).count() == 1
+    assert document.draft is draft
+
+
+@pytest.mark.parametrize("replay_mode", [None, False, True], ids=["omitted", "live", "replay"])
+def test_verified_order_requires_explicit_replay_mode(db_session, replay_mode):
+    document = PurchaseOrderDocument(
+        filename="po.txt", content_type="text/plain", raw_text="PO-1", status="Ingested",
+    )
+    draft = OrderDraft(document=document)
+    db_session.add(draft)
+    db_session.commit()
+
+    replay_fields = {} if replay_mode is None else {"is_replay_mode": replay_mode}
+    order = VerifiedOrderRecord(
+        draft_id=draft.id, order_number="VO-2026-0001", customer_id="CUST-001",
+        po_number="PO-1", grand_total_cents=100, approved_by="Operator",
+        line_items_snapshot_json="[]", **replay_fields,
+    )
+    db_session.add(order)
+    if replay_mode is None:
+        with pytest.raises(IntegrityError, match="NOT NULL constraint failed: verified_order_records.is_replay_mode"):
+            db_session.commit()
+        db_session.rollback()
+        assert db_session.query(VerifiedOrderRecord).count() == 0
+    else:
+        db_session.commit()
+        db_session.refresh(order)
+        assert order.is_replay_mode is replay_mode
