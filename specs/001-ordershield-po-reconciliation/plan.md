@@ -31,11 +31,11 @@ OrderShield transforms unstructured incoming customer purchase orders (`.txt` an
 **Testing**: `pytest` (unit tests for deterministic decimal reconciliation engine, pricing tiers, and parser; integration tests for API endpoints, terminal states, grounding validation, and failure modes).  
 **Target Platform**: Cross-platform (Windows, macOS, Linux).  
 **Project Type**: Single-service Web Application (FastAPI backend + static responsive SPA frontend with committed local assets).  
-**Performance Goals**: End-to-end reconciliation of prepared 5-line purchase order in <60 seconds during live demo; API response time <500ms for deterministic re-validation; explicit failure diagnostics within ≤5 seconds (SC-006).  
+**Performance Goals**: End-to-end reconciliation of prepared 5-line purchase order in <60 seconds during live demo; API response time <500ms for deterministic re-validation; bounded demo-oriented live AI inference target approximately ≤15 seconds; target ≤5 seconds from request intake for immediately detectable failures (SC-006).
 **Constraints**: 
 - Strictly digital text (`.txt`) and digital PDF with selectable text streams (`.pdf`); zero OCR or scanned image parsing.
 - Commercial price/quantity overrides are strictly prohibited.
-- Live AI inference failures must fail explicitly within ≤5s (enforced by a ≤4.5s client timeout) and never silently fall back to fixtures.
+- Live AI inference uses Alibaba Qwen 3.8 Flash (reasoning disabled) as primary training live provider, with Google Gemini 3.5 Flash-Lite (minimal thinking) as fallback candidate (ADR 0001). Switching providers requires explicit configuration (zero automatic runtime failover or silent substitution); provenance must capture actual provider/model. Live inference execution budget is bounded to ≤15s (reconciling empirical bake-off latency: p50 ~7.3s, max ~9.4s); immediately detectable intake/provider errors have a target of ≤5s from request intake, while silent/stalled inference is aborted at ≤15s with explicit diagnostic error per approved SC-006 amendment; live inference never silently falls back to fixtures.
 - Replay/fixture mode must be initiated through dedicated endpoints and 100% visibly badged as non-live across all views.
 - Field corrections must be verified server-side against canonical `raw_text`.  
 **Scale/Scope**: MVP vertical slice supporting single-order intake against a pre-loaded catalog of 10–30 SKUs and customer contract terms.
@@ -51,7 +51,7 @@ OrderShield transforms unstructured incoming customer purchase orders (`.txt` an
 | **I. Canonical Git Repository** | Repo is single source of truth | **PASS** | All specs, models, contracts, and fixtures committed to feature branch. |
 | **II. Spec-Driven Development** | Full spec before implementation | **PASS** | Specification frozen in `spec.md`; plan directly implements accepted requirements. |
 | **III. Mandatory Human Decision Gates** | Explicit human sign-off on 6 gates | **APPROVED** | 6 architectural gates approved in principle by Project Brain; data contracts reconciled. |
-| **IV. Architectural Decision Records** | Document context, rationale, tradeoffs | **PASS** | Evaluated and recorded in `research.md`. |
+| **IV. Architectural Decision Records** | Document context, rationale, tradeoffs | **PASS** | Evaluated and recorded in `research.md` and `docs/decisions/0001-training-live-ai-provider-selection.md`. |
 | **V. Vertical Slice Simplicity** | Smallest working end-to-end slice | **PASS** | Single-service architecture, embedded SQLite, zero microservices or node build steps. |
 | **VI. Test Integrity** | No weakening or skipping tests | **PASS** | Pure deterministic tests for arithmetic/rules; mockable AI provider interface. |
 | **VII. Verifiable Acceptance Criteria** | Objective, verifiable criteria | **PASS** | Concrete scenarios defined in `quickstart.md` matching `spec.md`. |
@@ -100,7 +100,7 @@ app/
 ├── services/
 │   ├── __init__.py
 │   ├── document_parser.py   # Pure-Python text extraction (.txt, pypdf) & canonical raw_text
-│   ├── ai_provider.py       # Pluggable AI boundary (LiveAIProvider with ≤4.5s timeout, FixtureAIProvider)
+│   ├── ai_provider.py       # Pluggable AI boundary (LiveAIProvider with ≤15s timeout, FixtureAIProvider)
 │   ├── reconciliation.py    # Deterministic contract tier pricing, MOQ, and integer-cents math engine
 │   └── order_service.py     # High-level coordinator for ingestion and atomic approval
 └── static/                  # Responsive Single-Page Application (Committed local assets, 0 CDN)
@@ -141,10 +141,10 @@ No constitution violations detected. Simplicity invariants preserved:
 
 ## Final Human Gate Status
 
-The six high-level architectural decisions are **APPROVED IN PRINCIPLE** by Project Brain, and all contract/data-model gaps are resolved:
+The six high-level architectural decisions are **APPROVED** by Project Brain, with Gate 4 reconciled and finalized following the provider bake-off (ADR 0001):
 1. **Application Architecture**: Single-service modular monolith (Python 3.11 + FastAPI). *(Approved)*
 2. **Client/Server Boundary**: Decoupled JSON REST API (`/api/v1`) with separate live intake (`POST /orders/ingest`) and fixture replay (`POST /fixtures/{id}/ingest`); catalog search endpoint; local offline-capable HTML5/ES6 SPA frontend. *(Approved & Reconciled)*
 3. **Persistent Data Model**: Relational SQLite schema with exact integer cents persistence, `ContractPriceTier` pricing, `FieldProvenance` grounding for all mandatory fields, explicit `sku_resolution_source`, line removal discrepancy preservation, terminal state protection, and atomic approval transactions. *(Approved & Reconciled)*
-4. **AI Provider & Boundary**: Pluggable, provider-neutral `OrderShieldAIProvider` with a ≤4.5s client timeout (meeting SC-006 ≤5s), untrusted schema validation, and complete prohibition of silent replay fallback. *(Approved)*
+4. **AI Provider & Boundary**: Pluggable `OrderShieldAIProvider` configured with Alibaba Qwen 3.8 Flash (reasoning disabled) as primary training live provider and Gemini 3.5 Flash-Lite (minimal thinking) as fallback candidate under explicit configuration only (no automatic runtime failover or silent substitution; provenance tracking enforced). Live inference timeout is bounded to ≤15s (reconciling empirical latency), with a target of ≤5s from request intake for immediately detectable errors. Silent/stalled provider inference is aborted at ≤15s with explicit diagnostic error under the approved Human Gate amendment to SC-006; untrusted schema validation and complete prohibition of silent replay fallback remain strictly enforced. *(Approved - ADR 0001)*
 5. **Major Dependencies**: Minimal dependency set: `fastapi`, `uvicorn`, `pydantic`, `pypdf`, `sqlalchemy`, `pytest`, `httpx`. Zero OCR or multi-agent libraries. *(Approved)*
 6. **Deployment & Runtime**: Zero-config startup with pre-seeded wholesale catalog and customer contract fixtures via `python -m uvicorn app.main:app`; deterministic, offline, reproducible demo paths. *(Approved)*
