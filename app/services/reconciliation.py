@@ -108,8 +108,9 @@ def select_contract_price_tier(
          contract.customer_id == C
          sku == S
          min_quantity <= Q
-    2. Select the eligible tier having the maximum min_quantity.
-    3. If no tier has min_quantity <= Q, returns None (explicit no-tier result).
+    2. Fail closed if eligible tiers belong to more than one contract (PricingConflictError).
+    3. Select the eligible tier having the maximum min_quantity within the single contract.
+    4. If no tier has min_quantity <= Q, returns None (explicit no-tier result).
 
     Does not apply automatic fallback to base price or lower tiers.
     """
@@ -152,17 +153,12 @@ def select_contract_price_tier(
     if not eligible_tiers:
         return None
 
-    top_tier = eligible_tiers[0]
+    contract_ids = {tier.contract_id for tier in eligible_tiers}
+    if len(contract_ids) > 1:
+        formatted_ids = ", ".join(sorted(contract_ids))
+        raise PricingConflictError(
+            f"Ambiguous contract pricing: multiple contracts ({formatted_ids}) "
+            f"found for customer '{customer_id}' and SKU '{sku}'"
+        )
 
-    # Verify no conflicting tiers at the same maximum threshold across contracts
-    for tier in eligible_tiers[1:]:
-        if tier.min_quantity < top_tier.min_quantity:
-            break
-        if tier.tier_price_cents != top_tier.tier_price_cents:
-            raise PricingConflictError(
-                f"Conflicting pricing tiers found for customer '{customer_id}' and SKU '{sku}' "
-                f"at min_quantity {top_tier.min_quantity}: "
-                f"{top_tier.tier_price_cents} cents vs {tier.tier_price_cents} cents"
-            )
-
-    return top_tier
+    return eligible_tiers[0]
