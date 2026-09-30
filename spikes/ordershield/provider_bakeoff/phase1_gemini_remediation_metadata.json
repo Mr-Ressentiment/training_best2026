@@ -1,0 +1,295 @@
+{
+  "scope": "GEMINI_PHASE_1_REMEDIATION",
+  "started_utc": "2026-09-29T23:26:15.951965+00:00",
+  "max_new_live_calls": 19,
+  "planned_evaluated_calls": 20,
+  "run_index": 1,
+  "automatic_retries": 0,
+  "candidates": [
+    {
+      "provider": "Google Gemini API",
+      "model": "gemini-3.5-flash-lite",
+      "thinking_level": "minimal",
+      "thinking": {
+        "thinking_level": "minimal"
+      },
+      "output_mode": "Gemini responseFormat.text JSON Schema (mimeType=APPLICATION_JSON)",
+      "max_output_tokens": 4096,
+      "temperature": 0,
+      "stream": false,
+      "timeout_seconds": 180,
+      "automatic_retries": 0,
+      "redirects": false,
+      "tools_search_grounding": false
+    },
+    {
+      "provider": "Google Gemini API",
+      "model": "gemini-3.8-flash",
+      "thinking_level": "low",
+      "thinking": {
+        "thinking_level": "low"
+      },
+      "output_mode": "Gemini responseFormat.text JSON Schema (mimeType=APPLICATION_JSON)",
+      "max_output_tokens": 4096,
+      "temperature": 0,
+      "stream": false,
+      "timeout_seconds": 180,
+      "automatic_retries": 0,
+      "redirects": false,
+      "tools_search_grounding": false
+    }
+  ],
+  "h01_reuse_verification": {
+    "exact_frozen_fixture_and_inputs": true,
+    "exact_corrected_phase1_body": true,
+    "unchanged_harness_and_scorer": true,
+    "unchanged_schema": true,
+    "intended_minimal_configuration": true,
+    "completed_http_success_and_schema": true,
+    "identical_recomputed_score_and_grounding": true
+  },
+  "qwen_offline_comparability": {
+    "recorded_calls_rescored_offline": 10,
+    "identical_scores_grounding_and_errors": true,
+    "source_artifact": "phase1_calls.json",
+    "source_sha256": "08d05424858a91f703aea0d8bed11d5115c5a68ffec5cdc54a8adb5acd8fd879",
+    "new_qwen_calls": 0
+  },
+  "integrity_before": {
+    "freeze_sha256": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+    "schema_sha256": "f5bd3918128dce7e8efd1e1c2a566e1cd166d692b534641345b9d5b70057f5c3",
+    "frozen_files": {
+      "live/expected.json": {
+        "sha256": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+        "verified_from": "working_tree"
+      },
+      "live/protocol.md": {
+        "sha256": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+        "verified_from": "working_tree"
+      },
+      "live/adapter.py": {
+        "sha256": "0a16b12de4eef3eaf5612fafc3ec379cfe2152cec9a60ded9f1456f5992f56e6",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/score.py": {
+        "sha256": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "live/run.py": {
+        "sha256": "2d46e5be5550ba4f17d48da3b74e21bacb9737bb10a755b4a5da70beb9e61c19",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/test_live.py": {
+        "sha256": "04aef30766727a6f2ce027143530896b3bd571150270c37828a41c5f1c7fc282",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/fixtures/h01_paper.txt": {
+        "sha256": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h02_large.txt": {
+        "sha256": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h03_alias.txt": {
+        "sha256": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h04_tape.txt": {
+        "sha256": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h05_no_size.txt": {
+        "sha256": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h06_no_pack.txt": {
+        "sha256": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h07_not_medium.txt": {
+        "sha256": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h08_not_large.txt": {
+        "sha256": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h09_latex.txt": {
+        "sha256": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h10_damaged.txt": {
+        "sha256": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+        "verified_from": "working_tree"
+      },
+      "ordershield.py": {
+        "sha256": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "catalog.json": {
+        "sha256": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+        "verified_from": "working_tree"
+      },
+      "prompt.txt": {
+        "sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "verified_from": "working_tree"
+      }
+    },
+    "reference_commit": "12a7e50"
+  },
+  "protected_sha256_before": {
+    "catalog.json": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+    "prompt.txt": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+    "live\\expected.json": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+    "live\\freeze.json": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+    "live\\protocol.md": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+    "live\\fixtures\\h01_paper.txt": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+    "live\\fixtures\\h02_large.txt": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+    "live\\fixtures\\h03_alias.txt": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+    "live\\fixtures\\h04_tape.txt": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+    "live\\fixtures\\h05_no_size.txt": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+    "live\\fixtures\\h06_no_pack.txt": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+    "live\\fixtures\\h07_not_medium.txt": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+    "live\\fixtures\\h08_not_large.txt": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+    "live\\fixtures\\h09_latex.txt": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+    "live\\fixtures\\h10_damaged.txt": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+    "provider_bakeoff\\gemini_diagnostic.json": "8ee65ae14656e43f7a07c0109879bfcd30bb636a546e72327b47789b4b9b9032",
+    "provider_bakeoff\\gemini_diagnostic.md": "0ce2fc2f9314763a9f1b701db8d5167f5cce822b166915814ecaa792c4ed77dc",
+    "provider_bakeoff\\gemini_diagnostic.py": "93bc168215b6091639a4060dc6bf81bdfed33e7065b136f7f467406286ecdb5f",
+    "provider_bakeoff\\phase1.md": "e04f82bfc763124b3b72f2ab2b6f2e5dc1b1f0b5f06cedd8449c81ed769fd90f",
+    "provider_bakeoff\\phase1.py": "83c529bc7d9baa2b14eecc3ae607ccf767ef89a692ce5db0d70bcdfc74000426",
+    "provider_bakeoff\\phase1_calls.json": "08d05424858a91f703aea0d8bed11d5115c5a68ffec5cdc54a8adb5acd8fd879",
+    "provider_bakeoff\\phase1_gemini_remediation.py": "7a50ac54e47c87469e86a785b319b28d7faaf17b9b3e111bd8863291061a506f",
+    "provider_bakeoff\\phase1_metadata.json": "8f8092a33b55feb739fda73ba151181df106bc6a2f6616641cf7668b6bfba20d",
+    "provider_bakeoff\\phase1_summary.json": "16dceeee6f29220a0082fa6772f60f267bf993da245d5e60aeb5b87f4807ece2",
+    "provider_bakeoff\\preflight.json": "16e642dcdef3391a55b6aebeed8231a2f63ef3a15353e31549cc58fea9f23719",
+    "provider_bakeoff\\preflight.md": "f4f19d61e033a8dc5f79718d54579e65704e4296aa8486c4db72baa79870d59b",
+    "provider_bakeoff\\preflight.py": "efb083d6b9b39a7b592d49bfc167ab59dfe1c04f1f0c1986667d8ea11f8bb6aa",
+    "provider_bakeoff\\test_gemini_diagnostic.py": "329e0bc9d798d665d893447ff55bbf0c458307147064b4e8d87a3a2da61e29a1",
+    "provider_bakeoff\\test_phase1.py": "694c138ec9371ce81a2a7077401913eb8571ea448b9801d62d2ee5682a5a80c7",
+    "provider_bakeoff\\test_phase1_gemini_remediation.py": "d7d7b07331ff90337deea177f0a185d36f82760846de1afeee2240e2becf592a",
+    "provider_bakeoff\\test_preflight.py": "082c462f9b77dd840dfbfe5390534128203af4310b9d019f290f4d87c4d548a3",
+    "provider_bakeoff\\frozen_reference\\ordershield.py": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+    "provider_bakeoff\\frozen_reference\\live\\score.py": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9"
+  },
+  "free_only_settings": "Previously explicitly confirmed by user; unchanged Google endpoint/account",
+  "call_order": "Reuse Lite h01; Lite h02..h10; 3.8 h01 gated; 3.8 h02..h10",
+  "stop_reason": "Gemini 3.8 h01 did not satisfy HTTP 200 + JSON/schema gate; remaining nine calls not made",
+  "phase2_started": false,
+  "remediation_script_sha256": "7a50ac54e47c87469e86a785b319b28d7faaf17b9b3e111bd8863291061a506f",
+  "protected_evidence_preserved": true,
+  "new_live_attempts": 10,
+  "evaluated_calls": 11,
+  "gemini_3_8_h01_gate": {
+    "http_status": 503,
+    "json_parsed": false,
+    "schema_valid": false
+  },
+  "completed_utc": "2026-09-29T23:26:39.338304+00:00",
+  "integrity_after": {
+    "freeze_sha256": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+    "schema_sha256": "f5bd3918128dce7e8efd1e1c2a566e1cd166d692b534641345b9d5b70057f5c3",
+    "frozen_files": {
+      "live/expected.json": {
+        "sha256": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+        "verified_from": "working_tree"
+      },
+      "live/protocol.md": {
+        "sha256": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+        "verified_from": "working_tree"
+      },
+      "live/adapter.py": {
+        "sha256": "0a16b12de4eef3eaf5612fafc3ec379cfe2152cec9a60ded9f1456f5992f56e6",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/score.py": {
+        "sha256": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "live/run.py": {
+        "sha256": "2d46e5be5550ba4f17d48da3b74e21bacb9737bb10a755b4a5da70beb9e61c19",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/test_live.py": {
+        "sha256": "04aef30766727a6f2ce027143530896b3bd571150270c37828a41c5f1c7fc282",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/fixtures/h01_paper.txt": {
+        "sha256": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h02_large.txt": {
+        "sha256": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h03_alias.txt": {
+        "sha256": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h04_tape.txt": {
+        "sha256": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h05_no_size.txt": {
+        "sha256": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h06_no_pack.txt": {
+        "sha256": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h07_not_medium.txt": {
+        "sha256": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h08_not_large.txt": {
+        "sha256": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h09_latex.txt": {
+        "sha256": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h10_damaged.txt": {
+        "sha256": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+        "verified_from": "working_tree"
+      },
+      "ordershield.py": {
+        "sha256": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "catalog.json": {
+        "sha256": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+        "verified_from": "working_tree"
+      },
+      "prompt.txt": {
+        "sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "verified_from": "working_tree"
+      }
+    },
+    "reference_commit": "12a7e50"
+  },
+  "checks": [
+    "python -B -m unittest discover -s spikes/ordershield/provider_bakeoff -p \"test_*.py\" -q: 42 tests PASS before live calls and after the run (post-run: 36.751 seconds)",
+    "python -B spikes/ordershield/provider_bakeoff/phase1_gemini_remediation.py validate: PASS; no live calls",
+    "git diff --check: PASS; all six new files also passed whitespace scan",
+    "Artifact audit: 10 new attempts + 1 reused result, 11 unique model/fixture pairs, summary reproduces exactly, protected evidence and frozen SHA-256 hashes PASS",
+    "All six new files secret scan: PASS; environment values inspected only in memory",
+    "Live run stopped at the Gemini 3.8 h01 gate (HTTP 503); remaining nine calls unattempted; zero retries"
+  ],
+  "new_live_budget_unused": 9,
+  "failure_findings": {
+    "h08_not_large": "Correct GLOVE-N-M and literal evidence, but description value includes the extra source sentence: Large gloves were ordered last month; that size must not be repeated here. Strict frozen description comparison fails (7/8 fields).",
+    "h10_damaged": "All eight values match, but quantity and unit_price are null with non-empty [unreadable] quotes. Frozen grounding requires an empty quote for null. Core rejects the order, so determinate-SKU scoring receives no credit.",
+    "gemini_3_8_h01": {
+      "http_status": 503,
+      "gemini_error_status": "UNAVAILABLE",
+      "gemini_error_message": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "error_info_reasons": [],
+      "request_id": null,
+      "requested_model_id": "gemini-3.8-flash",
+      "message_limit_characters": 2048
+    }
+  }
+}

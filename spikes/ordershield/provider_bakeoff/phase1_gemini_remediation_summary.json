@@ -1,0 +1,587 @@
+{
+  "scope": "GEMINI_PHASE_1_REMEDIATION",
+  "planned_calls": 20,
+  "attempted_calls": 11,
+  "completed_calls": 10,
+  "finalized_attempts": 11,
+  "candidates": [
+    {
+      "provider": "Google Gemini API",
+      "requested_model": "gemini-3.5-flash-lite",
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema (mimeType=APPLICATION_JSON)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "scheduled_calls": 10,
+      "attempted_calls": 10,
+      "completed_calls": 10,
+      "finalized_attempts": 10,
+      "http_2xx_calls": 10,
+      "parsed_model_outputs": 10,
+      "schema_valid_rate": {
+        "numerator": 10,
+        "denominator": 10,
+        "rate": 1.0
+      },
+      "schema_valid_per_scheduled": {
+        "numerator": 10,
+        "denominator": 10,
+        "rate": 1.0
+      },
+      "mandatory_field_accuracy": {
+        "numerator": 79,
+        "denominator": 80,
+        "rate": 0.9875
+      },
+      "whole_order_field_accuracy": {
+        "numerator": 9,
+        "denominator": 10,
+        "rate": 0.9
+      },
+      "per_field_accuracy": {
+        "customer": {
+          "numerator": 10,
+          "denominator": 10,
+          "rate": 1.0
+        },
+        "po_number": {
+          "numerator": 10,
+          "denominator": 10,
+          "rate": 1.0
+        },
+        "currency": {
+          "numerator": 10,
+          "denominator": 10,
+          "rate": 1.0
+        },
+        "declared_total": {
+          "numerator": 10,
+          "denominator": 10,
+          "rate": 1.0
+        },
+        "line.description": {
+          "numerator": 9,
+          "denominator": 10,
+          "rate": 0.9
+        },
+        "line.quantity": {
+          "numerator": 10,
+          "denominator": 10,
+          "rate": 1.0
+        },
+        "line.sale_unit": {
+          "numerator": 10,
+          "denominator": 10,
+          "rate": 1.0
+        },
+        "line.unit_price": {
+          "numerator": 10,
+          "denominator": 10,
+          "rate": 1.0
+        }
+      },
+      "strict_description_mismatches": [
+        "h08_not_large"
+      ],
+      "determinate_sku_accuracy": {
+        "numerator": 6,
+        "denominator": 7,
+        "rate": 0.857143
+      },
+      "correct_abstention": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate": 1.0
+      },
+      "ambiguity_review_accuracy": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate": 1.0
+      },
+      "h05_h06_ambiguity_review_accuracy": {
+        "numerator": 2,
+        "denominator": 2,
+        "rate": 1.0
+      },
+      "ambiguous_clean_promotions": 0,
+      "wrong_confident_sku_count": 0,
+      "wrong_confident_per_confident_proposal": {
+        "numerator": 0,
+        "denominator": 6,
+        "rate": 0.0
+      },
+      "dangerous_wrong_confident": {
+        "numerator": 0,
+        "denominator": 3,
+        "rate": 0.0
+      },
+      "evidence_grounding_rate": {
+        "numerator": 78,
+        "denominator": 80,
+        "rate": 0.975
+      },
+      "nonnull_evidence_coverage": {
+        "numerator": 76,
+        "denominator": 76,
+        "rate": 1.0
+      },
+      "whole_order_evidence_rate": {
+        "numerator": 9,
+        "denominator": 10,
+        "rate": 0.9
+      },
+      "returned_verbatim_snippets": {
+        "numerator": 78,
+        "denominator": 78,
+        "rate": 1.0
+      },
+      "schema_valid_returned_verbatim_snippets": {
+        "numerator": 78,
+        "denominator": 78,
+        "rate": 1.0
+      },
+      "provider_failures_by_class": {},
+      "all_failures_by_class": {
+        "SEMANTIC_WRONG": 2,
+        "LOCAL_VALIDATION_FAILURE": 1
+      },
+      "latency_all_attempts": {
+        "n": 10,
+        "min_ms": 1776.43,
+        "p50_ms": 1808.9,
+        "mean_ms": 1840.249,
+        "p90_ms": 1899.88,
+        "p95_ms": 2006.6,
+        "max_ms": 2006.6,
+        "method": "nearest rank p90/p95; median p50",
+        "p95_limitation": "With <=10 calls p95 is the observed maximum, not a reliable population tail estimate"
+      },
+      "latency_valid_core": {
+        "n": 9,
+        "min_ms": 1776.43,
+        "p50_ms": 1823.02,
+        "mean_ms": 1845.5388888888888,
+        "p90_ms": 2006.6,
+        "p95_ms": 2006.6,
+        "max_ms": 2006.6,
+        "method": "nearest rank p90/p95; median p50",
+        "p95_limitation": "With <=10 calls p95 is the observed maximum, not a reliable population tail estimate"
+      },
+      "token_usage": {
+        "input": {
+          "exposed_calls": 10,
+          "total": 7899,
+          "average_per_exposed_call": 789.9
+        },
+        "output": {
+          "exposed_calls": 10,
+          "total": 3921,
+          "average_per_exposed_call": 392.1
+        },
+        "total": {
+          "exposed_calls": 10,
+          "total": 11820,
+          "average_per_exposed_call": 1182
+        },
+        "thinking": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        }
+      },
+      "hard_semantic_gates": {
+        "zero_wrong_confident_skus": true,
+        "h05_h06_h09_successful_review": true,
+        "h07_h08_correct_distinguishing_sku": true,
+        "zero_ambiguous_clean_promotions": true,
+        "every_returned_snippet_verbatim": true,
+        "all_mandatory_fields_match": false,
+        "all_evaluated_outputs_schema_valid": true
+      },
+      "all_hard_gates_pass": false,
+      "per_fixture": {
+        "h01_paper": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "PAPER-A4-80",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 2006.6
+        },
+        "h02_large": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "GLOVE-N-L",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 1788.61
+        },
+        "h03_alias": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "GLOVE-N-M",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 1794.78
+        },
+        "h04_tape": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "TAPE-48",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 1831.96
+        },
+        "h05_no_size": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": null,
+          "sku_correct": true,
+          "review_success": true,
+          "wrong_confident_sku": false,
+          "core_status": "HUMAN_REVIEW",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 1899.88
+        },
+        "h06_no_pack": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": null,
+          "sku_correct": true,
+          "review_success": true,
+          "wrong_confident_sku": false,
+          "core_status": "HUMAN_REVIEW",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 1823.02
+        },
+        "h07_not_medium": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "GLOVE-N-L",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 1776.43
+        },
+        "h08_not_large": {
+          "http_status": 200,
+          "errors": [
+            "SEMANTIC_WRONG"
+          ],
+          "schema_valid": true,
+          "mandatory_fields_correct": 7,
+          "whole_order_correct": false,
+          "proposed_sku": "GLOVE-N-M",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 1789.96
+        },
+        "h09_latex": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": null,
+          "sku_correct": true,
+          "review_success": true,
+          "wrong_confident_sku": false,
+          "core_status": "HUMAN_REVIEW",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 1898.61
+        },
+        "h10_damaged": {
+          "http_status": 200,
+          "errors": [
+            "LOCAL_VALIDATION_FAILURE",
+            "SEMANTIC_WRONG"
+          ],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 1792.64
+        }
+      },
+      "new_live_attempts": 9,
+      "reused_calls": 1,
+      "evidence_model_quality": "CORRECTED_GEMINI_REMEDIATION"
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model": "gemini-3.8-flash",
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema (mimeType=APPLICATION_JSON)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "scheduled_calls": 10,
+      "attempted_calls": 1,
+      "completed_calls": 0,
+      "finalized_attempts": 1,
+      "http_2xx_calls": 0,
+      "parsed_model_outputs": 0,
+      "schema_valid_rate": {
+        "numerator": 0,
+        "denominator": 1,
+        "rate": 0.0
+      },
+      "schema_valid_per_scheduled": null,
+      "mandatory_field_accuracy": {
+        "numerator": 0,
+        "denominator": 8,
+        "rate": 0.0
+      },
+      "whole_order_field_accuracy": {
+        "numerator": 0,
+        "denominator": 1,
+        "rate": 0.0
+      },
+      "per_field_accuracy": {
+        "customer": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "po_number": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "currency": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "declared_total": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "line.description": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "line.quantity": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "line.sale_unit": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "line.unit_price": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        }
+      },
+      "strict_description_mismatches": [],
+      "determinate_sku_accuracy": {
+        "numerator": 0,
+        "denominator": 1,
+        "rate": 0.0
+      },
+      "correct_abstention": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "ambiguity_review_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "h05_h06_ambiguity_review_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "ambiguous_clean_promotions": 0,
+      "wrong_confident_sku_count": 0,
+      "wrong_confident_per_confident_proposal": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "dangerous_wrong_confident": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "evidence_grounding_rate": {
+        "numerator": 0,
+        "denominator": 8,
+        "rate": 0.0
+      },
+      "nonnull_evidence_coverage": {
+        "numerator": 0,
+        "denominator": 8,
+        "rate": 0.0
+      },
+      "whole_order_evidence_rate": {
+        "numerator": 0,
+        "denominator": 1,
+        "rate": 0.0
+      },
+      "returned_verbatim_snippets": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "schema_valid_returned_verbatim_snippets": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "provider_failures_by_class": {
+        "PROVIDER_5XX": 1
+      },
+      "all_failures_by_class": {
+        "PROVIDER_5XX": 1
+      },
+      "latency_all_attempts": {
+        "n": 1,
+        "min_ms": 3691.99,
+        "p50_ms": 3691.99,
+        "mean_ms": 3691.99,
+        "p90_ms": 3691.99,
+        "p95_ms": 3691.99,
+        "max_ms": 3691.99,
+        "method": "nearest rank p90/p95; median p50",
+        "p95_limitation": "With <=10 calls p95 is the observed maximum, not a reliable population tail estimate"
+      },
+      "latency_valid_core": null,
+      "token_usage": {
+        "input": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        },
+        "output": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        },
+        "total": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        },
+        "thinking": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        }
+      },
+      "hard_semantic_gates": {
+        "zero_wrong_confident_skus": null,
+        "h05_h06_h09_successful_review": null,
+        "h07_h08_correct_distinguishing_sku": null,
+        "zero_ambiguous_clean_promotions": null,
+        "every_returned_snippet_verbatim": null,
+        "all_mandatory_fields_match": null,
+        "all_evaluated_outputs_schema_valid": null
+      },
+      "all_hard_gates_pass": null,
+      "per_fixture": {
+        "h01_paper": {
+          "http_status": 503,
+          "errors": [
+            "PROVIDER_5XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 3691.99
+        }
+      },
+      "new_live_attempts": 1,
+      "reused_calls": 0,
+      "evidence_model_quality": "CORRECTED_GEMINI_REMEDIATION"
+    }
+  ],
+  "weighted_score": null,
+  "winner": null,
+  "phase2_started": false,
+  "max_new_live_calls": 19,
+  "evaluated_calls": 11,
+  "new_live_attempts": 10,
+  "reused_calls": 1,
+  "attempted_calls_definition": "Evaluated single attempts, including one prior corrected h01 diagnostic; new_live_attempts is the new network-call count",
+  "stop_reason": "Gemini 3.8 h01 did not satisfy HTTP 200 + JSON/schema gate; remaining nine calls not made",
+  "evidence_interpretation": {
+    "ORIGINAL_GEMINI_PHASE_1": "Invalid harness request; not model-quality evidence. Preserved unchanged.",
+    "GEMINI_REMEDIATION": "Corrected enum request path. Returned outputs are model-quality evidence; provider/transport failures remain operational failures with zero scoring credit.",
+    "QWEN_PHASE_1": "Existing evidence unchanged; zero new Qwen calls; same schema, expected labels, scorer and grounding semantics verified offline."
+  }
+}
