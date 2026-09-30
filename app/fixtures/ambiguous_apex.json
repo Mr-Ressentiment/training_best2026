@@ -1,0 +1,96 @@
+{
+  "fixture_id": "fixture-ambiguous-apex",
+  "name": "Ambiguous Apex Purchase Order",
+  "document_filename": "po_ambiguous_apex.txt",
+  "description": "Ambiguous PO intake scenario for Apex Distribution requiring operator SKU selection with compliant pricing and MOQ.",
+  "extraction": {
+    "customer_name": "Apex Distribution",
+    "customer_id": "CUST-APEX",
+    "po_number": "PO-APEX-8820",
+    "header_provenance": {
+      "customer_name": {
+        "field_name": "customer_name",
+        "verbatim_snippet": "Apex Distribution",
+        "location": {
+          "type": "txt",
+          "line_number": 2,
+          "char_offset": 10
+        }
+      },
+      "po_number": {
+        "field_name": "po_number",
+        "verbatim_snippet": "PO-APEX-8820",
+        "location": {
+          "type": "txt",
+          "line_number": 4,
+          "char_offset": 11
+        }
+      }
+    },
+    "line_items": [
+      {
+        "line_number": 1,
+        "customer_description": "Standard pallet wrap",
+        "extracted_quantity": 10,
+        "extracted_unit_price": "20.00",
+        "extracted_line_total": "200.00",
+        "matched_sku": null,
+        "sku_confidence": "Ambiguous",
+        "sku_resolution_source": "NONE",
+        "candidate_skus": [
+          {
+            "sku": "SKU-WRAP-15",
+            "name": "Standard Pallet Wrap 15in 65ga",
+            "score": 0.88,
+            "rationale": "High semantic match for standard gauge pallet film"
+          },
+          {
+            "sku": "SKU-WRAP-18",
+            "name": "Industrial Stretch Film 18in 80ga",
+            "score": 0.74,
+            "rationale": "Alternative width match"
+          }
+        ],
+        "matching_rationale": "Description matches multiple catalog pallet wrap items; operator resolution required",
+        "field_provenance": {
+          "customer_description": {
+            "field_name": "customer_description",
+            "verbatim_snippet": "Standard pallet wrap",
+            "location": {
+              "type": "txt",
+              "line_number": 9,
+              "char_offset": 0
+            }
+          },
+          "extracted_quantity": {
+            "field_name": "extracted_quantity",
+            "verbatim_snippet": "10",
+            "location": {
+              "type": "txt",
+              "line_number": 9,
+              "char_offset": 42
+            }
+          },
+          "extracted_unit_price": {
+            "field_name": "extracted_unit_price",
+            "verbatim_snippet": "$20.00",
+            "location": {
+              "type": "txt",
+              "line_number": 9,
+              "char_offset": 51
+            }
+          },
+          "extracted_line_total": {
+            "field_name": "extracted_line_total",
+            "verbatim_snippet": "$200.00",
+            "location": {
+              "type": "txt",
+              "line_number": 9,
+              "char_offset": 63
+            }
+          }
+        }
+      }
+    ]
+  }
+}

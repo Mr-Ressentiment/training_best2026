@@ -1,0 +1,13 @@
+PURCHASE ORDER
+Customer: Apex Distribution
+Account: CUST-APEX
+PO Number: PO-APEX-7741
+Date: 2026-09-29
+
+Item Description                         Qty   Unit Price   Line Total
+----------------------------------------------------------------------
+18in stretch film heavy duty              10       $18.00      $180.00
+Standard pallet wrap                       2       $20.00       $40.00
+----------------------------------------------------------------------
+Subtotal: $220.00
+Total: $220.00
