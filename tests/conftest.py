@@ -1,0 +1,274 @@
+"""Pytest test harness, in-memory SQLite fixtures, FastAPI TestClient, and mock provider helpers."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Any, Callable, Generator
+from unittest.mock import MagicMock
+
+import pytest
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine, event
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import StaticPool
+
+# Directory helpers
+TESTS_DIR = Path(__file__).resolve().parent
+REPO_ROOT = TESTS_DIR.parent
+TEST_FIXTURES_DIR = TESTS_DIR / "fixtures"
+APP_FIXTURES_DIR = REPO_ROOT / "app" / "fixtures"
+
+
+# -----------------------------------------------------------------------------
+# Path & Raw Document Fixtures
+# -----------------------------------------------------------------------------
+
+
+@pytest.fixture
+def fixtures_dir() -> Path:
+    """Path to the tests/fixtures directory."""
+    return TEST_FIXTURES_DIR
+
+
+@pytest.fixture
+def app_fixtures_dir() -> Path:
+    """Path to the app/fixtures runtime directory."""
+    return APP_FIXTURES_DIR
+
+
+@pytest.fixture
+def po_clean_acme_path(fixtures_dir: Path) -> Path:
+    """Path to the clean Acme PO text fixture."""
+    return fixtures_dir / "po_clean_acme.txt"
+
+
+@pytest.fixture
+def po_clean_acme_text(po_clean_acme_path: Path) -> str:
+    """Raw text content of the clean Acme PO document."""
+    return po_clean_acme_path.read_text(encoding="utf-8")
+
+
+@pytest.fixture
+def po_discrepancy_apex_path(fixtures_dir: Path) -> Path:
+    """Path to the discrepancy Apex PO text fixture."""
+    return fixtures_dir / "po_discrepancy_apex.txt"
+
+
+@pytest.fixture
+def po_discrepancy_apex_text(po_discrepancy_apex_path: Path) -> str:
+    """Raw text content of the discrepancy Apex PO document."""
+    return po_discrepancy_apex_path.read_text(encoding="utf-8")
+
+
+@pytest.fixture
+def po_ambiguous_apex_path(fixtures_dir: Path) -> Path:
+    """Path to the ambiguous Apex PO text fixture."""
+    return fixtures_dir / "po_ambiguous_apex.txt"
+
+
+@pytest.fixture
+def po_ambiguous_apex_text(po_ambiguous_apex_path: Path) -> str:
+    """Raw text content of the ambiguous Apex PO document."""
+    return po_ambiguous_apex_path.read_text(encoding="utf-8")
+
+
+@pytest.fixture
+def po_unextractable_pdf_path(fixtures_dir: Path) -> Path:
+    """Path to the unextractable PDF fixture."""
+    return fixtures_dir / "po_unextractable.pdf"
+
+
+@pytest.fixture
+def po_unextractable_pdf_bytes(po_unextractable_pdf_path: Path) -> bytes:
+    """Binary bytes of the unextractable PDF document."""
+    return po_unextractable_pdf_path.read_bytes()
+
+
+# -----------------------------------------------------------------------------
+# Runtime Fixture JSON Datasets
+# -----------------------------------------------------------------------------
+
+
+@pytest.fixture
+def clean_acme_fixture(app_fixtures_dir: Path) -> dict[str, Any]:
+    """Pre-verified runtime fixture for clean Acme PO."""
+    path = app_fixtures_dir / "clean_acme.json"
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+@pytest.fixture
+def discrepancy_apex_fixture(app_fixtures_dir: Path) -> dict[str, Any]:
+    """Pre-verified runtime fixture for discrepancy Apex PO."""
+    path = app_fixtures_dir / "discrepancy_apex.json"
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+@pytest.fixture
+def ambiguous_apex_fixture(app_fixtures_dir: Path) -> dict[str, Any]:
+    """Pre-verified runtime fixture for ambiguous Apex PO."""
+    path = app_fixtures_dir / "ambiguous_apex.json"
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+# -----------------------------------------------------------------------------
+# Database Fixtures (In-Memory SQLite with Foreign Key Pragma)
+# -----------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="session")
+def in_memory_db_engine():
+    """Create an isolated in-memory SQLite engine with PRAGMA foreign_keys = ON."""
+    engine = create_engine(
+        "sqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+
+    @event.listens_for(engine, "connect")
+    def set_sqlite_pragma(dbapi_connection, connection_record):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON")
+        cursor.close()
+
+    yield engine
+    engine.dispose()
+
+
+@pytest.fixture
+def db_session(in_memory_db_engine) -> Generator[Session, None, None]:
+    """Provide a transactional database session rolled back after every test.
+
+    Dynamically binds ORM models from `app.models.entities` if present.
+    """
+    base_class = None
+    try:
+        from app.models import entities  # type: ignore
+
+        base_class = getattr(entities, "Base", None)
+    except (ImportError, AttributeError):
+        pass
+
+    if base_class is not None:
+        base_class.metadata.create_all(bind=in_memory_db_engine)
+
+    testing_session_local = sessionmaker(
+        autocommit=False, autoflush=False, bind=in_memory_db_engine
+    )
+    session = testing_session_local()
+
+    try:
+        yield session
+    finally:
+        session.rollback()
+        session.close()
+        if base_class is not None:
+            base_class.metadata.drop_all(bind=in_memory_db_engine)
+
+
+# -----------------------------------------------------------------------------
+# FastAPI TestClient Fixture
+# -----------------------------------------------------------------------------
+
+
+@pytest.fixture
+def app_instance() -> FastAPI:
+    """Return the FastAPI application instance or a fallback test app."""
+    try:
+        from app.main import app  # type: ignore
+
+        return app
+    except (ImportError, AttributeError):
+        # Fallback placeholder until T022 implements app/main.py
+        fallback_app = FastAPI(title="OrderShield Test Fallback")
+        return fallback_app
+
+
+@pytest.fixture
+def client(app_instance: FastAPI, db_session: Session) -> Generator[TestClient, None, None]:
+    """FastAPI TestClient with database session dependency override applied."""
+    get_db_fn = None
+    try:
+        from app.database import get_db  # type: ignore
+
+        get_db_fn = get_db
+    except (ImportError, AttributeError):
+        pass
+
+    if get_db_fn is not None:
+        app_instance.dependency_overrides[get_db_fn] = lambda: db_session
+
+    with TestClient(app_instance) as test_client:
+        yield test_client
+
+    if get_db_fn is not None:
+        app_instance.dependency_overrides.pop(get_db_fn, None)
+
+
+# -----------------------------------------------------------------------------
+# Mock / Replaceable AI Provider Helpers
+# -----------------------------------------------------------------------------
+
+
+class MockAIProvider:
+    """Configurable mock AI provider for testing boundary, timeout, and error handling.
+
+    Enables testing:
+    - Bounded client timeout abortion (simulating >15s delay);
+    - Immediate failure handling (simulating target <=5s transport/auth/quota errors);
+    - Untrusted schema validation errors (malformed or incomplete JSON);
+    - Deterministic extraction payload return without network dependency;
+    - Zero automatic failover assertion.
+    """
+
+    def __init__(
+        self,
+        default_payload: dict[str, Any] | None = None,
+        provider_name: str = "mock-provider",
+        model_name: str = "mock-model-v1",
+    ) -> None:
+        self.provider_name = provider_name
+        self.model_name = model_name
+        self.default_payload = default_payload or {}
+        self.call_count = 0
+        self.last_call_args: tuple[Any, ...] = ()
+        self.last_call_kwargs: dict[str, Any] = {}
+
+        # Error simulation flags
+        self.simulate_timeout: bool = False
+        self.simulate_auth_error: bool = False
+        self.simulate_connection_error: bool = False
+        self.simulate_invalid_json: bool = False
+        self.simulate_schema_error: bool = False
+
+    def extract(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
+        """Simulate document extraction obeying configured failure modes."""
+        self.call_count += 1
+        self.last_call_args = args
+        self.last_call_kwargs = kwargs
+
+        if self.simulate_timeout:
+            raise TimeoutError("Inference exceeded bounded 15.0s client deadline")
+
+        if self.simulate_auth_error:
+            raise ConnectionError("Authentication failed: invalid API key / 401 Unauthorized")
+
+        if self.simulate_connection_error:
+            raise ConnectionError("Connection refused: upstream AI provider unreachable")
+
+        if self.simulate_invalid_json:
+            # Return malformed structure violating Pydantic schema
+            return {"invalid_json_stream": "```not-valid-json{"}
+
+        if self.simulate_schema_error:
+            # Missing mandatory fields
+            return {"unexpected_field": 123}
+
+        return self.default_payload
+
+
+@pytest.fixture
+def mock_ai_provider() -> MockAIProvider:
+    """Fixture providing a configurable MockAIProvider instance."""
+    return MockAIProvider()

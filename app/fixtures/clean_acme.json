@@ -1,0 +1,133 @@
+{
+  "fixture_id": "fixture-clean-acme",
+  "name": "Clean Acme Purchase Order",
+  "document_filename": "po_clean_acme.txt",
+  "description": "Clean PO intake scenario for Acme Industrial Supplies with 0 discrepancies and high-confidence SKU mapping.",
+  "extraction": {
+    "customer_name": "Acme Industrial Supplies",
+    "customer_id": "CUST-ACME",
+    "po_number": "PO-10023",
+    "header_provenance": {
+      "customer_name": {
+        "field_name": "customer_name",
+        "verbatim_snippet": "Acme Industrial Supplies",
+        "location": {
+          "type": "txt",
+          "line_number": 2,
+          "char_offset": 10
+        }
+      },
+      "po_number": {
+        "field_name": "po_number",
+        "verbatim_snippet": "PO-10023",
+        "location": {
+          "type": "txt",
+          "line_number": 4,
+          "char_offset": 11
+        }
+      }
+    },
+    "line_items": [
+      {
+        "line_number": 1,
+        "customer_description": "18in stretch film heavy duty",
+        "extracted_quantity": 10,
+        "extracted_unit_price": "25.00",
+        "extracted_line_total": "250.00",
+        "matched_sku": "SKU-WRAP-18",
+        "sku_confidence": "High",
+        "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+        "candidate_skus": [],
+        "matching_rationale": "Exact match for Industrial Stretch Film 18in 80ga",
+        "field_provenance": {
+          "customer_description": {
+            "field_name": "customer_description",
+            "verbatim_snippet": "18in stretch film heavy duty",
+            "location": {
+              "type": "txt",
+              "line_number": 9,
+              "char_offset": 0
+            }
+          },
+          "extracted_quantity": {
+            "field_name": "extracted_quantity",
+            "verbatim_snippet": "10",
+            "location": {
+              "type": "txt",
+              "line_number": 9,
+              "char_offset": 42
+            }
+          },
+          "extracted_unit_price": {
+            "field_name": "extracted_unit_price",
+            "verbatim_snippet": "$25.00",
+            "location": {
+              "type": "txt",
+              "line_number": 9,
+              "char_offset": 51
+            }
+          },
+          "extracted_line_total": {
+            "field_name": "extracted_line_total",
+            "verbatim_snippet": "$250.00",
+            "location": {
+              "type": "txt",
+              "line_number": 9,
+              "char_offset": 63
+            }
+          }
+        }
+      },
+      {
+        "line_number": 2,
+        "customer_description": "Standard Pallet Wrap 15in 65ga",
+        "extracted_quantity": 5,
+        "extracted_unit_price": "20.00",
+        "extracted_line_total": "100.00",
+        "matched_sku": "SKU-WRAP-15",
+        "sku_confidence": "High",
+        "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+        "candidate_skus": [],
+        "matching_rationale": "Exact match for Standard Pallet Wrap 15in 65ga",
+        "field_provenance": {
+          "customer_description": {
+            "field_name": "customer_description",
+            "verbatim_snippet": "Standard Pallet Wrap 15in 65ga",
+            "location": {
+              "type": "txt",
+              "line_number": 10,
+              "char_offset": 0
+            }
+          },
+          "extracted_quantity": {
+            "field_name": "extracted_quantity",
+            "verbatim_snippet": "5",
+            "location": {
+              "type": "txt",
+              "line_number": 10,
+              "char_offset": 43
+            }
+          },
+          "extracted_unit_price": {
+            "field_name": "extracted_unit_price",
+            "verbatim_snippet": "$20.00",
+            "location": {
+              "type": "txt",
+              "line_number": 10,
+              "char_offset": 51
+            }
+          },
+          "extracted_line_total": {
+            "field_name": "extracted_line_total",
+            "verbatim_snippet": "$100.00",
+            "location": {
+              "type": "txt",
+              "line_number": 10,
+              "char_offset": 63
+            }
+          }
+        }
+      }
+    ]
+  }
+}
