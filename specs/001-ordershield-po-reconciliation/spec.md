@@ -21,6 +21,10 @@
 - Q: What minimum grounding evidence must be captured and displayed for extracted fields and SKU matches? → A: For extracted text fields (header and line items): the exact verbatim text snippet from the raw document and a location pointer (line number, text offset, or block index). For semantic SKU matches: the input customer description snippet, the matched catalog SKU and standard product name, the match confidence level, and a candidate alternative list or matching rationale.
 - Q: Which exact discrepancy categories are supported by the MVP reconciliation engine? → A: Strictly four categories: (1) `PriceMismatch` (customer-stated unit price != contracted/tier price), (2) `QuantityOrPackagingBreach` (requested quantity < minimum order quantity or non-standard packaging increment), (3) `ArithmeticMismatch` (stated line total != quantity * unit price, or stated order total != sum of line totals), and (4) `CatalogMatchingMismatch` (ambiguous or unrecognized SKU). All other commercial validation checks (credit limits, tax rates, address matching) are excluded from MVP.
 
+### Session 2026-09-30 (Human Gate Reconciliation)
+
+- Q: What are the runtime failure and timeout semantics for live AI inference under SC-006 following provider research? → A: (1) Immediately detectable failures (unreadable/local document failure, connection refusal, authentication failure, quota/rate-limit rejection, explicit upstream 4xx/5xx) MUST surface an explicit diagnostic error with a target of ≤5 seconds from request intake. (2) Healthy live inference executes within a bounded ≤15-second budget based on empirical bake-off latency. (3) Silent/stalled provider inference remains indistinguishable from slow healthy inference until the client deadline, where it MUST be aborted at ≤15 seconds and return an explicit diagnostic error with zero partial persistence and zero silent fallback. (4) Zero automatic provider failover or fixture substitution is permitted.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - End-to-End Clean Purchase Order Intake & Verification (Priority: P1)
@@ -123,7 +127,7 @@ An operations supervisor or coordinator needs to audit how a purchase order was 
 - **SC-003 (Zero Hallucinated Commitments)**: 100% of ambiguous or out-of-catalog customer descriptions are routed to operator review; zero unrecognized descriptions are automatically assigned to an unverified SKU.
 - **SC-004 (Full Provenance Visibility)**: 100% of extracted line items provide visible textual grounding citations linking back to the source purchase order text.
 - **SC-005 (Mandatory Gate Enforcement)**: 0% of unreviewed or discrepancy-laden order drafts can transition to a committed order record without explicit operator sign-off or resolution.
-- **SC-006 (Explicit Failure & Replay Transparency)**: In the event of an unreadable document or AI provider failure, the system presents an explicit diagnostic error within 5 seconds without partial data corruption or silent fallback. When replay or fixture mode is active, 100% of views visibly indicate non-live demonstration status.
+- **SC-006 (Explicit Failure & Replay Transparency)**: In the event of an unreadable document or immediately detectable AI provider failure (local parse errors, connection refusal, authentication failure, quota/rate-limit rejection, or explicit upstream 4xx/5xx), the system presents an explicit diagnostic error with a target of ≤5 seconds from request intake without partial data corruption or silent fallback. Healthy live inference operates within a bounded ≤15-second budget; silent/stalled provider inference is aborted at ≤15 seconds with an explicit diagnostic error and no partial persistence. No automatic provider failover or fixture substitution is permitted. When replay or fixture mode is active, 100% of views visibly indicate non-live demonstration status.
 
 ## Assumptions
 

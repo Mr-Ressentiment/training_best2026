@@ -39,19 +39,25 @@ python -m app.cli init-db --seed
 ## 3. Running the Application
 
 ### 3.1 Live Mode
-Configure environment variables for your selected AI provider (OpenAI is shown here as an illustrative example of a supported backend):
+Configure environment variables for the reconciled primary training provider (Alibaba Qwen 3.8 Flash with reasoning disabled; see ADR 0001) or secondary fallback (Google Gemini 3.5 Flash-Lite):
 ```bash
-# Windows PowerShell (Example):
-$env:LLM_PROVIDER="openai" # Example provider
-$env:LLM_API_KEY="your-api-key"
-# Linux/macOS (Example):
-export LLM_PROVIDER="openai"
-export LLM_API_KEY="your-api-key"
+# Windows PowerShell (Primary Live Provider: Alibaba Qwen 3.8 Flash):
+$env:LLM_PROVIDER="qwen" # Primary training/demo live provider (qwen3.8-flash)
+$env:LLM_API_KEY="your-dashscope-api-key"
+# Windows PowerShell (Fallback Candidate: Google Gemini 3.5 Flash-Lite):
+# $env:LLM_PROVIDER="gemini"
+# $env:LLM_API_KEY="your-gemini-api-key"
+
+# Linux/macOS (Primary Live Provider):
+export LLM_PROVIDER="qwen"
+export LLM_API_KEY="your-dashscope-api-key"
 
 # Launch the FastAPI server
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 Open your browser to: `http://127.0.0.1:8000`
+
+*Note on Provider Governance*: Provider selection is strictly configuration-driven. The system does not perform automatic runtime provider failover or silent provider substitution. Switching from primary (Qwen) to secondary candidate (Gemini) requires explicit operator environment configuration and server restart. All generated drafts and audit events record the actual provider and model used.
 
 ### 3.2 Offline / Replay Mode (Deterministic Demo Path)
 To establish a deterministic, offline, reproducible demo path without external network calls or API quotas:
@@ -103,10 +109,12 @@ Then trigger demo fixtures via the web UI or via the dedicated fixture endpoints
 ---
 
 ### Scenario 3: AI Service Failure Resilience & Graceful Error (SC-006)
-1. **Action**: Simulate AI provider timeout / disconnect by uploading with an invalid API key or offline network.
+1. **Action**: Simulate AI provider failure / disconnect by uploading with an invalid API key or offline network.
 2. **Expected Outcome**:
-   - System returns HTTP 503 within **5 seconds** (enforced by client timeout ≤4.5s).
-   - UI displays clear diagnostic banner: *"External AI extraction service failed: request timed out. Live inference failed; fixture data was not silently substituted."*
+   - Immediately detectable connection, auth, or invalid key errors return HTTP 503 with a target of ≤5 seconds from request intake.
+   - Stalled inference conditions are aborted at the bounded **15-second** client deadline, returning HTTP 503 per approved SC-006 amendment.
+   - UI displays clear diagnostic banner: *"External AI extraction service failed: request timed out / connection error. Live inference failed; fixture data was not silently substituted."*
+   - Zero automatic runtime failover to fallback provider and zero silent substitution of fixture data.
    - Zero corrupted or partial drafts created.
 
 ---

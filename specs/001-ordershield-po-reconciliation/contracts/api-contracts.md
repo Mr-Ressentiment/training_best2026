@@ -65,7 +65,7 @@ Supports searching the master product catalog when an operator resolves an unrec
 ### 2.2 Live Document Intake
 `POST /api/v1/orders/ingest`
 
-Uploads an incoming customer purchase order document. **Always executes via `LiveAIProvider`**. It does not accept any parameter to substitute pre-recorded fixtures.
+Uploads an incoming customer purchase order document. **Always executes via `LiveAIProvider`** using the explicitly configured provider (`qwen3.8-flash` primary or `gemini-3.5-flash-lite` secondary). Zero automatic runtime failover or silent provider substitution is performed. It does not accept any parameter to substitute pre-recorded fixtures.
 
 **Request**: `multipart/form-data`
 - `file`: File binary (`.txt` or `.pdf`)
@@ -210,10 +210,10 @@ Uploads an incoming customer purchase order document. **Always executes via `Liv
 }
 ```
 
-**Explicit Error Responses (Guaranteed ≤5s response per SC-006)**:
-- `400 Bad Request`: If document is unreadable, empty, or a PDF lacking extractable text (`UnextractableTextError`).
+**Explicit Error Responses (Target ≤5s from request intake for immediately detectable errors / bounded ≤15s live inference timeout)**:
+- `400 Bad Request`: If document is unreadable, empty, or a PDF lacking extractable text (`UnextractableTextError`, target ≤5s from request intake).
 - `502 Bad Gateway`: If live AI provider returns invalid JSON or schema validation fails (`AIOutputValidationError`).
-- `503 Service Unavailable`: If live AI provider fails, times out (>4.5s), or encounters rate limits (`AIProviderUnavailableError`).
+- `503 Service Unavailable`: If live AI provider fails, encounters immediately detectable transport/auth/quota errors (target ≤5s from request intake), or reaches the bounded 15.0 s inference timeout (`AIProviderUnavailableError`). Silent/stalled provider inference is aborted at ≤15s with an explicit diagnostic error per approved SC-006 amendment. No automatic runtime provider failover or silent substitution is performed.
 
 ---
 

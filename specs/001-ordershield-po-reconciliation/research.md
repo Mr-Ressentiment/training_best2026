@@ -52,18 +52,60 @@
 
 ---
 
-### 1.4 AI Provider Boundary, Untrusted Output & Strict Failure Timing
+### 1.4 AI Provider Boundary, Untrusted Output & Reconciled Runtime Timing
 
-- **Decision**: Pluggable, provider-neutral `OrderShieldAIProvider` protocol with strict boundary isolation and sub-5-second failure guarantees:
-  1. `LiveAIProvider`: Connects to a configurable LLM endpoint (provider-neutral via standard HTTP/JSON).
-     - **Strict Timeout**: Configured with a client-level timeout of **≤4.5 seconds** so that any provider timeout, network error, or quota failure is caught, formatted, and returned as an explicit diagnostic error within the **5-second SC-006 bound**.
-     - **Untrusted Output Policy**: Model responses are treated as **untrusted external input**. The system validates raw provider output against an application-owned Pydantic schema before passing data to the reconciliation engine. If parsing or schema validation fails, the system fails explicitly and fabricates zero drafts.
+- **Decision**: Pluggable, provider-neutral `OrderShieldAIProvider` protocol with concrete model selection for the training/demo live path (formalized in [ADR 0001](../../docs/decisions/0001-training-live-ai-provider-selection.md)), strict boundary isolation, and reconciled runtime timeout:
+  1. **Primary Training Live Provider**:
+     - **Model**: Alibaba Qwen 3.8 Flash (`qwen3.8-flash`) via DashScope / OpenAI-compatible endpoint.
+     - **Configuration**: Reasoning / thinking disabled.
+     - **Role**: Primary provider for live interactive intake, verification testing, and demonstration.
+  2. **Secondary / Fallback Candidate & Fallback Governance**:
+     - **Model**: Google Gemini 3.5 Flash-Lite (`gemini-3.5-flash-lite`) via Google GenAI API.
+     - **Configuration**: Minimal thinking.
+     - **Role**: Validated secondary provider candidate if primary training provider experiences localized disruption.
+     - **No Automatic Runtime Provider Failover**: The application runtime does **NOT** attempt dynamic failover between providers upon failure; requests fail explicitly with diagnostic errors.
+     - **No Silent Provider Substitution**: The system must never silently substitute one live provider or model for another without explicit direction, just as it must never silently fall back to fixtures.
+     - **Explicit Operator Action Required**: Provider switching requires explicit administrative/operator configuration (`LLM_PROVIDER=gemini`) and service restart.
+     - **Auditable Provenance**: Extracted drafts, audit events, and provenance records must capture the exact active provider and model identifier (`provider="qwen"`, `model="qwen3.8-flash"` vs `provider="gemini"`, `model="gemini-3.5-flash-lite"`).
+  3. **Candidates Not Selected for Training Live Path**:
+     - **Gemini 3.8 Flash**: Not selected due to repeated free-tier HTTP 503 / availability evidence during bake-off execution. This is strictly an operational free-tier availability rejection and **NOT** a model-quality or reasoning-capability rejection.
+     - **Gemini 3.7 Flash**: Preflight smoke worked with ~13.7 s minimal smoke latency; not advanced into the full bake-off.
+  4. **Empirical Finalist Evidence (Combined Phase 1 Baseline + Phase 2 Stability, 24 attempts/finalist)**:
+     - *Alibaba Qwen 3.8 Flash*: 24/24 completed; exact mandatory fields 185/192; determinate SKU 12/12; review traps 12/12; grounding/null validity 192/192; 0 wrong-confident SKUs; 0 ambiguous-to-clean promotions.
+     - *Google Gemini 3.5 Flash-Lite*: 24/24 completed; exact mandatory fields 187/192; determinate SKU 9/12; review traps 12/12; grounding/null validity 184/192; 0 wrong-confident SKUs; 0 ambiguous-to-clean promotions.
+     - *Repeated Fixture Findings*:
+       - `h05`/`h06`/`h09` review traps: both routed correctly to human review 4/4.
+       - `h07`/`h08` distinguishing SKUs: both selected required SKU 4/4 (`GLOVE-N-L`, `GLOVE-N-M`).
+       - `h08` exact description: Gemini 0/4 (included extraneous source document text); Qwen 4/4 exact.
+       - `h10` null extraction: both 16/16 values correct.
+       - `h10` null provenance: Gemini 8/16 (emitted `"[unreadable]"` quote tokens for null quantities/prices); Qwen 16/16.
+       - `h10` SKU: Gemini 1/4 (3 conservative abstentions below confidence threshold); Qwen 4/4 (`PAPER-A4-80`).
+     - *Phase-2 Latency Profile*:
+       - Gemini 3.5 Flash-Lite: p50 = 6.918 s, observed max = 9.793 s.
+       - Qwen 3.8 Flash: p50 = 7.338 s, observed max = 9.414 s.
+  5. **Explicit Operational Limitations**:
+     - Synthetic frozen corpus (`h01`–`h10`).
+     - Repeated stability testing conducted only on selected `h05`–`h10` fixtures.
+     - Four observations per selected fixture demonstrate short-term stability but do not establish production reliability.
+     - Free-tier availability and quota windows do not establish production suitability or enterprise SLAs.
+     - Paid production candidates were researched but not empirically tested in this bake-off.
+     - Alibaba Qwen 3.8 Flash is selected strictly as the **TRAINING/DEMO** live provider.
+     - Production provider selection remains undecided and deferred to future decision gates.
+  6. **Runtime Timeout Reconciliation & Approved SC-006 Semantics (Human Gate)**:
+     - Earlier planning assumed a ≤4.5 s client timeout on live inference. Empirical bake-off evidence demonstrates that healthy successful live inference empirically requires a budget of up to ~15 s (p50 ~7.0–7.3 s, max ~9.4–9.8 s), refuting ≤4.5 s as a viable universal inference deadline.
+     - **Reconciled Lifecycle & Approved Human Gate Semantics**:
+       - *Immediately Detectable Failures*: Unreadable/local document failure, connection refusal, authentication failure, quota/rate-limit rejection, and explicit upstream 4xx/5xx must surface an explicit diagnostic error with a target of ≤5 seconds from request intake.
+       - *Healthy Live Inference*: Operates within a bounded ≤15-second live inference budget consistent with observed empirical latency.
+       - *Silent / Stalled Provider Inference*: May remain indistinguishable from healthy slow inference until the bounded client deadline; must be aborted at ≤15 seconds and return an explicit diagnostic error, with no partial persistence and no silent fallback.
+       - *Zero Automatic Failover*: No automatic provider failover or fixture substitution is permitted. (See [ADR 0001](../../docs/decisions/0001-training-live-ai-provider-selection.md)).
+  7. **Untrusted Output Policy & Boundary Safety**:
+     - Model responses are treated as **untrusted external input**. The system validates raw provider output against an application-owned Pydantic schema before passing data to the reconciliation engine. If parsing or schema validation fails, the system fails explicitly and fabricates zero drafts.
      - **No Silent Fallback**: Live intake MUST NEVER fall back to fixture data upon failure.
-  2. `FixtureAIProvider`: Loads pre-verified synthetic extraction/matching datasets from disk exclusively when the user invokes the dedicated fixture endpoint (`POST /api/v1/fixtures/{fixture_id}/ingest`). Every fixture-generated draft is explicitly flagged with `is_replay_mode=true` and visibly badged across all UI views.
+  8. `FixtureAIProvider`: Loads pre-verified synthetic extraction/matching datasets from disk exclusively when the user invokes the dedicated fixture endpoint (`POST /api/v1/fixtures/{fixture_id}/ingest`). Every fixture-generated draft is explicitly flagged with `is_replay_mode=true` and visibly badged across all UI views.
 - **Rationale**:
-  - Meets SC-006 performance and failure transparency requirements.
+  - Reconciles empirical provider bake-off evidence (`spikes/ordershield/provider_bakeoff/`) with operational demo needs.
   - Complete decoupling of live user uploads from pre-recorded fixture runs.
-  - Provider neutrality avoids early vendor lock-in until a concrete provider/model is formally evaluated and approved through a Human Decision Gate.
+  - Eliminates false-positive client timeouts during live demonstration while maintaining strict SC-006 failure diagnostics.
 
 ---
 
@@ -100,14 +142,14 @@
 
 ## 2. Mandatory Human Decision Gates (Constitution Principle III)
 
-The six architectural decisions are **APPROVED IN PRINCIPLE** with all contract gaps resolved:
+The six architectural decisions are **APPROVED** (with Gate 4 reconciled and accepted via [ADR 0001](../../docs/decisions/0001-training-live-ai-provider-selection.md)):
 
 | Gate | Approved In Principle | Final Reconciled Design | Status |
 |:---|:---:|:---|:---:|
 | **1. Application Architecture** | Yes | Single-service modular monolith (Python 3.11 + FastAPI). | **Approved** |
 | **2. Client/Server Boundary** | Yes | Decoupled RESTful API (`/api/v1`) with separate live intake (`POST /orders/ingest`) and fixture replay (`POST /fixtures/{id}/ingest`); catalog search endpoint (`GET /catalog?query=...`); local static SPA frontend. | **Approved** |
 | **3. Persistent Data Model** | Yes | Relational SQLite schema with exact integer cents persistence, `ContractPriceTier` pricing, `FieldProvenance` grounding for all mandatory fields, explicit `sku_resolution_source`, line removal discrepancy preservation, terminal state protection, and atomic approval transactions. | **Approved** |
-| **4. AI Provider & Boundary** | Yes | Pluggable, provider-neutral `OrderShieldAIProvider` with ≤4.5s client timeout (meeting SC-006 ≤5s), untrusted schema validation, and complete prohibition of silent replay fallback. | **Approved** |
+| **4. AI Provider & Boundary** | Yes | Primary live training provider: Alibaba Qwen 3.8 Flash (reasoning disabled); fallback candidate: Google Gemini 3.5 Flash-Lite (minimal thinking) under explicit configuration only (no automatic runtime failover or silent substitution; provenance tracking enforced); pluggable `OrderShieldAIProvider` with bounded ≤15s inference budget and target ≤5s diagnostic failure handling from request intake for immediately detectable errors. Stalled inference is aborted at ≤15s with explicit diagnostic error per approved SC-006 amendment. (See ADR 0001). | **Approved** |
 | **5. Major Dependencies** | Yes | Minimal footprint: `fastapi`, `uvicorn`, `pydantic`, `pypdf`, `sqlalchemy`, `pytest`, `httpx`. Zero OCR or multi-agent libraries. | **Approved** |
 | **6. Runtime & Demo Strategy** | Yes | Single startup command with pre-seeded wholesale catalog and customer contract fixtures; deterministic, offline, reproducible demo paths. | **Approved** |
 
