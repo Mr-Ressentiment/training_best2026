@@ -31,8 +31,40 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # 3. Initialize SQLite database and seed baseline catalog/contracts
+# For a fresh checkout where no local database exists yet, this command is sufficient:
 python -m app.cli init-db --seed
 ```
+
+### Local SQLite Schema Reset Policy
+
+OrderShield currently uses SQLAlchemy `Base.metadata.create_all()` and does not maintain incremental database migrations for the training/hackathon MVP.
+
+The repository-local `ordershield.db` is disposable runtime state and is excluded from Git.
+
+For a fresh checkout where no local database file exists yet, running:
+```bash
+python -m app.cli init-db --seed
+```
+is sufficient to create all tables and seed the baseline catalog and contract price tiers.
+
+However, `Base.metadata.create_all()` only creates missing tables; it does not alter or upgrade existing SQLite table schemas when columns are added, removed, or modified.
+
+After pulling a commit that changes ORM schema definitions (such as adding `OrderDraft.extracted_order_total_cents`), developers MUST recreate the local database before running the application:
+
+**Windows PowerShell:**
+```powershell
+Remove-Item .\ordershield.db -ErrorAction SilentlyContinue
+.\.venv\Scripts\python.exe -m app.cli init-db --seed
+```
+
+**Linux/macOS:**
+```bash
+rm -f ./ordershield.db
+python -m app.cli init-db --seed
+```
+
+> [!WARNING]
+> Do not use this reset procedure for any database containing data that must be preserved. Production-grade migration and schema versioning frameworks (e.g., Alembic) remain outside the scope of the current training/hackathon MVP.
 
 ---
 

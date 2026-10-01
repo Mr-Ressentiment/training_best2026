@@ -244,7 +244,42 @@ AI providers output an untrusted extraction payload adhering to `AIExtractionPay
       "location": { "type": "txt", "line_number": 15, "char_offset": 0 }
     }
   },
-  "line_items": []
+  "line_items": [
+    {
+      "line_number": 1,
+      "customer_description": "18in stretch film heavy duty",
+      "extracted_quantity": 10,
+      "extracted_unit_price": "25.00",
+      "extracted_line_total": "250.00",
+      "matched_sku": "SKU-WRAP-18",
+      "sku_confidence": "High",
+      "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+      "candidate_skus": [],
+      "matching_rationale": "High confidence match to standard 18in film",
+      "field_provenance": {
+        "customer_description": {
+          "field_name": "customer_description",
+          "verbatim_snippet": "18in stretch film heavy duty",
+          "location": { "type": "txt", "line_number": 9, "char_offset": 0 }
+        },
+        "extracted_quantity": {
+          "field_name": "extracted_quantity",
+          "verbatim_snippet": "10",
+          "location": { "type": "txt", "line_number": 9, "char_offset": 45 }
+        },
+        "extracted_unit_price": {
+          "field_name": "extracted_unit_price",
+          "verbatim_snippet": "$25.00",
+          "location": { "type": "txt", "line_number": 9, "char_offset": 54 }
+        },
+        "extracted_line_total": {
+          "field_name": "extracted_line_total",
+          "verbatim_snippet": "$250.00",
+          "location": { "type": "txt", "line_number": 9, "char_offset": 66 }
+        }
+      }
+    }
+  ]
 }
 ```
 
