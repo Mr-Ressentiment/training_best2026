@@ -137,7 +137,7 @@ IMMEDIATE_FAILURE_TIMEOUT=5.0
 | `LLM_API_KEY` | `""` | API authentication key for the configured provider. Required for live intake. |
 | `DATABASE_URL` | `"sqlite:///ordershield.db"` | SQLAlchemy database connection URL. |
 | `LIVE_INFERENCE_TIMEOUT` | `15.0` | Maximum client timeout in seconds for live AI inference before aborting. |
-| `IMMEDIATE_FAILURE_TIMEOUT`| `5.0` | Target timeout in seconds for immediate failure detection (auth, connection errors). |
+| `IMMEDIATE_FAILURE_TIMEOUT`| `5.0` | Reference/configuration value for the immediate-failure target used by the accepted requirements/tests; LiveAIProvider does not currently enforce it as a separate timer. |
 
 ### Setting Environment Variables
 
@@ -260,7 +260,7 @@ curl -X POST "http://127.0.0.1:8000/api/v1/fixtures/fixture-clean-acme/ingest"
 - **`fixture-clean-acme`** (`clean_acme.json`):
   Happy path for Acme Industrial Supplies (`CUST-ACME`). Both line items match catalog SKUs with high confidence and contracted pricing tiers. Status: `Ready for Approval` (0 discrepancies).
 - **`fixture-discrepancy-apex`** (`discrepancy_apex.json`):
-  Discrepancy scenario for Apex Distribution (`CUST-APEX`). Line 1 has a `PriceMismatch` ($18.00 requested vs $22.00 contract). Line 2 has an ambiguous SKU (`CatalogMatchingMismatch`). When the operator selects `SKU-WRAP-15`, deterministic revalidation reveals a genuine `QuantityOrPackagingBreach` (customer requested 2 rolls, below catalog MOQ of 5 rolls). Demonstrates blocked approval and explicit operator rejection.
+  Discrepancy scenario for Apex Distribution (`CUST-APEX`). Line 1 has a `PriceMismatch` ($18.00 requested vs $22.00 contract). Line 2 has an ambiguous SKU (`CatalogMatchingMismatch`). When the operator selects `SKU-WRAP-15`, deterministic revalidation reveals a genuine `QuantityOrPackagingBreach` (customer requested quantity 2, below catalog MOQ 5). Demonstrates blocked approval and explicit operator rejection.
 - **`fixture-ambiguous-apex`** (`ambiguous_apex.json`):
   Compliant scenario requiring operator ambiguity resolution. Line item contains description ambiguity; operator selects `SKU-WRAP-15`, which satisfies pricing and MOQ rules, transitioning draft to `Ready for Approval`.
 
@@ -271,7 +271,7 @@ curl -X POST "http://127.0.0.1:8000/api/v1/fixtures/fixture-clean-acme/ingest"
 A suggested 5-minute walkthrough to demonstrate key system capabilities:
 
 1. **Clean Replay Ingestion**:
-   - In the Replay panel, select `fixture-clean-acme` and click **Load replay fixture**.
+   - In the Replay panel, select `fixture-clean-acme` and click **Ingest selected fixture (replay)**.
    - Note the prominent replay warning banner.
    - Observe deterministic reconciliation: integer-cents pricing tier applied, 0 discrepancies, status is `Ready for Approval`.
 2. **Inspect Source Grounding**:
