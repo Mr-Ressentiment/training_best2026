@@ -5,18 +5,28 @@ Provides foundational business rule primitives for T010:
 - Exact integer-cents line arithmetic
 - Exact integer-cents subtotal arithmetic
 
-No AI participates in pricing, arithmetic, tier selection, or fallback decisions.
+T029 adds the operator line mutations on top of the T028 evaluation:
+- Source-grounded CorrectField validated against canonical raw_text
+- Line removal that preserves discrepancy history
+
+No AI participates in pricing, arithmetic, tier selection, grounding, or fallback decisions.
 """
 
 from collections.abc import Iterable
+from decimal import Decimal, InvalidOperation
+import json
+import re
 
+from pydantic import ValidationError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.entities import (
     CatalogProduct, ContractPriceTier, CustomerContract, DiscrepancyFlag,
-    DraftLineItem, OrderDraft,
+    DraftLineItem, FieldProvenance, OrderDraft,
 )
+from app.models.schemas import LocationDataSchema, decimal_to_cents
+from app.services.document_parser import compute_line_spans
 
 
 class PricingError(Exception):
@@ -341,3 +351,254 @@ def evaluate_clean_draft(db: Session, draft: OrderDraft) -> OrderDraft:
             clean = False
         draft.status = "Ready for Approval" if clean else "Needs Review"
     return draft
+
+
+# -----------------------------------------------------------------------------
+# T029: grounded field correction and line removal
+# -----------------------------------------------------------------------------
+
+class SourceGroundingMismatchError(Exception):
+    """The cited snippet/location or the corrected value is not grounded in canonical raw_text."""
+
+
+class TerminalDraftMutationError(Exception):
+    """An Approved or Rejected draft is immutable."""
+
+
+class LineMutationValidationError(ValueError):
+    """The mutation request itself is invalid: unsupported field, bad value type or foreign line."""
+
+
+_TERMINAL_STATUSES = ("Approved", "Rejected")
+_DOCUMENT_LOCATION_TYPES = {"text/plain": "txt", "application/pdf": "pdf"}
+# Correctable field -> persisted column. Derived, SKU and identity columns are never correctable.
+_CORRECTABLE_FIELDS = {
+    "customer_description": "customer_description",
+    "extracted_quantity": "extracted_quantity",
+    "extracted_unit_price": "extracted_unit_price_cents",
+    "extracted_line_total": "extracted_line_total_cents",
+}
+# Unresolved flag categories whose inputs change when a field is corrected.
+_LINE_FLAGS_AFFECTED_BY = {
+    "customer_description": (),
+    "extracted_quantity": ("QuantityOrPackagingBreach", "ArithmeticMismatch", "PriceMismatch"),
+    "extracted_unit_price": ("PriceMismatch", "ArithmeticMismatch"),
+    "extracted_line_total": ("ArithmeticMismatch",),
+}
+_MONEY_TEXT = re.compile(r"\d+(?:\.\d{1,2})?")
+# A numeric token is a maximal run of digits joined by '.' or ','.
+_NUMERIC_TOKEN = re.compile(r"\d+(?:[.,]\d+)*")
+_INTEGER_TOKEN = re.compile(r"\d+")
+_DECIMAL_TOKEN = re.compile(r"\d+(?:\.\d+)?")
+
+
+def _require_mutable(draft: OrderDraft, line: DraftLineItem) -> None:
+    """Terminal and ownership checks shared by every line mutation; runs before any change."""
+    if draft.status in _TERMINAL_STATUSES:
+        raise TerminalDraftMutationError(f"Draft is {draft.status} and cannot be modified")
+    owned = line.draft is draft or (draft.id is not None and line.draft_id == draft.id)
+    if not owned:
+        raise LineMutationValidationError("Line item does not belong to the supplied draft")
+
+
+def _normalize_corrected_value(field: str, value: object) -> str | int:
+    """Return the value to persist (text, quantity or integer cents) or fail closed."""
+    if field == "customer_description":
+        if not isinstance(value, str) or not value.strip():
+            raise LineMutationValidationError("customer_description must be a non-blank string")
+        return value
+    if field == "extracted_quantity":
+        if type(value) is not int or value < 1:
+            raise LineMutationValidationError("extracted_quantity must be an integer >= 1")
+        return value
+    # Money: exact cents only. Floats are rejected rather than rounded.
+    if isinstance(value, Decimal):
+        amount = value
+    elif type(value) is int:
+        amount = Decimal(value)
+    elif isinstance(value, str) and _MONEY_TEXT.fullmatch(value):
+        amount = Decimal(value)
+    else:
+        raise LineMutationValidationError(
+            f"{field} must be a Decimal, an integer or a plain decimal string with at most two places"
+        )
+    try:
+        return decimal_to_cents(amount)
+    except (ValueError, InvalidOperation) as exc:
+        raise LineMutationValidationError(f"{field} must be finite, nonnegative, exact-cent money") from exc
+
+
+def _ground_snippet(
+    draft: OrderDraft, source_snippet: object, source_location: object,
+) -> tuple[LocationDataSchema, str, int, int]:
+    """Verify the snippet at exactly the claimed canonical location; never search or repair.
+
+    Returns the validated location plus the canonical context string and the
+    snippet's [start, end) span inside it (the TXT line, or raw_text for PDF).
+    PDF page membership is not re-provable from persisted state; the absolute
+    canonical character span is authoritative.
+    """
+    if not isinstance(source_snippet, str) or not source_snippet:
+        raise SourceGroundingMismatchError("source_snippet must be a non-empty string")
+    try:
+        location = (
+            source_location if isinstance(source_location, LocationDataSchema)
+            else LocationDataSchema.model_validate(source_location)
+        )
+    except ValidationError:
+        raise SourceGroundingMismatchError("source_location is not a canonical TXT or PDF location") from None
+    document = draft.document
+    raw_text = document.raw_text if document is not None else None
+    if not isinstance(raw_text, str):
+        raise SourceGroundingMismatchError("Draft has no canonical source text")
+    where = location.root
+    if _DOCUMENT_LOCATION_TYPES.get(document.content_type) != where.type:
+        raise SourceGroundingMismatchError("source_location type does not match the source document type")
+    if where.type == "txt":
+        span = next(
+            (item for item in compute_line_spans(raw_text) if item.line_number == where.line_number), None,
+        )
+        if span is None:
+            raise SourceGroundingMismatchError("source_location line does not exist in the source document")
+        context, start = span.text, where.char_offset
+        end = start + len(source_snippet)
+        absolute = span.char_start + start
+        grounded = (
+            end <= len(context) and context[start:end] == source_snippet
+            and raw_text[absolute:absolute + len(source_snippet)] == source_snippet
+        )
+    else:
+        context, start, end = raw_text, where.char_start, where.char_end
+        grounded = end <= len(context) and context[start:end] == source_snippet
+    if not grounded:
+        raise SourceGroundingMismatchError("source_snippet is not present at the specified source location")
+    return location, context, start, end
+
+
+def _grounded_numbers(context: str, start: int, end: int) -> list[str]:
+    """Numeric tokens of the canonical context lying wholly inside the snippet span.
+
+    Tokens are taken from the surrounding canonical text, so a snippet cut out
+    of a longer number ("10" inside "210" or "10.5") yields nothing. Signed,
+    leading-dot and comma-separated tokens are not interpreted.
+    """
+    tokens = []
+    for match in _NUMERIC_TOKEN.finditer(context):
+        if match.start() < start or match.end() > end:
+            continue
+        if match.start() > 0 and context[match.start() - 1] in "-.,":
+            continue
+        tokens.append(match.group())
+    return tokens
+
+
+def _require_value_grounded(
+    field: str, value: str | int, source_snippet: str, context: str, start: int, end: int,
+) -> None:
+    """The corrected value itself, not only the citation, must be stated by the snippet."""
+    if field == "customer_description":
+        grounded = value in source_snippet
+    elif field == "extracted_quantity":
+        grounded = any(
+            _INTEGER_TOKEN.fullmatch(token) and int(token) == value
+            for token in _grounded_numbers(context, start, end)
+        )
+    else:
+        grounded = any(
+            _DECIMAL_TOKEN.fullmatch(token) and Decimal(token) * 100 == value
+            for token in _grounded_numbers(context, start, end)
+        )
+    if not grounded:
+        raise SourceGroundingMismatchError(
+            f"Field correction value for {field} is not grounded in the source document at the specified location"
+        )
+
+
+def _resolve_unresolved_flags(
+    draft: OrderDraft, line: DraftLineItem | None, resolution_state: str,
+    discrepancy_types: tuple[str, ...] | None = None,
+) -> None:
+    """Close matching unresolved flags in place; history rows are never deleted."""
+    for flag in draft.discrepancy_flags:
+        if flag.resolution_state != "Unresolved":
+            continue
+        if line is None:
+            if flag.line_item is not None or flag.line_item_id is not None:
+                continue
+        elif flag.line_item is not line and (line.id is None or flag.line_item_id != line.id):
+            continue
+        if discrepancy_types is None or flag.discrepancy_type in discrepancy_types:
+            flag.resolution_state = resolution_state
+
+
+def correct_line_field(
+    db: Session,
+    draft: OrderDraft,
+    line: DraftLineItem,
+    *,
+    field: str,
+    value: object,
+    source_snippet: str,
+    source_location: object,
+) -> OrderDraft:
+    """Correct one extracted line field to what the source document states.
+
+    The snippet must sit exactly at source_location in the draft's canonical
+    raw_text and must state the corrected value; otherwise
+    SourceGroundingMismatchError is raised before anything changes. On success
+    the field and its provenance are updated, affected unresolved flags become
+    ResolvedByCorrection and evaluate_clean_draft re-derives pricing, flags,
+    subtotal and readiness. SKU resolution is never touched.
+
+    Raises TerminalDraftMutationError for Approved/Rejected drafts and
+    LineMutationValidationError for a foreign or removed line, an unsupported
+    field or an invalid value. The caller owns flush, commit, rollback and the
+    audit event.
+    """
+    with db.no_autoflush:
+        _require_mutable(draft, line)
+        if line.status != "Active":
+            raise LineMutationValidationError("Only an Active line item can be corrected")
+        if not isinstance(field, str) or field not in _CORRECTABLE_FIELDS:
+            raise LineMutationValidationError(f"Field {field!r} cannot be corrected")
+        persisted_value = _normalize_corrected_value(field, value)
+        location, context, start, end = _ground_snippet(draft, source_snippet, source_location)
+        _require_value_grounded(field, persisted_value, source_snippet, context, start, end)
+
+        # Everything above is read-only; mutation starts here.
+        setattr(line, _CORRECTABLE_FIELDS[field], persisted_value)
+        location_json = json.dumps(
+            location.model_dump(mode="json"), ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+        )
+        records = [record for record in line.provenance_records if record.field_name == field]
+        if not records:
+            records = [FieldProvenance(draft=draft, line_item=line, field_name=field)]
+            db.add(records[0])
+        for record in records:
+            record.verbatim_snippet = source_snippet
+            record.location_type = location.root.type
+            record.location_data_json = location_json
+
+        _resolve_unresolved_flags(draft, line, "ResolvedByCorrection", _LINE_FLAGS_AFFECTED_BY[field])
+        if field == "extracted_line_total":
+            # The order-level check sums stated line totals, so its flag is stale too.
+            _resolve_unresolved_flags(draft, None, "ResolvedByCorrection", ("ArithmeticMismatch",))
+    return evaluate_clean_draft(db, draft)
+
+
+def remove_line(db: Session, draft: OrderDraft, line: DraftLineItem) -> OrderDraft:
+    """Mark a line Removed, keeping the row, its provenance and its discrepancy history.
+
+    Unresolved flags of the line, and the order-level ArithmeticMismatch computed
+    over the previous active-line set, become ResolvedByLineRemoval before
+    evaluate_clean_draft re-derives the draft. Removing an already Removed line
+    changes nothing. The caller owns flush, commit, rollback and the audit event.
+    """
+    with db.no_autoflush:
+        _require_mutable(draft, line)
+        if line.status == "Removed":
+            return draft
+        line.status = "Removed"
+        _resolve_unresolved_flags(draft, line, "ResolvedByLineRemoval")
+        _resolve_unresolved_flags(draft, None, "ResolvedByLineRemoval", ("ArithmeticMismatch",))
+    return evaluate_clean_draft(db, draft)
