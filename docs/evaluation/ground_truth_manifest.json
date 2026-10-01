@@ -584,7 +584,16 @@
             ]
           },
           "state_b_operator_selects_sku": {
-            "trigger_action": "POST /api/v1/drafts/{draft_id}/lines/2/select-sku with sku='SKU-WRAP-15'",
+            "trigger_action": {
+              "method": "PATCH",
+              "path": "/api/v1/drafts/{draft_id}/lines/{line_id}",
+              "body": {
+                "action": "SelectSKU",
+                "matched_sku": "SKU-WRAP-15"
+              },
+              "target_line_number": 2,
+              "notes": "line_id is returned by the draft response; line_number is NOT the URL identifier"
+            },
             "description": "After operator explicitly resolves line 2 SKU to SKU-WRAP-15",
             "expected_status": "Needs Review",
             "approval_blocked": true,
@@ -657,7 +666,16 @@
             ]
           },
           "state_b_operator_selects_sku": {
-            "trigger_action": "POST /api/v1/drafts/{draft_id}/lines/1/select-sku with sku='SKU-WRAP-15'",
+            "trigger_action": {
+              "method": "PATCH",
+              "path": "/api/v1/drafts/{draft_id}/lines/{line_id}",
+              "body": {
+                "action": "SelectSKU",
+                "matched_sku": "SKU-WRAP-15"
+              },
+              "target_line_number": 1,
+              "notes": "line_id is returned by the draft response; line_number is NOT the URL identifier"
+            },
             "expected_status": "Ready for Approval",
             "approval_blocked": false,
             "active_unresolved_discrepancies": []
@@ -743,12 +761,16 @@
       },
       {
         "case_id": "approval_gate_enforcement",
-        "description": "Verification that POST /api/v1/drafts/{draft_id}/approve strictly rejects drafts with unresolved discrepancies",
+        "description": "Verification that POST /api/v1/drafts/{draft_id}/approve strictly rejects drafts with unresolved discrepancies or incomplete status",
         "target_endpoint": "POST /api/v1/drafts/{draft_id}/approve",
         "expected_status_code": 409,
-        "expected_error": "Cannot approve draft: unresolved discrepancies or invalid status",
-        "no_verified_order_created": true,
-        "no_illegal_state_transition": true
+        "expected_error": "DraftNotReadyForApprovalError",
+        "expected_message": "Draft is not Ready for Approval",
+        "effects": {
+          "verified_order_records_created": 0,
+          "draft_transitions_to_approved": false,
+          "draft_remains_in_pre_approval_state": true
+        }
       }
     ]
   }

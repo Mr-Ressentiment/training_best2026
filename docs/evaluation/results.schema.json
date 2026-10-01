@@ -260,6 +260,8 @@
             "metric_name": { "type": "string" },
             "value": { "type": ["number", "string", "null"] },
             "unit": { "type": ["string", "null"] },
+            "automated_system_path_duration_ms": { "type": ["number", "null"] },
+            "assisted_operator_completion_duration_seconds": { "type": ["number", "null"] },
             "notes": { "type": "string" }
           }
         },

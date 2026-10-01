@@ -68,9 +68,9 @@ Committed application fixtures evaluated against active database master data (`a
 - **`clean_acme`** (`tests/fixtures/po_clean_acme.txt`, `app/fixtures/clean_acme.json`): 2-line purchase order for Acme Industrial Supplies (`CUST-ACME`). 0 discrepancies, high-confidence SKU mapping, valid arithmetic ($350.00). Evaluates clean intake workflow.
 - **`discrepancy_apex`** (`tests/fixtures/po_discrepancy_apex.txt`, `app/fixtures/discrepancy_apex.json`): Stateful 2-line purchase order for Apex Distribution (`CUST-APEX`). Demonstrates sequential discrepancy emergence:
   - *State A (Intake)*: Line 1 exhibits `PriceMismatch` ($18.00 requested vs $22.00 contract tier for qty 10); Line 2 exhibits `CatalogMatchingMismatch` (ambiguous description "Standard pallet wrap"). The MOQ rule on Line 2 remains latent/inactive because line 2 has not yet been resolved to a catalog SKU.
-  - *State B (Operator SKU Selection)*: Operator selects candidate `SKU-WRAP-15` on Line 2. `CatalogMatchingMismatch` is resolved; deterministic revalidation reveals `QuantityOrPackagingBreach` because requested quantity $2 < \text{MOQ } 5$.
+  - *State B (Operator SKU Selection)*: Operator selects candidate `SKU-WRAP-15` on Line 2 via `PATCH /api/v1/drafts/{draft_id}/lines/{line_id}` with body `{"action": "SelectSKU", "matched_sku": "SKU-WRAP-15"}`. `CatalogMatchingMismatch` is resolved; deterministic revalidation reveals `QuantityOrPackagingBreach` because requested quantity $2 < \text{MOQ } 5$.
   - *State C (Rejection)*: Draft cannot transition to `Ready for Approval` or `Approved` due to commercial price breach and MOQ violation; operator rejects draft with recorded reason.
-- **`ambiguous_apex`** (`tests/fixtures/po_ambiguous_apex.txt`, `app/fixtures/ambiguous_apex.json`): 1-line purchase order for Apex Distribution. Seeded `CatalogMatchingMismatch` (ambiguous description "Standard pallet wrap", qty 10). Resolves to clean draft upon operator SKU selection (`SKU-WRAP-15`).
+- **`ambiguous_apex`** (`tests/fixtures/po_ambiguous_apex.txt`, `app/fixtures/ambiguous_apex.json`): 1-line purchase order for Apex Distribution. Seeded `CatalogMatchingMismatch` (ambiguous description "Standard pallet wrap", qty 10). Resolves to clean draft upon operator SKU selection (`SKU-WRAP-15`) via `PATCH /api/v1/drafts/{draft_id}/lines/{line_id}` with body `{"action": "SelectSKU", "matched_sku": "SKU-WRAP-15"}`.
 - **`unextractable_pdf`** (`tests/fixtures/po_unextractable.pdf`): Digital PDF with corrupted/unextractable text stream. Intake returns HTTP `400` with error type `UnextractableTextError`, 0 provider invocations, 0 partial draft persistence, and 0 fixture fallback.
 
 ### 2.3 Synthetic Deterministic Rule Suite
@@ -204,16 +204,23 @@ The runner must never silently map or conflate these schemas.
   $$\text{POST } /api/v1/drafts/\{draft\_id\}/approve$$
 - **Canonical Behavior**:
   - Returns HTTP `409` (Conflict).
-  - Surfaces an explicit error message: `"Cannot approve draft: unresolved discrepancies or invalid status"`.
-  - Creates 0 `VerifiedOrder` records.
-  - Causes 0 illegal state transitions (draft remains in `Needs Review`).
+  - Error: `DraftNotReadyForApprovalError`.
+  - Message: `"Draft is not Ready for Approval"`.
+  - Effects:
+    - Creates 0 `VerifiedOrder` records.
+    - Draft does not transition to `Approved`.
+    - Draft remains in its valid pre-approval state (`Needs Review`).
 - **Calculation**:
   $$\text{Gate Blocking Rate} = \frac{N_{\text{blocked\_approvals}}}{D_{\text{invalid\_approval\_attempts}}}$$
 - **Normative Target**: $100.0\%$ (0% approval leakage) (SC-005).
 
 #### Metric DET-5: Terminal-State Immutability Rate
 - **Objective**: Ensure committed orders (`Approved` or `Rejected`) cannot be modified, re-evaluated, or re-transitioned.
-- **Normative Target**: $100.0\%$ rejection with explicit error (`ValueError` / HTTP 400).
+- **Canonical API Behavior**:
+  - Mutation or re-transition attempts on `Approved` or `Rejected` drafts return HTTP `409` Conflict.
+  - Error: `TerminalDraftConflictError`.
+  - Message: `"Cannot modify an Approved or Rejected draft"`.
+- **Normative Target**: $100.0\%$ rejection with canonical HTTP 409 error.
 
 ---
 
@@ -223,26 +230,47 @@ The runner must never silently map or conflate these schemas.
 - **Operator Action Count**: Number of discrete operator interactions required to achieve terminal state:
   - Clean scenario (`sc001_prepared_5line`, `clean_acme`): 1 action (operator visual inspection and final approval sign-off).
   - Ambiguous scenario (`ambiguous_apex`): 2 actions (manual candidate SKU selection + final approval sign-off).
-  - Unresolvable discrepancy (`discrepancy_apex`): 1 action (rejection with mandatory recorded reason).
-- **Execution Mode Badge Verification**: 100% of API responses and UI views in replay/fixture mode must contain `is_replay_mode: true` and visible non-live badging.
+  - Unresolvable discrepancy stateful path (`discrepancy_apex` State A $\to$ B $\to$ C): 2 actions (SelectSKU on line 2 to reveal latent MOQ breach, followed by rejection with mandatory recorded reason).
+- **Replay Transparency Contract**:
+  - Replay-created draft and order representations expose `is_replay_mode: true` where that field belongs to the canonical API representation.
+  - Relevant UI views displaying replay-created state visibly show the non-live replay badge.
+  - A live intake request must never silently become replay/fixture execution.
+  - Unrelated responses (such as fixture listings, product catalogs, or general errors) do not contain `is_replay_mode`.
 
 ---
 
 ## 4. Success Criteria Traceability Matrix
 
-This table maps specification success criteria (SC-001 through SC-006) directly to protocol metrics, supporting evidence, and pre-execution status.
+### 4.1 SC-001 Dual Measurement Framework
+SC-001 specifies: *"An operations coordinator can complete end-to-end reconciliation and approval of a prepared 5-line PO in under 60 seconds."*
+Because an automated CLI runner alone cannot prove human operator completion, evaluation establishes two distinct measurements:
+1. **`automated_system_path_duration`**: Machine/runtime measurement of end-to-end ingestion and reconciliation processing duration. Provides diagnostic velocity profiling; does NOT independently satisfy SC-001.
+2. **`assisted_operator_completion_duration`**: Measurement of an actual human operator using OrderShield to reconcile and approve the canonical 5-line fixture (`sc001_prepared_5line_po.txt`). Required to decide SC-001 PASS/FAIL.
+   - **Timer Start**: Operator initiates submission of the prepared 5-line PO in the OrderShield UI.
+   - **Timer Stop**: Successful approval is completed and the Verified Order record is visibly returned.
+   - Operator visual inspection of the populated reconciliation view is included within this timed interval.
+
+**SC-001 Status Lifecycle**:
+- Pre-execution / unrun: **`NOT_YET_MEASURED`**
+- Automated runner completed without human-assisted timing: **`PARTIALLY_MEASURED`**
+- Assisted operator run completed in $<60\text{ s}$: **`PASS`**
+- Assisted operator run completed in $\ge 60\text{ s}$: **`FAIL`**
+
+An automated runner execution alone must **never** mark SC-001 as `PASS`. Assisted timing evidence is collected during manual baseline measurement (`VLD-EVAL-03`).
+
+### 4.2 Traceability Table
 
 | Success Criterion | Specification Requirement | Mapped Metric | Evaluation Assets / Evidence | Pre-Execution Status |
 |:---|:---|:---|:---|:---:|
-| **SC-001** | Prepared Demo Processing Velocity: Operations coordinator completes reconciliation & approval of prepared 5-line PO in $<60\text{ s}$. | E2E Processing Duration & Operator Actions | `docs/evaluation/fixtures/sc001_prepared_5line_po.txt` (`sc001_prepared_5line`). Canonical 5-line fixture authored; awaiting runner timing execution. | **`NOT_YET_MEASURED`** *(Asset available; target $<60\text{ s}$)* |
+| **SC-001** | Prepared Demo Processing Velocity: Operations coordinator completes reconciliation & approval of prepared 5-line PO in $<60\text{ s}$. | Assisted Operator Duration (`assisted_operator_completion_duration`) & System Velocity (`automated_system_path_duration`) | `docs/evaluation/fixtures/sc001_prepared_5line_po.txt` (`sc001_prepared_5line`). Canonical 5-line fixture authored; awaiting runner timing & assisted operator execution. | **`NOT_YET_MEASURED`** *(Target: assisted $<60\text{ s}$)* |
 | **SC-002** | Discrepancy Catch Rate: 100% of seeded pricing mismatches, arithmetic errors, and MOQ violations detected before approval. | `DET-1` Seeded Discrepancy Catch Rate | `discrepancy_apex.json` (stateful), `synthetic_deterministic_suite`, unit test suites (`test_reconciliation.py`). | **`NOT_YET_MEASURED`** *(Target: 100.0%)* |
 | **SC-003** | Zero Hallucinated Commitments: 100% of ambiguous/out-of-catalog items routed to review; zero unrecognized descriptions assigned to unverified SKUs. | `AI-5` Review-Routing Rate & `AI-6` Wrong-Confident SKUs | Traps `h05`, `h06`, `h09`; `ambiguous_apex.json`; `test_ai_matcher.py`. | **`NOT_YET_MEASURED`** *(Target: 100% routed, 0 wrong-confident)* |
 | **SC-004** | Full Provenance Visibility: 100% of extracted line items provide visible textual grounding citations back to source PO text. | `AI-3` Provenance Citation Validity Rate | `app/fixtures/*.json`, `expected.json`, `test_schemas.py`. | **`NOT_YET_MEASURED`** *(Target: 100.0%)* |
-| **SC-005** | Mandatory Gate Enforcement: 0% of unreviewed or discrepancy-laden drafts can transition to committed order record without operator sign-off/resolution. | `DET-4` Approval Gate Blocking Rate (`POST /api/v1/drafts/{id}/approve` $\to 409$) | `test_order_service.py`, `test_api_contracts.py`. | **`NOT_YET_MEASURED`** *(Target: 0% approval leakage)* |
+| **SC-005** | Mandatory Gate Enforcement: 0% of unreviewed or discrepancy-laden drafts can transition to committed order record without operator sign-off/resolution. | `DET-4` Approval Gate Blocking Rate (`POST /api/v1/drafts/{draft_id}/approve` $\to 409$) | `test_order_service.py`, `test_api_contracts.py`. | **`NOT_YET_MEASURED`** *(Target: 0% approval leakage)* |
 | **SC-006** | Explicit Failure & Replay Transparency: Immediate diagnostic error $\le 5\text{ s}$ target; healthy live inference $\le 15\text{ s}$ budget; silent/stalled aborted at $\le 15\text{ s}$; 0 silent fallback; 100% visible replay badge. | `AI-7` Latency Profile, Replay Mode Badge Presence, `po_unextractable.pdf` HTTP 400 | `po_unextractable.pdf`, `test_ai_provider.py`, `test_api_wiring.py`. | **`NOT_YET_MEASURED`** *(Target: Immediate $\le 5\text{ s}$, Live $\le 15\text{ s}$, 0 fallback)* |
 
 > [!IMPORTANT]
-> **Pre-Execution Invariant**: Every Success Criterion is strictly marked **`NOT_YET_MEASURED`** until the evaluation runner (`VLD-EVAL-02`) executes against the ground-truth manifest and records timestamped, verifiable result artifacts in `docs/evaluation/results/`. Implementation conformance tests prove architectural presence but do not replace empirical evaluation.
+> **Pre-Execution Invariant**: Every Success Criterion is strictly marked **`NOT_YET_MEASURED`** until the evaluation runner (`VLD-EVAL-02`) and assisted timing study (`VLD-EVAL-03`) execute against the ground-truth manifest and record timestamped, verifiable result artifacts in `docs/evaluation/results/`. Implementation conformance tests prove architectural presence but do not replace empirical evaluation.
 
 ---
 
