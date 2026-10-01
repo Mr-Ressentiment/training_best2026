@@ -157,6 +157,21 @@
         <div><dt>Line items</dt><dd id="result-lines">—</dd></div>
         <div><dt>Order ID</dt><dd id="result-order-id" class="mono-id">—</dd></div>
       </dl>
+
+      <!-- Audit trail (T038): loaded on request from GET /api/v1/orders/{order_id}; rendered in server order. -->
+      <div class="approval">
+        <button id="audit-load" type="button" class="btn btn--outline">View audit trail</button>
+        <p id="audit-hint" class="approval__hint"></p>
+      </div>
+      <section id="audit-section" aria-label="Audit trail" hidden>
+        <hr>
+        <div class="section-head">
+          <h3>Audit trail</h3>
+          <span id="audit-count" class="muted"></span>
+        </div>
+        <p class="panel__hint">Committed lifecycle events in chronological order, exactly as returned by the server.</p>
+        <ol id="audit-events" class="flags"></ol>
+      </section>
     </section>
   </main>
 
