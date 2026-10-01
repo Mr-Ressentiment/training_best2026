@@ -1,0 +1,641 @@
+"""Unit-level acceptance contract for T026 / P2 deterministic discrepancy engine.
+
+Defines the RED acceptance boundary prior to T028 implementation for:
+- PriceMismatch (AC1)
+- QuantityOrPackagingBreach (AC2, AC3, AC4)
+- ArithmeticMismatch (AC5, AC6)
+- CatalogMatchingMismatch (AC7, AC8, AC9)
+- Clean draft / false-positive prevention (AC10)
+- Readiness blocker invariant: unresolved discrepancy -> Needs Review (AC11)
+- Multiple concurrent discrepancy categories (AC12)
+- Pure deterministic execution without AI or network (AC13)
+"""
+
+from __future__ import annotations
+
+import pytest
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from app.cli import seed_baseline
+from app.models.entities import (
+    ContractPriceTier,
+    DiscrepancyFlag,
+    DraftLineItem,
+    OrderDraft,
+    PurchaseOrderDocument,
+)
+from app.services.reconciliation import (
+    calculate_subtotal_cents,
+    evaluate_clean_draft,
+)
+
+
+# -----------------------------------------------------------------------------
+# Test-local helpers
+# -----------------------------------------------------------------------------
+
+def _create_test_draft(
+    db: Session,
+    *,
+    customer_id: str = "CUST-ACME",
+    customer_name: str = "Acme Industrial Supplies",
+    po_number: str = "PO-10023",
+    line_items: list[DraftLineItem] | None = None,
+    raw_text: str = "PURCHASE ORDER\nAcme Industrial Supplies\nPO-10023\n",
+) -> OrderDraft:
+    """Create a persisted OrderDraft and PurchaseOrderDocument fixture."""
+    doc = PurchaseOrderDocument(
+        filename="test_po.txt",
+        content_type="text/plain",
+        raw_text=raw_text,
+        status="Ingested",
+    )
+    db.add(doc)
+    db.flush()
+
+    if line_items is None:
+        line_items = [
+            DraftLineItem(
+                line_number=1,
+                customer_description="18in stretch film heavy duty",
+                extracted_quantity=10,
+                extracted_unit_price_cents=2500,
+                extracted_line_total_cents=25000,
+                matched_sku="SKU-WRAP-18",
+                sku_confidence="High",
+                sku_resolution_source="AI_HIGH_CONFIDENCE",
+                status="Active",
+            )
+        ]
+
+    draft = OrderDraft(
+        document_id=doc.id,
+        customer_id=customer_id,
+        customer_name_extracted=customer_name,
+        po_number_extracted=po_number,
+        status="Ingested",
+        is_replay_mode=False,
+        line_items=line_items,
+    )
+    db.add(draft)
+    db.flush()
+    return draft
+
+
+def _get_discrepancies(
+    db: Session,
+    draft: OrderDraft,
+    line: DraftLineItem | None = None,
+) -> list[DiscrepancyFlag]:
+    """Retrieve all discrepancy flags associated with the draft or specific line."""
+    flags = list(draft.discrepancy_flags)
+    if not flags:
+        flags = list(
+            db.scalars(
+                select(DiscrepancyFlag).where(DiscrepancyFlag.draft_id == draft.id)
+            ).all()
+        )
+    if line is not None:
+        matched = [f for f in flags if f.line_item_id == line.id or f.line_item is line]
+        if not matched and line.discrepancy_flags:
+            matched = list(line.discrepancy_flags)
+        return matched
+    return flags
+
+
+# -----------------------------------------------------------------------------
+# AC1 — PriceMismatch
+# -----------------------------------------------------------------------------
+
+def test_price_mismatch_creates_blocking_unresolved_discrepancy(db_session):
+    """AC1: Stated unit price != authoritative contract tier price creates PriceMismatch."""
+    seed_baseline(db_session)
+    # SKU-WRAP-18 under CONTRACT-ACME-2026: Q=10 tier price is 2500 cents ($25.00).
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2400,  # 2400 != authoritative tier price 2500
+        extracted_line_total_cents=24000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    flags = _get_discrepancies(db_session, result, line)
+    price_flags = [f for f in flags if f.discrepancy_type == "PriceMismatch"]
+    assert len(price_flags) == 1, f"Expected 1 PriceMismatch flag, found {len(price_flags)}"
+    flag = price_flags[0]
+    assert flag.severity == "Blocking"
+    assert flag.resolution_state == "Unresolved"
+    assert flag.line_item_id == line.id or flag.line_item is line
+    assert flag.expected_value and ("25" in flag.expected_value or "2500" in flag.expected_value)
+    assert flag.requested_value and ("24" in flag.requested_value or "2400" in flag.requested_value)
+    assert bool(flag.explanation and flag.explanation.strip())
+
+
+def test_price_mismatch_uses_deterministic_contract_tier_not_catalog_base(db_session):
+    """AC1: Price validation strictly uses contract tier lookup, never catalog base price."""
+    seed_baseline(db_session)
+    # SKU-WRAP-18: catalog base_price_cents=2450.
+    # Contract CONTRACT-ACME-2026 tiers: Q=1 -> 2600, Q=10 -> 2500, Q=50 -> 2300.
+    # For quantity=50: authoritative tier price is 2300 cents ($23.00).
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty bulk",
+        extracted_quantity=50,
+        extracted_unit_price_cents=2450,  # Customer stated catalog base price ($24.50)
+        extracted_line_total_cents=122500,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    flags = _get_discrepancies(db_session, result, line)
+    price_flags = [f for f in flags if f.discrepancy_type == "PriceMismatch"]
+    assert len(price_flags) == 1, "Expected PriceMismatch when stated price equals catalog base instead of tier price"
+    flag = price_flags[0]
+    assert "23" in flag.expected_value
+    assert "24.5" not in flag.expected_value
+
+
+# -----------------------------------------------------------------------------
+# AC2 — QuantityOrPackagingBreach: MOQ
+# -----------------------------------------------------------------------------
+
+def test_quantity_below_moq_creates_quantity_or_packaging_breach(db_session):
+    """AC2: Requested quantity < catalog product min_order_quantity creates QuantityOrPackagingBreach."""
+    seed_baseline(db_session)
+    # SKU-WRAP-18 has min_order_quantity = 5.
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=3,  # 3 < MOQ (5)
+        extracted_unit_price_cents=2600,  # Tier price for Q=1..9 is 2600
+        extracted_line_total_cents=7800,  # 3 * 2600
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    flags = _get_discrepancies(db_session, result, line)
+    moq_flags = [f for f in flags if f.discrepancy_type == "QuantityOrPackagingBreach"]
+    assert len(moq_flags) == 1, f"Expected 1 QuantityOrPackagingBreach flag, found {len(moq_flags)}"
+    flag = moq_flags[0]
+    assert flag.severity == "Blocking"
+    assert flag.resolution_state == "Unresolved"
+    assert flag.line_item_id == line.id or flag.line_item is line
+    assert flag.expected_value and ("5" in flag.expected_value or "MOQ" in flag.expected_value)
+    assert flag.requested_value and ("3" in flag.requested_value)
+    assert bool(flag.explanation and flag.explanation.strip())
+
+
+# -----------------------------------------------------------------------------
+# AC3 — QuantityOrPackagingBreach: package increment
+# -----------------------------------------------------------------------------
+
+def test_quantity_violating_package_increment_creates_quantity_or_packaging_breach(db_session):
+    """AC3: Quantity satisfying MOQ but not a multiple of package_increment creates QuantityOrPackagingBreach."""
+    seed_baseline(db_session)
+    # SKU-TAPE-03: min_order_quantity = 4, package_increment = 2.
+    db_session.add(ContractPriceTier(
+        id="TIER-ACME-TAPE03-Q1",
+        contract_id="CONTRACT-ACME-2026",
+        sku="SKU-TAPE-03",
+        min_quantity=1,
+        tier_price_cents=800,
+    ))
+    db_session.flush()
+
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="Industrial Filament Strapping Tape 3in",
+        extracted_quantity=5,  # 5 >= MOQ (4), but 5 % package_increment (2) != 0
+        extracted_unit_price_cents=800,
+        extracted_line_total_cents=4000,  # 5 * 800
+        matched_sku="SKU-TAPE-03",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    flags = _get_discrepancies(db_session, result, line)
+    pkg_flags = [f for f in flags if f.discrepancy_type == "QuantityOrPackagingBreach"]
+    assert len(pkg_flags) == 1, f"Expected 1 QuantityOrPackagingBreach flag for package increment breach, found {len(pkg_flags)}"
+    flag = pkg_flags[0]
+    assert flag.severity == "Blocking"
+    assert flag.resolution_state == "Unresolved"
+    assert flag.expected_value and (
+        "2" in flag.expected_value
+        or "increment" in flag.expected_value.lower()
+        or "multiple" in flag.expected_value.lower()
+    )
+    assert flag.requested_value and ("5" in flag.requested_value)
+    assert bool(flag.explanation and flag.explanation.strip())
+
+
+# -----------------------------------------------------------------------------
+# AC4 — valid quantity (negative / clean case)
+# -----------------------------------------------------------------------------
+
+def test_valid_quantity_satisfying_moq_and_increment_creates_no_quantity_breach(db_session):
+    """AC4: Quantity satisfying both MOQ and package increment creates no QuantityOrPackagingBreach."""
+    seed_baseline(db_session)
+    # SKU-TAPE-03: min_order_quantity = 4, package_increment = 2.
+    db_session.add(ContractPriceTier(
+        id="TIER-ACME-TAPE03-Q1",
+        contract_id="CONTRACT-ACME-2026",
+        sku="SKU-TAPE-03",
+        min_quantity=1,
+        tier_price_cents=800,
+    ))
+    db_session.flush()
+
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="Industrial Filament Strapping Tape 3in",
+        extracted_quantity=6,  # 6 >= 4 and 6 % 2 == 0
+        extracted_unit_price_cents=800,
+        extracted_line_total_cents=4800,  # 6 * 800
+        matched_sku="SKU-TAPE-03",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    flags = _get_discrepancies(db_session, result, line)
+    pkg_flags = [f for f in flags if f.discrepancy_type == "QuantityOrPackagingBreach"]
+    assert pkg_flags == [], (
+        "Valid quantity satisfying MOQ and package increment must not produce QuantityOrPackagingBreach"
+    )
+
+
+# -----------------------------------------------------------------------------
+# AC5 — ArithmeticMismatch: line arithmetic
+# -----------------------------------------------------------------------------
+
+def test_line_arithmetic_mismatch_creates_arithmetic_discrepancy(db_session):
+    """AC5: Customer stated line total != quantity * unit price creates ArithmeticMismatch."""
+    seed_baseline(db_session)
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2500,  # 10 * 2500 = 25000 cents
+        extracted_line_total_cents=26000,  # Stated line total 26000 != 25000
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    flags = _get_discrepancies(db_session, result, line)
+    arithmetic_flags = [f for f in flags if f.discrepancy_type == "ArithmeticMismatch"]
+    assert len(arithmetic_flags) == 1, f"Expected 1 ArithmeticMismatch flag, found {len(arithmetic_flags)}"
+    flag = arithmetic_flags[0]
+    assert flag.severity == "Blocking"
+    assert flag.resolution_state == "Unresolved"
+    assert flag.line_item_id == line.id or flag.line_item is line
+    assert flag.expected_value and ("250" in flag.expected_value or "25000" in flag.expected_value)
+    assert flag.requested_value and ("260" in flag.requested_value or "26000" in flag.requested_value)
+    assert bool(flag.explanation and flag.explanation.strip())
+
+
+# -----------------------------------------------------------------------------
+# AC6 — ArithmeticMismatch: order-level arithmetic boundary & limitation
+# -----------------------------------------------------------------------------
+
+def test_order_level_stated_subtotal_model_boundary(db_session):
+    """AC6: Document canonical model boundary for order subtotal arithmetic.
+
+    The canonical OrderDraft model stores derived calculated_subtotal_cents and does not
+    contain a source-backed stated order subtotal field. Line-level arithmetic serves as
+    the mandatory acceptance boundary, and order subtotal is purely calculated.
+    """
+    seed_baseline(db_session)
+    draft = _create_test_draft(db_session)
+
+    # Confirm model boundary: no source-backed stated subtotal column exists
+    assert not hasattr(draft, "extracted_subtotal_cents")
+    assert not hasattr(draft, "stated_subtotal_cents")
+    assert hasattr(draft, "calculated_subtotal_cents")
+
+    result = evaluate_clean_draft(db_session, draft)
+    expected_sum = calculate_subtotal_cents([line.calculated_line_total_cents for line in result.line_items])
+    assert result.calculated_subtotal_cents == expected_sum
+
+
+# -----------------------------------------------------------------------------
+# AC7 — CatalogMatchingMismatch: Ambiguous
+# -----------------------------------------------------------------------------
+
+def test_ambiguous_sku_creates_catalog_matching_mismatch(db_session):
+    """AC7: sku_confidence == 'Ambiguous' creates CatalogMatchingMismatch."""
+    seed_baseline(db_session)
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="Standard pallet wrap",
+        extracted_quantity=2,
+        extracted_unit_price_cents=2000,
+        extracted_line_total_cents=4000,
+        matched_sku=None,
+        sku_confidence="Ambiguous",
+        sku_resolution_source="NONE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    flags = _get_discrepancies(db_session, result, line)
+    cat_flags = [f for f in flags if f.discrepancy_type == "CatalogMatchingMismatch"]
+    assert len(cat_flags) == 1, f"Expected 1 CatalogMatchingMismatch flag, found {len(cat_flags)}"
+    flag = cat_flags[0]
+    assert flag.severity == "Blocking"
+    assert flag.resolution_state == "Unresolved"
+    assert flag.line_item_id == line.id or flag.line_item is line
+    assert bool(flag.expected_value and flag.expected_value.strip())
+    assert bool(flag.requested_value and flag.requested_value.strip())
+    assert bool(flag.explanation and flag.explanation.strip())
+
+
+# -----------------------------------------------------------------------------
+# AC8 — CatalogMatchingMismatch: Unrecognized
+# -----------------------------------------------------------------------------
+
+def test_unrecognized_sku_creates_catalog_matching_mismatch_without_auto_substitution(db_session):
+    """AC8: sku_confidence == 'Unrecognized' creates CatalogMatchingMismatch without auto-substituting SKU."""
+    seed_baseline(db_session)
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="Completely unknown specialty item xyz",
+        extracted_quantity=1,
+        extracted_unit_price_cents=5000,
+        extracted_line_total_cents=5000,
+        matched_sku=None,
+        sku_confidence="Unrecognized",
+        sku_resolution_source="NONE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    assert line.matched_sku is None
+    assert line.contract_price_cents is None
+    flags = _get_discrepancies(db_session, result, line)
+    cat_flags = [f for f in flags if f.discrepancy_type == "CatalogMatchingMismatch"]
+    assert len(cat_flags) == 1, f"Expected 1 CatalogMatchingMismatch flag, found {len(cat_flags)}"
+    flag = cat_flags[0]
+    assert flag.severity == "Blocking"
+    assert flag.resolution_state == "Unresolved"
+    assert bool(flag.explanation and flag.explanation.strip())
+
+
+# -----------------------------------------------------------------------------
+# AC9 — clean catalog match
+# -----------------------------------------------------------------------------
+
+def test_clean_catalog_match_creates_no_catalog_matching_mismatch(db_session):
+    """AC9: High confidence match resolved to catalog SKU creates no CatalogMatchingMismatch."""
+    seed_baseline(db_session)
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2500,
+        extracted_line_total_cents=25000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    flags = _get_discrepancies(db_session, result, line)
+    cat_flags = [f for f in flags if f.discrepancy_type == "CatalogMatchingMismatch"]
+    assert cat_flags == [], "High confidence catalog match must not create CatalogMatchingMismatch"
+
+
+# -----------------------------------------------------------------------------
+# AC10 — no false positive clean case
+# -----------------------------------------------------------------------------
+
+def test_clean_draft_has_zero_unresolved_discrepancies_and_ready_for_approval(db_session):
+    """AC10: Completely clean draft transitions to Ready for Approval with zero unresolved discrepancies."""
+    seed_baseline(db_session)
+    lines = [
+        DraftLineItem(
+            line_number=1,
+            customer_description="18in stretch film heavy duty",
+            extracted_quantity=10,
+            extracted_unit_price_cents=2500,
+            extracted_line_total_cents=25000,
+            matched_sku="SKU-WRAP-18",
+            sku_confidence="High",
+            sku_resolution_source="AI_HIGH_CONFIDENCE",
+            status="Active",
+        ),
+        DraftLineItem(
+            line_number=2,
+            customer_description="Standard Pallet Wrap 15in 65ga",
+            extracted_quantity=5,
+            extracted_unit_price_cents=2000,
+            extracted_line_total_cents=10000,
+            matched_sku="SKU-WRAP-15",
+            sku_confidence="High",
+            sku_resolution_source="AI_HIGH_CONFIDENCE",
+            status="Active",
+        ),
+    ]
+    draft = _create_test_draft(db_session, line_items=lines)
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Ready for Approval"
+    assert result.calculated_subtotal_cents == 35000
+    all_flags = _get_discrepancies(db_session, result)
+    unresolved_flags = [f for f in all_flags if f.resolution_state == "Unresolved"]
+    assert unresolved_flags == []
+
+
+# -----------------------------------------------------------------------------
+# AC11 — unresolved discrepancy blocks readiness
+# -----------------------------------------------------------------------------
+
+@pytest.mark.parametrize("category", [
+    "PriceMismatch",
+    "QuantityOrPackagingBreach",
+    "ArithmeticMismatch",
+    "CatalogMatchingMismatch",
+])
+def test_existing_unresolved_flag_blocks_readiness_for_all_categories(db_session, category):
+    """AC11: Any unresolved blocking discrepancy flag of any category forces Needs Review, never Ready for Approval."""
+    seed_baseline(db_session)
+    draft = _create_test_draft(db_session)
+    flag = DiscrepancyFlag(
+        draft=draft,
+        line_item=draft.line_items[0],
+        discrepancy_type=category,
+        severity="Blocking",
+        expected_value="expected_val",
+        requested_value="requested_val",
+        explanation=f"Blocking discrepancy of type {category}",
+        resolution_state="Unresolved",
+    )
+    db_session.add(flag)
+    db_session.flush()
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    assert result.status != "Ready for Approval"
+
+
+@pytest.mark.parametrize("defect_type,mutator", [
+    ("PriceMismatch", lambda line: setattr(line, "extracted_unit_price_cents", 2499)),
+    ("QuantityOrPackagingBreach", lambda line: setattr(line, "extracted_quantity", 2)),
+    ("ArithmeticMismatch", lambda line: setattr(line, "extracted_line_total_cents", 99999)),
+    ("CatalogMatchingMismatch", lambda line: (
+        setattr(line, "sku_confidence", "Ambiguous"),
+        setattr(line, "sku_resolution_source", "NONE"),
+        setattr(line, "matched_sku", None),
+    )),
+])
+def test_evaluation_detected_discrepancy_blocks_readiness(db_session, defect_type, mutator):
+    """AC11: Evaluation-detected discrepancy in each category strictly prevents Ready for Approval."""
+    seed_baseline(db_session)
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2500,
+        extracted_line_total_cents=25000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+    mutator(line)
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    assert result.status != "Ready for Approval"
+    flags = _get_discrepancies(db_session, result, line)
+    matching = [f for f in flags if f.discrepancy_type == defect_type]
+    assert len(matching) >= 1, f"Expected {defect_type} discrepancy to be generated by evaluation"
+
+
+# -----------------------------------------------------------------------------
+# AC12 — multiple discrepancy categories
+# -----------------------------------------------------------------------------
+
+def test_multiple_discrepancy_categories_accumulate_without_early_exit(db_session):
+    """AC12: A line/draft violating multiple independent rules detects all applicable discrepancy categories."""
+    seed_baseline(db_session)
+    # A single line simultaneously has:
+    # 1. Price mismatch: extracted_unit_price_cents = 2400 (contract tier is 2600 for Q < 10)
+    # 2. MOQ breach: extracted_quantity = 3 (< MOQ 5 for SKU-WRAP-18)
+    # 3. Arithmetic mismatch: extracted_line_total_cents = 10000 (3 * 2400 = 7200 != 10000)
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=3,
+        extracted_unit_price_cents=2400,
+        extracted_line_total_cents=10000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    flags = _get_discrepancies(db_session, result, line)
+    found_types = {f.discrepancy_type for f in flags}
+    expected_types = {"PriceMismatch", "QuantityOrPackagingBreach", "ArithmeticMismatch"}
+
+    assert expected_types.issubset(found_types), (
+        f"Engine must not stop on first error; expected {expected_types}, got {found_types}"
+    )
+    assert all(f.severity == "Blocking" for f in flags)
+    assert all(f.resolution_state == "Unresolved" for f in flags)
+
+
+# -----------------------------------------------------------------------------
+# AC13 — deterministic behavior
+# -----------------------------------------------------------------------------
+
+def test_deterministic_reconciliation_repeatability_without_ai_or_network(db_session):
+    """AC13: Business-rule evaluation produces identical deterministic output on successive evaluations."""
+    seed_baseline(db_session)
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2500,
+        extracted_line_total_cents=25000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    res1 = evaluate_clean_draft(db_session, draft)
+    status1 = res1.status
+    subtotal1 = res1.calculated_subtotal_cents
+    line_total1 = res1.line_items[0].calculated_line_total_cents
+    flags1 = [
+        (f.discrepancy_type, f.severity, f.resolution_state)
+        for f in _get_discrepancies(db_session, res1)
+    ]
+
+    res2 = evaluate_clean_draft(db_session, draft)
+    status2 = res2.status
+    subtotal2 = res2.calculated_subtotal_cents
+    line_total2 = res2.line_items[0].calculated_line_total_cents
+    flags2 = [
+        (f.discrepancy_type, f.severity, f.resolution_state)
+        for f in _get_discrepancies(db_session, res2)
+    ]
+
+    assert status1 == status2 == "Ready for Approval"
+    assert subtotal1 == subtotal2 == 25000
+    assert line_total1 == line_total2 == 25000
+    assert flags1 == flags2 == []
