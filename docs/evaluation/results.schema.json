@@ -1,0 +1,282 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OrderShield Evaluation Run Results Schema",
+  "description": "Formal contract schema for evaluation run result artifacts produced by OrderShield evaluation runner.",
+  "type": "object",
+  "required": [
+    "run_id",
+    "mode",
+    "timestamp_utc",
+    "git_commit",
+    "deterministic_metrics",
+    "e2e_metrics",
+    "sc_traceability"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "description": "Unique identifier for this evaluation execution run"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["DETERMINISTIC", "REPLAY", "LIVE", "HISTORICAL_BAKEOFF", "ALL"],
+      "description": "Execution evaluation mode"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of evaluation completion"
+    },
+    "git_commit": {
+      "type": "string",
+      "description": "Canonical Git commit SHA under evaluation"
+    },
+    "provider_config": {
+      "type": "object",
+      "properties": {
+        "provider": { "type": ["string", "null"] },
+        "model": { "type": ["string", "null"] },
+        "base_url_masked": { "type": ["string", "null"] },
+        "timeout_seconds": { "type": ["number", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "ai_metrics": {
+      "type": "object",
+      "properties": {
+        "schema_valid_rate": {
+          "type": "object",
+          "required": ["numerator", "denominator", "rate_percentage"],
+          "properties": {
+            "numerator": { "type": "integer" },
+            "denominator": { "type": "integer" },
+            "rate_percentage": { "type": "number" }
+          }
+        },
+        "mandatory_field_exactness": {
+          "type": "object",
+          "required": ["numerator", "denominator", "rate_percentage", "per_field_breakdown"],
+          "properties": {
+            "numerator": { "type": "integer" },
+            "denominator": { "type": "integer" },
+            "rate_percentage": { "type": "number" },
+            "per_field_breakdown": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "exact": { "type": "integer" },
+                  "total": { "type": "integer" },
+                  "rate_percentage": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "provenance_validity": {
+          "type": "object",
+          "required": ["numerator", "denominator", "rate_percentage"],
+          "properties": {
+            "numerator": { "type": "integer" },
+            "denominator": { "type": "integer" },
+            "rate_percentage": { "type": "number" }
+          }
+        },
+        "determinate_sku_accuracy": {
+          "type": "object",
+          "required": ["numerator", "denominator", "rate_percentage"],
+          "properties": {
+            "numerator": { "type": "integer" },
+            "denominator": { "type": "integer" },
+            "rate_percentage": { "type": "number" },
+            "abstentions": { "type": "integer" }
+          }
+        },
+        "review_trap_catch_rate": {
+          "type": "object",
+          "required": ["numerator", "denominator", "rate_percentage"],
+          "properties": {
+            "numerator": { "type": "integer" },
+            "denominator": { "type": "integer" },
+            "rate_percentage": { "type": "number" }
+          }
+        },
+        "wrong_confident_skus": {
+          "type": "object",
+          "required": ["count", "rate_percentage"],
+          "properties": {
+            "count": { "type": "integer" },
+            "rate_percentage": { "type": "number" }
+          }
+        },
+        "latency_profile_seconds": {
+          "type": "object",
+          "properties": {
+            "min": { "type": "number" },
+            "p50": { "type": "number" },
+            "mean": { "type": "number" },
+            "p90": { "type": "number" },
+            "p95": { "type": "number" },
+            "max": { "type": "number" }
+          }
+        }
+      }
+    },
+    "deterministic_metrics": {
+      "type": "object",
+      "required": [
+        "discrepancy_catch_rate",
+        "false_positive_discrepancy_count",
+        "commercial_rule_enforcement_rate",
+        "gate_blocking_rate",
+        "terminal_state_enforcement_rate"
+      ],
+      "properties": {
+        "discrepancy_catch_rate": {
+          "type": "object",
+          "required": ["numerator", "denominator", "rate_percentage"],
+          "properties": {
+            "numerator": { "type": "integer" },
+            "denominator": { "type": "integer" },
+            "rate_percentage": { "type": "number" }
+          }
+        },
+        "false_positive_discrepancy_count": { "type": "integer" },
+        "false_positive_rate": { "type": "number" },
+        "commercial_rule_enforcement_rate": {
+          "type": "object",
+          "required": ["numerator", "denominator", "rate_percentage"],
+          "properties": {
+            "numerator": { "type": "integer" },
+            "denominator": { "type": "integer" },
+            "rate_percentage": { "type": "number" }
+          }
+        },
+        "gate_blocking_rate": {
+          "type": "object",
+          "required": ["numerator", "denominator", "rate_percentage"],
+          "properties": {
+            "numerator": { "type": "integer" },
+            "denominator": { "type": "integer" },
+            "rate_percentage": { "type": "number" }
+          }
+        },
+        "terminal_state_enforcement_rate": {
+          "type": "object",
+          "required": ["numerator", "denominator", "rate_percentage"],
+          "properties": {
+            "numerator": { "type": "integer" },
+            "denominator": { "type": "integer" },
+            "rate_percentage": { "type": "number" }
+          }
+        }
+      }
+    },
+    "e2e_metrics": {
+      "type": "object",
+      "required": [
+        "average_reconciliation_duration_ms",
+        "operator_actions_recorded",
+        "visible_replay_badge_rate"
+      ],
+      "properties": {
+        "average_reconciliation_duration_ms": { "type": "number" },
+        "operator_actions_recorded": { "type": "integer" },
+        "terminal_status_counts": {
+          "type": "object",
+          "properties": {
+            "Approved": { "type": "integer" },
+            "Rejected": { "type": "integer" }
+          }
+        },
+        "visible_replay_badge_rate": { "type": "number" }
+      }
+    },
+    "sc_traceability": {
+      "type": "object",
+      "required": ["SC_001", "SC_002", "SC_003", "SC_004", "SC_005", "SC_006"],
+      "properties": {
+        "SC_001": {
+          "type": "object",
+          "required": ["status", "metric_name", "notes"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PASS", "FAIL", "MISSING_EVALUATION_ASSET", "PARTIALLY_MEASURED"] },
+            "metric_name": { "type": "string" },
+            "value": { "type": ["number", "string", "null"] },
+            "unit": { "type": ["string", "null"] },
+            "notes": { "type": "string" }
+          }
+        },
+        "SC_002": {
+          "type": "object",
+          "required": ["status", "metric_name", "value", "unit", "notes"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "metric_name": { "type": "string" },
+            "value": { "type": "number" },
+            "unit": { "type": "string" },
+            "notes": { "type": "string" }
+          }
+        },
+        "SC_003": {
+          "type": "object",
+          "required": ["status", "metric_name", "value", "unit", "notes"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "metric_name": { "type": "string" },
+            "value": { "type": "number" },
+            "unit": { "type": "string" },
+            "notes": { "type": "string" }
+          }
+        },
+        "SC_004": {
+          "type": "object",
+          "required": ["status", "metric_name", "value", "unit", "notes"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "metric_name": { "type": "string" },
+            "value": { "type": "number" },
+            "unit": { "type": "string" },
+            "notes": { "type": "string" }
+          }
+        },
+        "SC_005": {
+          "type": "object",
+          "required": ["status", "metric_name", "value", "unit", "notes"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "metric_name": { "type": "string" },
+            "value": { "type": "number" },
+            "unit": { "type": "string" },
+            "notes": { "type": "string" }
+          }
+        },
+        "SC_006": {
+          "type": "object",
+          "required": ["status", "metric_name", "value", "unit", "notes"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "metric_name": { "type": "string" },
+            "value": { "type": "number" },
+            "unit": { "type": "string" },
+            "notes": { "type": "string" }
+          }
+        }
+      }
+    },
+    "case_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["case_id", "status"],
+        "properties": {
+          "case_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["PASS", "FAIL", "ERROR", "SKIPPED"] },
+          "latency_seconds": { "type": "number" },
+          "discrepancies_detected": { "type": "integer" },
+          "details": { "type": "object" }
+        }
+      }
+    }
+  }
+}

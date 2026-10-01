@@ -1,0 +1,657 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "manifest_version": "1.0.0",
+  "created_at_utc": "2026-10-02T00:00:00Z",
+  "description": "OrderShield Canonical Evaluation Ground-Truth Manifest defining test corpora, expected field extractions, grounded provenance requirements, deterministic discrepancy baselines, and Success Criteria traceability.",
+  "catalogs": {
+    "historical_spike_catalog": {
+      "reference_path": "spikes/ordershield/catalog.json",
+      "currency": "EUR",
+      "products": [
+        {
+          "sku": "PAPER-A4-80",
+          "description": "A4 copier paper 80 gsm, 500 sheets",
+          "sale_unit": "ream",
+          "base_price": "5.00"
+        },
+        {
+          "sku": "GLOVE-N-M",
+          "description": "Blue powder-free nitrile exam gloves, medium, box of 100",
+          "sale_unit": "box",
+          "base_price": "8.00"
+        },
+        {
+          "sku": "GLOVE-N-L",
+          "description": "Blue powder-free nitrile exam gloves, large, box of 100",
+          "sale_unit": "box",
+          "base_price": "8.00"
+        },
+        {
+          "sku": "TAPE-48",
+          "description": "Transparent polypropylene packing tape 48 mm x 66 m",
+          "sale_unit": "roll",
+          "base_price": "2.00"
+        }
+      ],
+      "contract_assignments": {
+        "Alder Office Supplies": ["PAPER-A4-80", "TAPE-48"],
+        "Cedar Care": ["GLOVE-N-M", "GLOVE-N-L"],
+        "Harbor Logistics": ["TAPE-48"]
+      }
+    },
+    "app_baseline_catalog": {
+      "reference_module": "app.cli.BASELINE_PRODUCTS",
+      "currency": "USD",
+      "products": [
+        {
+          "sku": "SKU-WRAP-18",
+          "name": "Industrial Stretch Film 18in 80ga",
+          "unit_of_measure": "Roll",
+          "base_price_cents": 2450,
+          "min_order_quantity": 5,
+          "package_increment": 1
+        },
+        {
+          "sku": "SKU-WRAP-15",
+          "name": "Standard Pallet Wrap 15in 65ga",
+          "unit_of_measure": "Case",
+          "base_price_cents": 2000,
+          "min_order_quantity": 5,
+          "package_increment": 1
+        },
+        {
+          "sku": "SKU-TAPE-02",
+          "name": "Heavy Duty Packaging Tape 2in x 110yd",
+          "unit_of_measure": "Roll",
+          "base_price_cents": 350,
+          "min_order_quantity": 6,
+          "package_increment": 6
+        },
+        {
+          "sku": "SKU-TAPE-03",
+          "name": "Industrial Filament Strapping Tape 3in",
+          "unit_of_measure": "Roll",
+          "base_price_cents": 850,
+          "min_order_quantity": 4,
+          "package_increment": 2
+        },
+        {
+          "sku": "SKU-BOX-MED",
+          "name": "Corrugated Shipping Box 16x12x12in",
+          "unit_of_measure": "Bundle",
+          "base_price_cents": 3200,
+          "min_order_quantity": 1,
+          "package_increment": 1
+        },
+        {
+          "sku": "SKU-BOX-LRG",
+          "name": "Heavy Duty Corrugated Box 24x18x18in",
+          "unit_of_measure": "Bundle",
+          "base_price_cents": 4800,
+          "min_order_quantity": 1,
+          "package_increment": 1
+        },
+        {
+          "sku": "SKU-LBL-THERM",
+          "name": "Direct Thermal Shipping Labels 4x6in",
+          "unit_of_measure": "Roll",
+          "base_price_cents": 1250,
+          "min_order_quantity": 4,
+          "package_increment": 4
+        },
+        {
+          "sku": "SKU-STRAP-HD",
+          "name": "Heavy Duty Polyester Strapping Kit",
+          "unit_of_measure": "Kit",
+          "base_price_cents": 7500,
+          "min_order_quantity": 1,
+          "package_increment": 1
+        }
+      ],
+      "contracts": [
+        {
+          "contract_id": "CONTRACT-ACME-2026",
+          "customer_id": "CUST-ACME",
+          "customer_name": "Acme Industrial Supplies"
+        },
+        {
+          "contract_id": "CONTRACT-APEX-2026",
+          "customer_id": "CUST-APEX",
+          "customer_name": "Apex Distribution"
+        }
+      ]
+    }
+  },
+  "corpora": {
+    "historical_bakeoff": [
+      {
+        "case_id": "h01_paper",
+        "source_path": "spikes/ordershield/live/fixtures/h01_paper.txt",
+        "category": "clear",
+        "is_determinate": true,
+        "is_review_trap": false,
+        "dangerous": false,
+        "expected_header": {
+          "customer_name": "Alder Office Supplies",
+          "po_number": "HX-201",
+          "currency": "EUR",
+          "order_total": "35.00"
+        },
+        "expected_line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "PAPER-A4-80 / white office stock; A4, 80 g/m2, 500 leaves per ream",
+            "quantity": "7",
+            "sale_unit": "ream",
+            "unit_price": "5.00",
+            "line_total": "35.00",
+            "expected_sku": "PAPER-A4-80",
+            "needs_sku_review": false
+          }
+        ],
+        "expected_status": "CLEAN_DRAFT",
+        "expected_discrepancies": []
+      },
+      {
+        "case_id": "h02_large",
+        "source_path": "spikes/ordershield/live/fixtures/h02_large.txt",
+        "category": "clear",
+        "is_determinate": true,
+        "is_review_trap": false,
+        "dangerous": false,
+        "expected_header": {
+          "customer_name": "Cedar Care",
+          "po_number": "HX-202",
+          "currency": "EUR",
+          "order_total": "48.00"
+        },
+        "expected_line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "Blue powder-free nitrile exam gloves, large, box of 100",
+            "quantity": "6",
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "line_total": "48.00",
+            "expected_sku": "GLOVE-N-L",
+            "needs_sku_review": false
+          }
+        ],
+        "expected_status": "CLEAN_DRAFT",
+        "expected_discrepancies": []
+      },
+      {
+        "case_id": "h03_alias",
+        "source_path": "spikes/ordershield/live/fixtures/h03_alias.txt",
+        "category": "semantic",
+        "is_determinate": true,
+        "is_review_trap": false,
+        "dangerous": false,
+        "expected_header": {
+          "customer_name": "Cedar Care",
+          "po_number": "HX-203",
+          "currency": "EUR",
+          "order_total": "64.00"
+        },
+        "expected_line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "Nitrile patient-examination handwear, blue, no powder, medium; 100 gloves per box",
+            "quantity": "8",
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "line_total": "64.00",
+            "expected_sku": "GLOVE-N-M",
+            "needs_sku_review": false
+          }
+        ],
+        "expected_status": "CLEAN_DRAFT",
+        "expected_discrepancies": []
+      },
+      {
+        "case_id": "h04_tape",
+        "source_path": "spikes/ordershield/live/fixtures/h04_tape.txt",
+        "category": "semantic",
+        "is_determinate": true,
+        "is_review_trap": false,
+        "dangerous": false,
+        "expected_header": {
+          "customer_name": "Harbor Logistics",
+          "po_number": "HX-204",
+          "currency": "EUR",
+          "order_total": "21.60"
+        },
+        "expected_line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "See-through PP carton-sealing adhesive tape; width 48 mm, length 66 m",
+            "quantity": "12",
+            "sale_unit": "roll",
+            "unit_price": "1.80",
+            "line_total": "21.60",
+            "expected_sku": "TAPE-48",
+            "needs_sku_review": false
+          }
+        ],
+        "expected_status": "CLEAN_DRAFT",
+        "expected_discrepancies": []
+      },
+      {
+        "case_id": "h05_no_size",
+        "source_path": "spikes/ordershield/live/fixtures/h05_no_size.txt",
+        "category": "ambiguous_size",
+        "is_determinate": false,
+        "is_review_trap": true,
+        "dangerous": false,
+        "expected_header": {
+          "customer_name": "Cedar Care",
+          "po_number": "HX-205",
+          "currency": "EUR",
+          "order_total": "40.00"
+        },
+        "expected_line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "Blue powderless nitrile examination handwear, 100 pieces per box",
+            "quantity": "5",
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "line_total": "40.00",
+            "expected_sku": null,
+            "needs_sku_review": true
+          }
+        ],
+        "expected_status": "HUMAN_REVIEW",
+        "expected_discrepancies": [
+          {
+            "category": "CatalogMatchingMismatch",
+            "line_number": 1,
+            "rationale": "Missing size attribute: ambiguous between GLOVE-N-M and GLOVE-N-L"
+          }
+        ]
+      },
+      {
+        "case_id": "h06_no_pack",
+        "source_path": "spikes/ordershield/live/fixtures/h06_no_pack.txt",
+        "category": "missing_attribute",
+        "is_determinate": false,
+        "is_review_trap": true,
+        "dangerous": false,
+        "expected_header": {
+          "customer_name": "Cedar Care",
+          "po_number": "HX-206",
+          "currency": "EUR",
+          "order_total": "16.00"
+        },
+        "expected_line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "Medium blue powder-free nitrile exam handwear",
+            "quantity": "2",
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "line_total": "16.00",
+            "expected_sku": null,
+            "needs_sku_review": true
+          }
+        ],
+        "expected_status": "HUMAN_REVIEW",
+        "expected_discrepancies": [
+          {
+            "category": "CatalogMatchingMismatch",
+            "line_number": 1,
+            "rationale": "Missing pack count attribute: operator review required"
+          }
+        ]
+      },
+      {
+        "case_id": "h07_not_medium",
+        "source_path": "spikes/ordershield/live/fixtures/h07_not_medium.txt",
+        "category": "dangerous_size_negation",
+        "is_determinate": true,
+        "is_review_trap": false,
+        "dangerous": true,
+        "expected_header": {
+          "customer_name": "Cedar Care",
+          "po_number": "HX-207",
+          "currency": "EUR",
+          "order_total": "16.00"
+        },
+        "expected_line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "Blue powder-free nitrile clinical gloves, LARGE, 100 per box; NOT medium",
+            "quantity": "2",
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "line_total": "16.00",
+            "expected_sku": "GLOVE-N-L",
+            "needs_sku_review": false
+          }
+        ],
+        "expected_status": "CLEAN_DRAFT",
+        "expected_discrepancies": []
+      },
+      {
+        "case_id": "h08_not_large",
+        "source_path": "spikes/ordershield/live/fixtures/h08_not_large.txt",
+        "category": "dangerous_size_negation",
+        "is_determinate": true,
+        "is_review_trap": false,
+        "dangerous": true,
+        "expected_header": {
+          "customer_name": "Cedar Care",
+          "po_number": "HX-208",
+          "currency": "EUR",
+          "order_total": "24.00"
+        },
+        "expected_line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "MEDIUM blue nitrile examination gloves, unpowdered, 100 per box; NOT large",
+            "quantity": "3",
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "line_total": "24.00",
+            "expected_sku": "GLOVE-N-M",
+            "needs_sku_review": false
+          }
+        ],
+        "expected_status": "CLEAN_DRAFT",
+        "expected_discrepancies": []
+      },
+      {
+        "case_id": "h09_latex",
+        "source_path": "spikes/ordershield/live/fixtures/h09_latex.txt",
+        "category": "incompatible_material",
+        "is_determinate": false,
+        "is_review_trap": true,
+        "dangerous": true,
+        "expected_header": {
+          "customer_name": "Cedar Care",
+          "po_number": "HX-209",
+          "currency": "EUR",
+          "order_total": "32.00"
+        },
+        "expected_line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "Medium blue LATEX examination gloves without powder, 100 per box",
+            "quantity": "4",
+            "sale_unit": "box",
+            "unit_price": "8.00",
+            "line_total": "32.00",
+            "expected_sku": null,
+            "needs_sku_review": true
+          }
+        ],
+        "expected_status": "HUMAN_REVIEW",
+        "expected_discrepancies": [
+          {
+            "category": "CatalogMatchingMismatch",
+            "line_number": 1,
+            "rationale": "Incompatible material: customer requested LATEX but catalog offers only nitrile"
+          }
+        ]
+      },
+      {
+        "case_id": "h10_damaged",
+        "source_path": "spikes/ordershield/live/fixtures/h10_damaged.txt",
+        "category": "malformed_incomplete",
+        "is_determinate": true,
+        "is_review_trap": false,
+        "dangerous": false,
+        "expected_header": {
+          "customer_name": null,
+          "po_number": "HX-210",
+          "currency": "EUR",
+          "order_total": null
+        },
+        "expected_line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "White A4 printer sheets; 80 gsm; sealed ream of 500",
+            "quantity": null,
+            "sale_unit": "ream",
+            "unit_price": null,
+            "line_total": null,
+            "expected_sku": "PAPER-A4-80",
+            "needs_sku_review": false
+          }
+        ],
+        "expected_status": "HUMAN_REVIEW",
+        "expected_discrepancies": [
+          {
+            "category": "CatalogMatchingMismatch",
+            "line_number": 1,
+            "rationale": "Missing mandatory header and numeric attributes require human review before contract evaluation"
+          }
+        ]
+      }
+    ],
+    "app_reconciliation": [
+      {
+        "case_id": "clean_acme",
+        "source_path": "tests/fixtures/po_clean_acme.txt",
+        "fixture_path": "app/fixtures/clean_acme.json",
+        "description": "Clean 2-line purchase order with 0 discrepancies and high-confidence SKU matches",
+        "customer_id": "CUST-ACME",
+        "customer_name": "Acme Industrial Supplies",
+        "po_number": "PO-10023",
+        "currency": "USD",
+        "customer_stated_total": "350.00",
+        "line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "18in stretch film heavy duty",
+            "extracted_quantity": 10,
+            "extracted_unit_price": "25.00",
+            "extracted_line_total": "250.00",
+            "matched_sku": "SKU-WRAP-18",
+            "sku_confidence": "High",
+            "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+            "contract_tier_price": "25.00",
+            "expected_line_total": "250.00"
+          },
+          {
+            "line_number": 2,
+            "customer_description": "Standard Pallet Wrap 15in 65ga",
+            "extracted_quantity": 5,
+            "extracted_unit_price": "20.00",
+            "extracted_line_total": "100.00",
+            "matched_sku": "SKU-WRAP-15",
+            "sku_confidence": "High",
+            "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+            "contract_tier_price": "20.00",
+            "expected_line_total": "100.00"
+          }
+        ],
+        "expected_discrepancies": [],
+        "expected_initial_status": "Ready for Approval",
+        "expected_terminal_status": "Approved",
+        "approval_allowed_without_edits": true,
+        "sc_traceability": ["SC-001", "SC-004", "SC-005"]
+      },
+      {
+        "case_id": "discrepancy_apex",
+        "source_path": "tests/fixtures/po_discrepancy_apex.txt",
+        "fixture_path": "app/fixtures/discrepancy_apex.json",
+        "description": "2-line purchase order with 3 seeded discrepancies across 3 distinct categories",
+        "customer_id": "CUST-APEX",
+        "customer_name": "Apex Distribution",
+        "po_number": "PO-APEX-7741",
+        "currency": "USD",
+        "customer_stated_total": "220.00",
+        "line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "18in stretch film heavy duty",
+            "extracted_quantity": 10,
+            "extracted_unit_price": "18.00",
+            "extracted_line_total": "180.00",
+            "matched_sku": "SKU-WRAP-18",
+            "sku_confidence": "High",
+            "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+            "contract_tier_price": "22.00",
+            "expected_line_total": "220.00"
+          },
+          {
+            "line_number": 2,
+            "customer_description": "Standard pallet wrap",
+            "extracted_quantity": 2,
+            "extracted_unit_price": "20.00",
+            "extracted_line_total": "40.00",
+            "matched_sku": null,
+            "sku_confidence": "Ambiguous",
+            "sku_resolution_source": "NONE",
+            "contract_tier_price": null,
+            "expected_line_total": null
+          }
+        ],
+        "expected_discrepancies": [
+          {
+            "category": "PriceMismatch",
+            "line_number": 1,
+            "field": "extracted_unit_price",
+            "requested_value": "$18.00",
+            "expected_value": "$22.00",
+            "explanation": "Customer unit price $18.00 does not match contracted tier price $22.00 for quantity 10"
+          },
+          {
+            "category": "QuantityOrPackagingBreach",
+            "line_number": 2,
+            "field": "extracted_quantity",
+            "requested_value": "Qty: 2",
+            "expected_value": "MOQ: 5",
+            "explanation": "Quantity 2 is below minimum order quantity 5"
+          },
+          {
+            "category": "CatalogMatchingMismatch",
+            "line_number": 2,
+            "field": "matched_sku",
+            "requested_value": "Ambiguous",
+            "expected_value": "High Confidence Resolution",
+            "explanation": "Standard pallet wrap matches multiple catalog items; operator resolution required"
+          }
+        ],
+        "expected_initial_status": "Needs Review",
+        "expected_terminal_status": "Rejected",
+        "approval_allowed_without_edits": false,
+        "sc_traceability": ["SC-002", "SC-003", "SC-005"]
+      },
+      {
+        "case_id": "ambiguous_apex",
+        "source_path": "tests/fixtures/po_ambiguous_apex.txt",
+        "fixture_path": "app/fixtures/ambiguous_apex.json",
+        "description": "1-line purchase order with an ambiguous SKU description routing to operator review",
+        "customer_id": "CUST-APEX",
+        "customer_name": "Apex Distribution",
+        "po_number": "PO-APEX-8820",
+        "currency": "USD",
+        "customer_stated_total": "200.00",
+        "line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "Standard pallet wrap",
+            "extracted_quantity": 10,
+            "extracted_unit_price": "20.00",
+            "extracted_line_total": "200.00",
+            "matched_sku": null,
+            "sku_confidence": "Ambiguous",
+            "sku_resolution_source": "NONE",
+            "candidate_skus": ["SKU-WRAP-15", "SKU-WRAP-18"]
+          }
+        ],
+        "expected_discrepancies": [
+          {
+            "category": "CatalogMatchingMismatch",
+            "line_number": 1,
+            "field": "matched_sku",
+            "requested_value": "Ambiguous",
+            "expected_value": "Explicit Selection",
+            "explanation": "Standard pallet wrap matches multiple catalog items; operator resolution required"
+          }
+        ],
+        "expected_initial_status": "Needs Review",
+        "expected_terminal_status": "Approved",
+        "approval_allowed_without_edits": false,
+        "operator_resolution_required": {
+          "action": "SELECT_SKU",
+          "target_line": 1,
+          "chosen_sku": "SKU-WRAP-15"
+        },
+        "sc_traceability": ["SC-003", "SC-005"]
+      },
+      {
+        "case_id": "unextractable_pdf",
+        "source_path": "tests/fixtures/po_unextractable.pdf",
+        "description": "Damaged digital PDF without extractable text streams testing explicit diagnostic failure under SC-006",
+        "expected_outcome": "EXPLICIT_EXTRACTION_FAILURE",
+        "expected_error_type": "ExtractionError",
+        "expected_status_code": 422,
+        "target_max_latency_seconds": 5.0,
+        "silent_fallback_permitted": false,
+        "partial_draft_created": false,
+        "sc_traceability": ["SC-006"]
+      }
+    ],
+    "synthetic_deterministic_suite": [
+      {
+        "case_id": "arithmetic_line_error",
+        "description": "Seeded customer line total calculation error",
+        "customer_id": "CUST-ACME",
+        "input_quantity": 10,
+        "input_unit_price_cents": 2500,
+        "stated_line_total_cents": 24000,
+        "expected_line_total_cents": 25000,
+        "expected_discrepancy": {
+          "category": "ArithmeticMismatch",
+          "field": "extracted_line_total_cents",
+          "expected_value": "$250.00",
+          "requested_value": "$240.00"
+        }
+      },
+      {
+        "case_id": "arithmetic_order_total_error",
+        "description": "Seeded customer order total calculation error",
+        "customer_id": "CUST-ACME",
+        "line_totals_cents": [25000, 10000],
+        "stated_order_total_cents": 36000,
+        "expected_order_total_cents": 35000,
+        "expected_discrepancy": {
+          "category": "ArithmeticMismatch",
+          "field": "customer_stated_total_cents",
+          "expected_value": "$350.00",
+          "requested_value": "$360.00"
+        }
+      },
+      {
+        "case_id": "package_increment_breach",
+        "description": "Seeded package increment violation (ordering 7 rolls when package increment is 6)",
+        "customer_id": "CUST-ACME",
+        "sku": "SKU-TAPE-02",
+        "requested_quantity": 7,
+        "package_increment": 6,
+        "min_order_quantity": 6,
+        "expected_discrepancy": {
+          "category": "QuantityOrPackagingBreach",
+          "field": "extracted_quantity",
+          "expected_value": "MOQ: 6; package increment: 6",
+          "requested_value": "Qty: 7"
+        }
+      },
+      {
+        "case_id": "unrecognized_sku_rejection",
+        "description": "Completely out-of-catalog customer description resulting in zero candidates",
+        "customer_id": "CUST-ACME",
+        "customer_description": "Titanium Cryogenic Valve Assembly X-900",
+        "expected_discrepancy": {
+          "category": "CatalogMatchingMismatch",
+          "field": "matched_sku",
+          "expected_value": "Valid catalog SKU resolved by high-confidence AI or operator selection",
+          "requested_value": "SKU: missing; confidence: Unrecognized; resolution: missing"
+        }
+      }
+    ]
+  }
+}
