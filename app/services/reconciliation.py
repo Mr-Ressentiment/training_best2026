@@ -369,6 +369,10 @@ class LineMutationValidationError(ValueError):
     """The mutation request itself is invalid: unsupported field, bad value type or foreign line."""
 
 
+class LineNotFoundError(LookupError):
+    """The requested line item does not exist or does not belong to the draft."""
+
+
 _TERMINAL_STATUSES = ("Approved", "Rejected")
 _DOCUMENT_LOCATION_TYPES = {"text/plain": "txt", "application/pdf": "pdf"}
 # Correctable field -> persisted column. Derived, SKU and identity columns are never correctable.
@@ -601,4 +605,45 @@ def remove_line(db: Session, draft: OrderDraft, line: DraftLineItem) -> OrderDra
         line.status = "Removed"
         _resolve_unresolved_flags(draft, line, "ResolvedByLineRemoval")
         _resolve_unresolved_flags(draft, None, "ResolvedByLineRemoval", ("ArithmeticMismatch",))
+    return evaluate_clean_draft(db, draft)
+
+
+def select_line_sku(
+    db: Session,
+    draft: OrderDraft,
+    line: DraftLineItem,
+    *,
+    matched_sku: str,
+) -> OrderDraft:
+    """Explicitly select a master-catalog SKU for a draft line item.
+
+    Resolves stale SKU-dependent unresolved flags as ResolvedByCorrection and
+    re-evaluates draft pricing, flags, subtotal and readiness. The operator may
+    select any valid master-catalog SKU. AI candidate history and provenance
+    are preserved.
+
+    Raises TerminalDraftMutationError for Approved/Rejected drafts and
+    LineMutationValidationError for a foreign line, non-Active line, blank SKU
+    or unknown catalog SKU. The caller owns flush, commit, rollback and the
+    audit event.
+    """
+    with db.no_autoflush:
+        _require_mutable(draft, line)
+        if line.status != "Active":
+            raise LineMutationValidationError("Only an Active line item can have a SKU selected")
+        if not isinstance(matched_sku, str) or not matched_sku.strip():
+            raise LineMutationValidationError("matched_sku must be a non-blank string")
+        product = db.get(CatalogProduct, matched_sku)
+        if product is None:
+            raise LineMutationValidationError(f"SKU {matched_sku!r} does not exist in catalog")
+
+        line.matched_sku = matched_sku
+        line.sku_resolution_source = "OPERATOR_SELECTED"
+
+        _resolve_unresolved_flags(
+            draft,
+            line,
+            "ResolvedByCorrection",
+            ("CatalogMatchingMismatch", "PriceMismatch", "QuantityOrPackagingBreach"),
+        )
     return evaluate_clean_draft(db, draft)

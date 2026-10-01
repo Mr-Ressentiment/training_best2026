@@ -15,6 +15,10 @@ from app.services.document_parser import DocumentParserError
 from app.services.order_service import (
     DraftNotFoundError, DraftNotReadyForApprovalError, TerminalDraftStateError,
 )
+from app.services.reconciliation import (
+    LineMutationValidationError, LineNotFoundError, SourceGroundingMismatchError,
+    TerminalDraftMutationError,
+)
 
 
 def _error(status: int, name: str, message: str) -> JSONResponse:
@@ -40,8 +44,20 @@ async def _not_ready_error(request: Request, exc: DraftNotReadyForApprovalError)
     return _error(409, "DraftNotReadyForApprovalError", "Draft is not Ready for Approval")
 
 
-async def _terminal_error(request: Request, exc: TerminalDraftStateError) -> JSONResponse:
-    return _error(409, "TerminalDraftConflictError", "Cannot approve an Approved or Rejected draft")
+async def _terminal_error(request: Request, exc: Exception) -> JSONResponse:
+    return _error(409, "TerminalDraftConflictError", "Cannot modify an Approved or Rejected draft")
+
+
+async def _source_grounding_error(request: Request, exc: SourceGroundingMismatchError) -> JSONResponse:
+    return _error(422, "SourceGroundingMismatchError", str(exc) or "Source grounding validation failed")
+
+
+async def _line_mutation_validation_error(request: Request, exc: LineMutationValidationError) -> JSONResponse:
+    return _error(422, "LineMutationValidationError", str(exc) or "Line mutation validation failed")
+
+
+async def _missing_line_error(request: Request, exc: LineNotFoundError) -> JSONResponse:
+    return _error(404, "LineNotFoundError", str(exc) or "Line item does not exist")
 
 
 async def _missing_draft_error(request: Request, exc: DraftNotFoundError) -> JSONResponse:
@@ -66,6 +82,10 @@ def create_app() -> FastAPI:
         (AIProviderUnavailableError, _provider_error),
         (DraftNotReadyForApprovalError, _not_ready_error),
         (TerminalDraftStateError, _terminal_error),
+        (TerminalDraftMutationError, _terminal_error),
+        (SourceGroundingMismatchError, _source_grounding_error),
+        (LineMutationValidationError, _line_mutation_validation_error),
+        (LineNotFoundError, _missing_line_error),
         (DraftNotFoundError, _missing_draft_error),
         (HTTPException, _http_error),
         (RequestValidationError, _request_validation_error),

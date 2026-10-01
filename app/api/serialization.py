@@ -71,6 +71,7 @@ def serialize_draft(draft: OrderDraft) -> dict:
         "customer_name_extracted": draft.customer_name_extracted,
         "po_number_extracted": draft.po_number_extracted,
         "status": draft.status,
+        "rejection_reason": draft.rejection_reason,
         "is_replay_mode": draft.is_replay_mode,
         "calculated_subtotal": _money(draft.calculated_subtotal_cents),
         "header_provenance": _provenance(
