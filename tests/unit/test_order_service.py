@@ -2,11 +2,13 @@
 
 from copy import deepcopy
 from datetime import datetime, timezone
+from decimal import Decimal
 import io
 import json
 from unittest.mock import Mock
 
 import httpx
+from pydantic import ValidationError
 import pytest
 from pypdf import PdfWriter
 from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject
@@ -19,7 +21,7 @@ from app.models.entities import (
     AuditEvent, CatalogProduct, DiscrepancyFlag, DraftLineItem, FieldProvenance,
     OrderDraft, PurchaseOrderDocument, VerifiedOrderRecord,
 )
-from app.models.schemas import AIExtractionPayload
+from app.models.schemas import AIExtractionPayload, decimal_to_cents
 from app.services.ai_provider import (
     AIOutputValidationError, AIProviderConfigurationError, AIProviderUnavailableError,
     FixtureAIProvider, LiveAIProvider,
@@ -150,8 +152,13 @@ def test_intake_preserves_canonical_crlf_text_without_renormalizing(service_db, 
     assert live_provider.last_call_kwargs["raw_text"] == canonical
 
 
-@pytest.mark.parametrize("fixture_id", ["fixture-ambiguous-apex", "fixture-discrepancy-apex"])
-def test_nonclean_fixture_keeps_candidates_as_valid_json_without_p2_flags(service_db, fixtures_dir, app_fixtures_dir, fixture_id):
+@pytest.mark.parametrize(("fixture_id", "expected_flags"), [
+    ("fixture-ambiguous-apex", {(1, "CatalogMatchingMismatch")}),
+    ("fixture-discrepancy-apex", {(1, "PriceMismatch"), (2, "CatalogMatchingMismatch")}),
+])
+def test_nonclean_fixture_preserves_candidates_and_creates_expected_p2_flags(
+    service_db, fixtures_dir, app_fixtures_dir, fixture_id, expected_flags,
+):
     filename = "ambiguous_apex.json" if "ambiguous" in fixture_id else "discrepancy_apex.json"
     dataset = json.loads((app_fixtures_dir / filename).read_text(encoding="utf-8"))
     parsed = parse_document(fixtures_dir / dataset["document_filename"])
@@ -163,7 +170,17 @@ def test_nonclean_fixture_keeps_candidates_as_valid_json_without_p2_flags(servic
             original = dataset["extraction"]["line_items"][line.line_number - 1]
             assert json.loads(line.candidate_skus_json) == original["candidate_skus"]
             assert line.matching_rationale == original["matching_rationale"]
-        assert _rows(observer, DiscrepancyFlag) == []
+            assert line.matched_sku == original["matched_sku"]
+        flags = _rows(observer, DiscrepancyFlag)
+        line_numbers = {line.id: line.line_number for line in draft.line_items}
+        actual_flags = {
+            (line_numbers[flag.line_item_id] if flag.line_item_id is not None else None, flag.discrepancy_type)
+            for flag in flags
+        }
+        assert actual_flags == expected_flags
+        assert len(flags) == len(expected_flags)
+        assert all(flag.severity == "Blocking" for flag in flags)
+        assert all(flag.resolution_state == "Unresolved" for flag in flags)
 
 
 @pytest.mark.parametrize("error_type", [AIProviderUnavailableError, AIOutputValidationError])
@@ -764,3 +781,151 @@ def test_fix1_grounding_preserves_null_field_and_null_provenance_semantics(servi
         draft = observer.get(OrderDraft, draft_id)
         assert draft.status == "Needs Review"
         assert len(draft.provenance_records) == 9
+
+
+# -----------------------------------------------------------------------------
+# HG-P2-01 / VLD-P2-HG01R: Source-backed Order Total Contract & Persistence Tests
+# -----------------------------------------------------------------------------
+
+def test_extracted_order_total_schema_acceptance_valid(clean_acme_fixture):
+    """Schema acceptance: present value + valid provenance, and absent value + absent provenance."""
+    base_payload = clean_acme_fixture["extraction"]
+
+    # 1. Valid: value present + valid provenance
+    payload_present = deepcopy(base_payload)
+    payload_present["extracted_order_total"] = "350.00"
+    payload_present["header_provenance"]["extracted_order_total"] = {
+        "field_name": "extracted_order_total",
+        "verbatim_snippet": "$350.00",
+        "location": {"type": "txt", "line_number": 13, "char_offset": 7},
+    }
+    model_present = AIExtractionPayload.model_validate(payload_present)
+    assert model_present.extracted_order_total == Decimal("350.00")
+    assert decimal_to_cents(model_present.extracted_order_total) == 35000
+    assert model_present.header_provenance.extracted_order_total.field_name == "extracted_order_total"
+    assert model_present.header_provenance.extracted_order_total.verbatim_snippet == "$350.00"
+    # Serialized json string money
+    dumped = json.loads(model_present.model_dump_json())
+    assert dumped["extracted_order_total"] == "350.00"
+
+    # 2. Valid: value absent + provenance absent (explicit None)
+    payload_absent = deepcopy(base_payload)
+    payload_absent["extracted_order_total"] = None
+    payload_absent["header_provenance"]["extracted_order_total"] = None
+    model_absent = AIExtractionPayload.model_validate(payload_absent)
+    assert model_absent.extracted_order_total is None
+    assert model_absent.header_provenance.extracted_order_total is None
+
+    # 3. Valid: keys completely omitted (backward compatible with existing payloads)
+    payload_omitted = deepcopy(base_payload)
+    payload_omitted.pop("extracted_order_total", None)
+    payload_omitted["header_provenance"].pop("extracted_order_total", None)
+    model_omitted = AIExtractionPayload.model_validate(payload_omitted)
+    assert model_omitted.extracted_order_total is None
+    assert model_omitted.header_provenance.extracted_order_total is None
+
+
+def test_extracted_order_total_schema_rejection_invalid(clean_acme_fixture):
+    """Schema rejection: value without provenance, provenance without value, and invalid money."""
+    base_payload = clean_acme_fixture["extraction"]
+
+    # 1. Invalid: value present + provenance absent (None)
+    payload_val_only = deepcopy(base_payload)
+    payload_val_only["extracted_order_total"] = "350.00"
+    payload_val_only["header_provenance"]["extracted_order_total"] = None
+    with pytest.raises(ValidationError):
+        AIExtractionPayload.model_validate(payload_val_only)
+
+    # 2. Invalid: value present + provenance key completely omitted
+    payload_val_no_prov_key = deepcopy(base_payload)
+    payload_val_no_prov_key["extracted_order_total"] = "350.00"
+    payload_val_no_prov_key["header_provenance"].pop("extracted_order_total", None)
+    with pytest.raises(ValidationError):
+        AIExtractionPayload.model_validate(payload_val_no_prov_key)
+
+    # 3. Invalid: value absent + provenance present
+    payload_prov_only = deepcopy(base_payload)
+    payload_prov_only["extracted_order_total"] = None
+    payload_prov_only["header_provenance"]["extracted_order_total"] = {
+        "field_name": "extracted_order_total",
+        "verbatim_snippet": "$350.00",
+        "location": {"type": "txt", "line_number": 13, "char_offset": 7},
+    }
+    with pytest.raises(ValidationError):
+        AIExtractionPayload.model_validate(payload_prov_only)
+
+    # 4. Invalid money: float or non-exact
+    for invalid_val in [350.0, "350.001", "-350.00", "invalid"]:
+        payload_invalid_money = deepcopy(base_payload)
+        payload_invalid_money["extracted_order_total"] = invalid_val
+        payload_invalid_money["header_provenance"]["extracted_order_total"] = {
+            "field_name": "extracted_order_total",
+            "verbatim_snippet": "$350.00",
+            "location": {"type": "txt", "line_number": 13, "char_offset": 7},
+        }
+        with pytest.raises(ValidationError):
+            AIExtractionPayload.model_validate(payload_invalid_money)
+
+
+def test_grounded_order_total_intake_persists_cents_and_header_provenance(service_db, document, live_provider):
+    """Intake persists extracted_order_total_cents == 35000 and 1 header-level provenance record."""
+    payload = live_provider.default_payload.model_dump(mode="python")
+    payload["extracted_order_total"] = "350.00"
+    payload["header_provenance"]["extracted_order_total"] = {
+        "field_name": "extracted_order_total",
+        "verbatim_snippet": "$350.00",
+        "location": {"type": "txt", "line_number": 13, "char_offset": 7},
+    }
+    live_provider.default_payload = AIExtractionPayload.model_validate(payload)
+
+    draft_id = ingest_order(service_db, document=document, provider=live_provider).id
+
+    with _observer(service_db) as observer:
+        draft = observer.get(OrderDraft, draft_id)
+        assert draft.extracted_order_total_cents == 35000
+        assert draft.calculated_subtotal_cents == 35000
+        order_total_provenances = [
+            p for p in draft.provenance_records if p.field_name == "extracted_order_total"
+        ]
+        assert len(order_total_provenances) == 1
+        record = order_total_provenances[0]
+        assert record.line_item_id is None
+        assert record.verbatim_snippet == "$350.00"
+        assert record.location_type == "txt"
+        assert json.loads(record.location_data_json) == {"type": "txt", "line_number": 13, "char_offset": 7}
+        # 3 header + 8 line = 11 total provenance records
+        assert len(draft.provenance_records) == 11
+
+
+def test_order_without_order_total_persists_none_cents_and_no_order_total_provenance(service_db, document, live_provider):
+    """Extraction without order total persists extracted_order_total_cents = None and 0 order-total provenance records."""
+    draft_id = ingest_order(service_db, document=document, provider=live_provider).id
+
+    with _observer(service_db) as observer:
+        draft = observer.get(OrderDraft, draft_id)
+        assert draft.extracted_order_total_cents is None
+        assert draft.calculated_subtotal_cents == 35000
+        order_total_provenances = [
+            p for p in draft.provenance_records if p.field_name == "extracted_order_total"
+        ]
+        assert order_total_provenances == []
+        # 2 header + 8 line = 10 total provenance records
+        assert len(draft.provenance_records) == 10
+
+
+def test_ungrounded_order_total_provenance_is_rejected_before_persistence(service_db, document, live_provider):
+    """Ungrounded order total provenance fails intake validation before creating any DB records."""
+    payload = live_provider.default_payload.model_dump(mode="python")
+    payload["extracted_order_total"] = "350.00"
+    payload["header_provenance"]["extracted_order_total"] = {
+        "field_name": "extracted_order_total",
+        "verbatim_snippet": "$350.00",
+        "location": {"type": "txt", "line_number": 13, "char_offset": 99},  # invalid offset
+    }
+    live_provider.default_payload = AIExtractionPayload.model_validate(payload)
+
+    with pytest.raises(AIOutputValidationError) as excinfo:
+        ingest_order(service_db, document=document, provider=live_provider)
+
+    assert "extracted_order_total is not grounded" in str(excinfo.value)
+    _assert_no_intake_state(service_db)

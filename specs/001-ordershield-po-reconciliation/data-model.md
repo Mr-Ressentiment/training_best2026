@@ -46,6 +46,7 @@ erDiagram
         string po_number_extracted
         string status
         int calculated_subtotal_cents
+        int extracted_order_total_cents
         string rejection_reason
         boolean is_replay_mode
         datetime created_at
@@ -193,6 +194,7 @@ The central working entity for an intake reconciliation session.
 - `po_number_extracted`: Verbatim PO reference number extracted from PO.
 - `status`: State indicator (`Ingested`, `Needs Review`, `Ready for Approval`, `Approved`, `Rejected`).
 - `calculated_subtotal_cents`: Authoritative integer cents sum of active lines.
+- `extracted_order_total_cents`: Nullable integer cents containing the customer-stated source order total (e.g., `35000` for $350.00). Distinct from `calculated_subtotal_cents`, which is the authoritative deterministic contract-priced sum.
 - `rejection_reason`: Mandatory text string populated if draft is rejected.
 - `is_replay_mode`: Boolean flag (`false` for live intake; `true` for fixture replay).
 - `created_at` / `updated_at`: Audit timestamps.
@@ -224,7 +226,7 @@ Captures explicit, reproducible grounding for every mandatory extracted field.
 - `draft_id`: Foreign key referencing `OrderDraft`.
 - `line_item_id`: Optional foreign key referencing `DraftLineItem` (null for header-level fields).
 - `field_name`: Exact field identifier:
-  - Header: `customer_name`, `po_number`
+  - Header: `customer_name`, `po_number`, `extracted_order_total`
   - Line Item: `customer_description`, `extracted_quantity`, `extracted_unit_price`, `extracted_line_total`
 - `verbatim_snippet`: Exact substring from the canonical `PurchaseOrderDocument.raw_text`.
 - `location_type`: Format (`txt` or `pdf`).

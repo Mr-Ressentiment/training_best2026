@@ -217,6 +217,81 @@ Uploads an incoming customer purchase order document. **Always executes via `Liv
 
 ---
 
+### 2.2.1 AI Extraction & Persistence Contract Boundary (`AIExtractionPayload`)
+
+AI providers output an untrusted extraction payload adhering to `AIExtractionPayload`. It may carry an optional source-stated order total:
+
+```json
+{
+  "customer_name": "Acme Industrial Supplies",
+  "customer_id": "CUST-ACME",
+  "po_number": "PO-99214",
+  "extracted_order_total": "350.00",
+  "header_provenance": {
+    "customer_name": {
+      "field_name": "customer_name",
+      "verbatim_snippet": "Acme Industrial Supplies",
+      "location": { "type": "txt", "line_number": 2, "char_offset": 0 }
+    },
+    "po_number": {
+      "field_name": "po_number",
+      "verbatim_snippet": "PO-99214",
+      "location": { "type": "txt", "line_number": 4, "char_offset": 0 }
+    },
+    "extracted_order_total": {
+      "field_name": "extracted_order_total",
+      "verbatim_snippet": "$350.00",
+      "location": { "type": "txt", "line_number": 15, "char_offset": 0 }
+    }
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "customer_description": "18in stretch film heavy duty",
+      "extracted_quantity": 10,
+      "extracted_unit_price": "25.00",
+      "extracted_line_total": "250.00",
+      "matched_sku": "SKU-WRAP-18",
+      "sku_confidence": "High",
+      "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+      "candidate_skus": [],
+      "matching_rationale": "High confidence match to standard 18in film",
+      "field_provenance": {
+        "customer_description": {
+          "field_name": "customer_description",
+          "verbatim_snippet": "18in stretch film heavy duty",
+          "location": { "type": "txt", "line_number": 9, "char_offset": 0 }
+        },
+        "extracted_quantity": {
+          "field_name": "extracted_quantity",
+          "verbatim_snippet": "10",
+          "location": { "type": "txt", "line_number": 9, "char_offset": 45 }
+        },
+        "extracted_unit_price": {
+          "field_name": "extracted_unit_price",
+          "verbatim_snippet": "$25.00",
+          "location": { "type": "txt", "line_number": 9, "char_offset": 54 }
+        },
+        "extracted_line_total": {
+          "field_name": "extracted_line_total",
+          "verbatim_snippet": "$250.00",
+          "location": { "type": "txt", "line_number": 9, "char_offset": 66 }
+        }
+      }
+    }
+  ]
+}
+```
+
+**Persistence Boundary Semantics**:
+- `extracted_order_total` and its provenance are optional.
+- If present, its provenance is strictly mandatory and grounded against canonical `PurchaseOrderDocument.raw_text`.
+- Upon successful grounding, `order_service` converts `extracted_order_total` to exact integer cents and persists it into `OrderDraft.extracted_order_total_cents` (`35000`) and creates a header-level `FieldProvenance` row (`field_name="extracted_order_total"`, `line_item_id=null`).
+- If omitted from the customer PO, `OrderDraft.extracted_order_total_cents` is persisted as `null` and no order-total provenance record is created.
+- The public `OrderDraftResponse` exposed by the intake API intentionally serves reconciliation workflow state, presenting the deterministic `calculated_subtotal` for pricing verification while the untrusted raw `extracted_order_total_cents` remains anchored at the internal persistence boundary for discrepancy evaluation.
+
+---
+
 ### 2.3 Replay / Fixture Intake (Dedicated Endpoint)
 `GET /api/v1/fixtures`  
 Lists pre-registered demonstration fixtures.

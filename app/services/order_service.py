@@ -118,6 +118,10 @@ def ingest_order(
         draft = OrderDraft(
             document=stored_document, customer_id=extraction.customer_id,
             customer_name_extracted=extraction.customer_name, po_number_extracted=extraction.po_number,
+            extracted_order_total_cents=(
+                decimal_to_cents(extraction.extracted_order_total)
+                if extraction.extracted_order_total is not None else None
+            ),
             status="Ingested", is_replay_mode=provider.is_replay_mode,
         )
         db.add(draft)

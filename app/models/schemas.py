@@ -15,6 +15,7 @@ from pydantic import (
     Field,
     PlainSerializer,
     RootModel,
+    model_serializer,
     model_validator,
 )
 
@@ -99,6 +100,7 @@ class FieldProvenanceSchema(_StrictSchema):
     field_name: Literal[
         "customer_name", "po_number", "customer_description",
         "extracted_quantity", "extracted_unit_price", "extracted_line_total",
+        "extracted_order_total",
     ]
     verbatim_snippet: NonEmptyText
     location: LocationDataSchema
@@ -111,6 +113,10 @@ class _CustomerNameProvenance(FieldProvenanceSchema):
 
 class _PONumberProvenance(FieldProvenanceSchema):
     field_name: Literal["po_number"]
+
+
+class _OrderTotalProvenance(FieldProvenanceSchema):
+    field_name: Literal["extracted_order_total"]
 
 
 class _DescriptionProvenance(FieldProvenanceSchema):
@@ -132,6 +138,14 @@ class _LineTotalProvenance(FieldProvenanceSchema):
 class HeaderProvenanceSchema(_StrictSchema):
     customer_name: _CustomerNameProvenance | None
     po_number: _PONumberProvenance | None
+    extracted_order_total: _OrderTotalProvenance | None = None
+
+    @model_serializer(mode="wrap")
+    def _serialize_unset_order_total(self, handler):
+        data = handler(self)
+        if "extracted_order_total" not in self.model_fields_set and data.get("extracted_order_total") is None:
+            data.pop("extracted_order_total", None)
+        return data
 
 
 class LineItemProvenanceSchema(_StrictSchema):
@@ -195,15 +209,23 @@ class AIExtractionPayload(_StrictSchema):
     # Resolved customer identity remains a downstream readiness prerequisite.
     customer_id: NonEmptyText | None = None
     po_number: NonEmptyText | None
+    extracted_order_total: Money | None = None
     header_provenance: HeaderProvenanceSchema
     line_items: Annotated[list[AILineItemPayload], Field(min_length=1)]
 
     @model_validator(mode="after")
     def _validate_header_provenance(self) -> "AIExtractionPayload":
-        for field in ("customer_name", "po_number"):
+        for field in ("customer_name", "po_number", "extracted_order_total"):
             if (getattr(self, field) is None) != (getattr(self.header_provenance, field) is None):
                 raise ValueError(f"{field} value and provenance must both be null or both present")
         return self
+
+    @model_serializer(mode="wrap")
+    def _serialize_unset_order_total(self, handler):
+        data = handler(self)
+        if "extracted_order_total" not in self.model_fields_set and data.get("extracted_order_total") is None:
+            data.pop("extracted_order_total", None)
+        return data
 
 
 class ErrorResponse(_StrictSchema):

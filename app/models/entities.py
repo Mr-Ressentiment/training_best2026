@@ -118,6 +118,7 @@ class OrderDraft(Base):
     po_number_extracted = Column(String, nullable=True)
     status = Column(String, nullable=False, default="Ingested")
     calculated_subtotal_cents = Column(Integer, nullable=False, default=0)
+    extracted_order_total_cents = Column(Integer, nullable=True)
     rejection_reason = Column(Text, nullable=True)
     is_replay_mode = Column(Boolean, nullable=False, default=False)
     created_at = Column(
