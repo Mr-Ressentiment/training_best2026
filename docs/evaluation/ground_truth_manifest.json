@@ -1,8 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "manifest_version": "1.0.0",
+  "manifest_version": "1.1.0",
   "created_at_utc": "2026-10-02T00:00:00Z",
-  "description": "OrderShield Canonical Evaluation Ground-Truth Manifest defining test corpora, expected field extractions, grounded provenance requirements, deterministic discrepancy baselines, and Success Criteria traceability.",
+  "updated_at_utc": "2026-10-02T02:00:00Z",
+  "description": "OrderShield Canonical Evaluation Ground-Truth Manifest defining test corpora, schema separation (historical bake-off vs current application), stateful discrepancy workflows, and Success Criteria traceability.",
   "catalogs": {
     "historical_spike_catalog": {
       "reference_path": "spikes/ordershield/catalog.json",
@@ -95,15 +96,15 @@
           "sku": "SKU-LBL-THERM",
           "name": "Direct Thermal Shipping Labels 4x6in",
           "unit_of_measure": "Roll",
-          "base_price_cents": 1250,
-          "min_order_quantity": 4,
-          "package_increment": 4
+          "base_price_cents": 1450,
+          "min_order_quantity": 2,
+          "package_increment": 2
         },
         {
-          "sku": "SKU-STRAP-HD",
-          "name": "Heavy Duty Polyester Strapping Kit",
-          "unit_of_measure": "Kit",
-          "base_price_cents": 7500,
+          "sku": "SKU-STRAP-POLY",
+          "name": "Polypropylene Strapping Roll 1/2in x 9000ft",
+          "unit_of_measure": "Coil",
+          "base_price_cents": 6500,
           "min_order_quantity": 1,
           "package_increment": 1
         }
@@ -149,8 +150,7 @@
             "needs_sku_review": false
           }
         ],
-        "expected_status": "CLEAN_DRAFT",
-        "expected_discrepancies": []
+        "expected_ai_status": "CLEAN_DRAFT"
       },
       {
         "case_id": "h02_large",
@@ -177,8 +177,7 @@
             "needs_sku_review": false
           }
         ],
-        "expected_status": "CLEAN_DRAFT",
-        "expected_discrepancies": []
+        "expected_ai_status": "CLEAN_DRAFT"
       },
       {
         "case_id": "h03_alias",
@@ -205,8 +204,7 @@
             "needs_sku_review": false
           }
         ],
-        "expected_status": "CLEAN_DRAFT",
-        "expected_discrepancies": []
+        "expected_ai_status": "CLEAN_DRAFT"
       },
       {
         "case_id": "h04_tape",
@@ -233,8 +231,7 @@
             "needs_sku_review": false
           }
         ],
-        "expected_status": "CLEAN_DRAFT",
-        "expected_discrepancies": []
+        "expected_ai_status": "CLEAN_DRAFT"
       },
       {
         "case_id": "h05_no_size",
@@ -261,14 +258,8 @@
             "needs_sku_review": true
           }
         ],
-        "expected_status": "HUMAN_REVIEW",
-        "expected_discrepancies": [
-          {
-            "category": "CatalogMatchingMismatch",
-            "line_number": 1,
-            "rationale": "Missing size attribute: ambiguous between GLOVE-N-M and GLOVE-N-L"
-          }
-        ]
+        "expected_ai_status": "HUMAN_REVIEW",
+        "review_routing_criteria": "AI provider must abstain from proposing a SKU, returning expected_sku=null and needs_sku_review=true at the AI inference boundary."
       },
       {
         "case_id": "h06_no_pack",
@@ -295,14 +286,8 @@
             "needs_sku_review": true
           }
         ],
-        "expected_status": "HUMAN_REVIEW",
-        "expected_discrepancies": [
-          {
-            "category": "CatalogMatchingMismatch",
-            "line_number": 1,
-            "rationale": "Missing pack count attribute: operator review required"
-          }
-        ]
+        "expected_ai_status": "HUMAN_REVIEW",
+        "review_routing_criteria": "AI provider must abstain from proposing a SKU, returning expected_sku=null and needs_sku_review=true at the AI inference boundary."
       },
       {
         "case_id": "h07_not_medium",
@@ -329,8 +314,7 @@
             "needs_sku_review": false
           }
         ],
-        "expected_status": "CLEAN_DRAFT",
-        "expected_discrepancies": []
+        "expected_ai_status": "CLEAN_DRAFT"
       },
       {
         "case_id": "h08_not_large",
@@ -357,8 +341,7 @@
             "needs_sku_review": false
           }
         ],
-        "expected_status": "CLEAN_DRAFT",
-        "expected_discrepancies": []
+        "expected_ai_status": "CLEAN_DRAFT"
       },
       {
         "case_id": "h09_latex",
@@ -385,14 +368,8 @@
             "needs_sku_review": true
           }
         ],
-        "expected_status": "HUMAN_REVIEW",
-        "expected_discrepancies": [
-          {
-            "category": "CatalogMatchingMismatch",
-            "line_number": 1,
-            "rationale": "Incompatible material: customer requested LATEX but catalog offers only nitrile"
-          }
-        ]
+        "expected_ai_status": "HUMAN_REVIEW",
+        "review_routing_criteria": "Incompatible material trap: AI provider must abstain from proposing a SKU, returning expected_sku=null and needs_sku_review=true at the AI inference boundary."
       },
       {
         "case_id": "h10_damaged",
@@ -419,17 +396,87 @@
             "needs_sku_review": false
           }
         ],
-        "expected_status": "HUMAN_REVIEW",
-        "expected_discrepancies": [
-          {
-            "category": "CatalogMatchingMismatch",
-            "line_number": 1,
-            "rationale": "Missing mandatory header and numeric attributes require human review before contract evaluation"
-          }
-        ]
+        "expected_ai_status": "HUMAN_REVIEW"
       }
     ],
     "app_reconciliation": [
+      {
+        "case_id": "sc001_prepared_5line",
+        "source_path": "docs/evaluation/fixtures/sc001_prepared_5line_po.txt",
+        "description": "Dedicated synthetic 5-line purchase order for SC-001 processing velocity evaluation and manual baseline comparison.",
+        "customer_id": "CUST-ACME",
+        "customer_name": "Acme Industrial Supplies",
+        "po_number": "PO-ACME-5001",
+        "currency": "USD",
+        "customer_stated_total": "2212.50",
+        "line_items": [
+          {
+            "line_number": 1,
+            "customer_description": "18in stretch film heavy duty",
+            "extracted_quantity": 10,
+            "extracted_unit_price": "25.00",
+            "extracted_line_total": "250.00",
+            "matched_sku": "SKU-WRAP-18",
+            "sku_confidence": "High",
+            "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+            "contract_tier_price": "25.00",
+            "expected_line_total": "250.00"
+          },
+          {
+            "line_number": 2,
+            "customer_description": "Standard Pallet Wrap 15in 65ga",
+            "extracted_quantity": 5,
+            "extracted_unit_price": "20.00",
+            "extracted_line_total": "100.00",
+            "matched_sku": "SKU-WRAP-15",
+            "sku_confidence": "High",
+            "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+            "contract_tier_price": "20.00",
+            "expected_line_total": "100.00"
+          },
+          {
+            "line_number": 3,
+            "customer_description": "Industrial Stretch Film 18in 80ga",
+            "extracted_quantity": 10,
+            "extracted_unit_price": "25.00",
+            "extracted_line_total": "250.00",
+            "matched_sku": "SKU-WRAP-18",
+            "sku_confidence": "High",
+            "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+            "contract_tier_price": "25.00",
+            "expected_line_total": "250.00"
+          },
+          {
+            "line_number": 4,
+            "customer_description": "Standard Pallet Wrap 15in 65ga",
+            "extracted_quantity": 25,
+            "extracted_unit_price": "18.50",
+            "extracted_line_total": "462.50",
+            "matched_sku": "SKU-WRAP-15",
+            "sku_confidence": "High",
+            "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+            "contract_tier_price": "18.50",
+            "expected_line_total": "462.50"
+          },
+          {
+            "line_number": 5,
+            "customer_description": "Industrial Stretch Film 18in 80ga",
+            "extracted_quantity": 50,
+            "extracted_unit_price": "23.00",
+            "extracted_line_total": "1150.00",
+            "matched_sku": "SKU-WRAP-18",
+            "sku_confidence": "High",
+            "sku_resolution_source": "AI_HIGH_CONFIDENCE",
+            "contract_tier_price": "23.00",
+            "expected_line_total": "1150.00"
+          }
+        ],
+        "expected_discrepancies": [],
+        "expected_initial_status": "Ready for Approval",
+        "expected_terminal_status": "Approved",
+        "approval_allowed_without_edits": true,
+        "sc_traceability": ["SC-001", "SC-004", "SC-005"]
+      },
       {
         "case_id": "clean_acme",
         "source_path": "tests/fixtures/po_clean_acme.txt",
@@ -470,13 +517,13 @@
         "expected_initial_status": "Ready for Approval",
         "expected_terminal_status": "Approved",
         "approval_allowed_without_edits": true,
-        "sc_traceability": ["SC-001", "SC-004", "SC-005"]
+        "sc_traceability": ["SC-004", "SC-005"]
       },
       {
         "case_id": "discrepancy_apex",
         "source_path": "tests/fixtures/po_discrepancy_apex.txt",
         "fixture_path": "app/fixtures/discrepancy_apex.json",
-        "description": "2-line purchase order with 3 seeded discrepancies across 3 distinct categories",
+        "description": "Stateful 2-line purchase order demonstrating sequential discrepancy emergence across operator lifecycle",
         "customer_id": "CUST-APEX",
         "customer_name": "Apex Distribution",
         "po_number": "PO-APEX-7741",
@@ -491,9 +538,7 @@
             "extracted_line_total": "180.00",
             "matched_sku": "SKU-WRAP-18",
             "sku_confidence": "High",
-            "sku_resolution_source": "AI_HIGH_CONFIDENCE",
-            "contract_tier_price": "22.00",
-            "expected_line_total": "220.00"
+            "sku_resolution_source": "AI_HIGH_CONFIDENCE"
           },
           {
             "line_number": 2,
@@ -504,39 +549,73 @@
             "matched_sku": null,
             "sku_confidence": "Ambiguous",
             "sku_resolution_source": "NONE",
-            "contract_tier_price": null,
-            "expected_line_total": null
+            "candidate_skus": ["SKU-WRAP-15", "SKU-WRAP-18"]
           }
         ],
-        "expected_discrepancies": [
-          {
-            "category": "PriceMismatch",
-            "line_number": 1,
-            "field": "extracted_unit_price",
-            "requested_value": "$18.00",
-            "expected_value": "$22.00",
-            "explanation": "Customer unit price $18.00 does not match contracted tier price $22.00 for quantity 10"
+        "stateful_lifecycle": {
+          "state_a_intake": {
+            "description": "Immediately after ingestion and initial reconciliation evaluation",
+            "expected_status": "Needs Review",
+            "approval_blocked": true,
+            "expected_unresolved_discrepancies": [
+              {
+                "line_number": 1,
+                "discrepancy_type": "PriceMismatch",
+                "field": "extracted_unit_price",
+                "requested_value": "$18.00",
+                "expected_value": "$22.00",
+                "explanation": "Customer unit price $18.00 does not match contracted tier price $22.00 for quantity 10"
+              },
+              {
+                "line_number": 2,
+                "discrepancy_type": "CatalogMatchingMismatch",
+                "field": "matched_sku",
+                "requested_value": "Ambiguous",
+                "expected_value": "High Confidence Resolution",
+                "explanation": "Standard pallet wrap matches multiple catalog items; operator resolution required"
+              }
+            ],
+            "latent_rules_not_yet_active": [
+              {
+                "line_number": 2,
+                "discrepancy_type": "QuantityOrPackagingBreach",
+                "rationale": "Line 2 has not yet been resolved to a specific catalog SKU; MOQ rule cannot evaluate until SKU is selected"
+              }
+            ]
           },
-          {
-            "category": "QuantityOrPackagingBreach",
-            "line_number": 2,
-            "field": "extracted_quantity",
-            "requested_value": "Qty: 2",
-            "expected_value": "MOQ: 5",
-            "explanation": "Quantity 2 is below minimum order quantity 5"
+          "state_b_operator_selects_sku": {
+            "trigger_action": "POST /api/v1/drafts/{draft_id}/lines/2/select-sku with sku='SKU-WRAP-15'",
+            "description": "After operator explicitly resolves line 2 SKU to SKU-WRAP-15",
+            "expected_status": "Needs Review",
+            "approval_blocked": true,
+            "resolved_discrepancies": [
+              {
+                "line_number": 2,
+                "discrepancy_type": "CatalogMatchingMismatch"
+              }
+            ],
+            "newly_revealed_discrepancies": [
+              {
+                "line_number": 2,
+                "discrepancy_type": "QuantityOrPackagingBreach",
+                "field": "extracted_quantity",
+                "requested_value": "Qty: 2",
+                "expected_value": "MOQ: 5; package increment: 1",
+                "explanation": "Quantity 2 is below MOQ 5."
+              }
+            ],
+            "active_unresolved_discrepancies": [
+              "PriceMismatch (line 1)",
+              "QuantityOrPackagingBreach (line 2)"
+            ]
           },
-          {
-            "category": "CatalogMatchingMismatch",
-            "line_number": 2,
-            "field": "matched_sku",
-            "requested_value": "Ambiguous",
-            "expected_value": "High Confidence Resolution",
-            "explanation": "Standard pallet wrap matches multiple catalog items; operator resolution required"
+          "state_c_rejection": {
+            "trigger_action": "POST /api/v1/drafts/{draft_id}/reject with reason='Non-compliant customer price and MOQ breach'",
+            "description": "Operator rejects draft due to non-negotiable commercial price mismatch and MOQ violation",
+            "expected_status": "Rejected",
+            "is_terminal": true
           }
-        ],
-        "expected_initial_status": "Needs Review",
-        "expected_terminal_status": "Rejected",
-        "approval_allowed_without_edits": false,
+        },
         "sc_traceability": ["SC-002", "SC-003", "SC-005"]
       },
       {
@@ -562,23 +641,32 @@
             "candidate_skus": ["SKU-WRAP-15", "SKU-WRAP-18"]
           }
         ],
-        "expected_discrepancies": [
-          {
-            "category": "CatalogMatchingMismatch",
-            "line_number": 1,
-            "field": "matched_sku",
-            "requested_value": "Ambiguous",
-            "expected_value": "Explicit Selection",
-            "explanation": "Standard pallet wrap matches multiple catalog items; operator resolution required"
+        "stateful_lifecycle": {
+          "state_a_intake": {
+            "expected_status": "Needs Review",
+            "approval_blocked": true,
+            "expected_unresolved_discrepancies": [
+              {
+                "line_number": 1,
+                "discrepancy_type": "CatalogMatchingMismatch",
+                "field": "matched_sku",
+                "requested_value": "Ambiguous",
+                "expected_value": "Explicit Selection",
+                "explanation": "Standard pallet wrap matches multiple catalog items; operator resolution required"
+              }
+            ]
+          },
+          "state_b_operator_selects_sku": {
+            "trigger_action": "POST /api/v1/drafts/{draft_id}/lines/1/select-sku with sku='SKU-WRAP-15'",
+            "expected_status": "Ready for Approval",
+            "approval_blocked": false,
+            "active_unresolved_discrepancies": []
+          },
+          "state_c_approval": {
+            "trigger_action": "POST /api/v1/drafts/{draft_id}/approve",
+            "expected_status": "Approved",
+            "is_terminal": true
           }
-        ],
-        "expected_initial_status": "Needs Review",
-        "expected_terminal_status": "Approved",
-        "approval_allowed_without_edits": false,
-        "operator_resolution_required": {
-          "action": "SELECT_SKU",
-          "target_line": 1,
-          "chosen_sku": "SKU-WRAP-15"
         },
         "sc_traceability": ["SC-003", "SC-005"]
       },
@@ -587,11 +675,12 @@
         "source_path": "tests/fixtures/po_unextractable.pdf",
         "description": "Damaged digital PDF without extractable text streams testing explicit diagnostic failure under SC-006",
         "expected_outcome": "EXPLICIT_EXTRACTION_FAILURE",
-        "expected_error_type": "ExtractionError",
-        "expected_status_code": 422,
-        "target_max_latency_seconds": 5.0,
-        "silent_fallback_permitted": false,
+        "expected_error_type": "UnextractableTextError",
+        "expected_status_code": 400,
+        "provider_invocations": 0,
         "partial_draft_created": false,
+        "silent_fallback_permitted": false,
+        "target_max_latency_seconds": 5.0,
         "sc_traceability": ["SC-006"]
       }
     ],
@@ -651,6 +740,15 @@
           "expected_value": "Valid catalog SKU resolved by high-confidence AI or operator selection",
           "requested_value": "SKU: missing; confidence: Unrecognized; resolution: missing"
         }
+      },
+      {
+        "case_id": "approval_gate_enforcement",
+        "description": "Verification that POST /api/v1/drafts/{draft_id}/approve strictly rejects drafts with unresolved discrepancies",
+        "target_endpoint": "POST /api/v1/drafts/{draft_id}/approve",
+        "expected_status_code": 409,
+        "expected_error": "Cannot approve draft: unresolved discrepancies or invalid status",
+        "no_verified_order_created": true,
+        "no_illegal_state_transition": true
       }
     ]
   }

@@ -1,6 +1,7 @@
 # OrderShield Evaluation Protocol & Ground-Truth Contract
 
 - **Document ID**: `EVAL-PROTO-01`
+- **Revision**: 1.1.0 (Reconciled with canonical runtime contracts)
 - **Status**: Draft / Submitted for Human Gate Review (`HG-EVAL-01`)
 - **Author / Lead**: Vladimir (Integrator / Project Brain)
 - **Canonical Date**: 2026-10-02
@@ -8,6 +9,7 @@
 - **Related Decisions**: `docs/decisions/0001-training-live-ai-provider-selection.md` (ADR 0001)
 - **Manifest**: `docs/evaluation/ground_truth_manifest.json`
 - **Results Schema**: `docs/evaluation/results.schema.json`
+- **Dedicated SC-001 Fixture**: `docs/evaluation/fixtures/sc001_prepared_5line_po.txt`
 
 ---
 
@@ -16,13 +18,15 @@
 ### 1.1 Purpose
 This protocol defines a rigorous, repeatable, and auditable evaluation methodology for OrderShield. It converts system specification criteria (SC-001 through SC-006), architectural boundaries, and performance claims into exact mathematical formulas, standard test procedures, and machine-readable contracts.
 
-### 1.2 Non-Claim Invariant
+### 1.2 Non-Claim Invariant & Status Policy
 **This document asserts NO empirical benchmark claims.**
-All performance numbers, latency percentiles, accuracy rates, and operational comparisons may only be asserted after the execution of the evaluation runner (`VLD-EVAL-02`) and manual baseline study (`VLD-EVAL-03`), with raw run logs committed to `docs/evaluation/results/`.
+- All Success Criteria (SC-001 through SC-006) are initialized to the pre-execution state **`NOT_YET_MEASURED`**.
+- Performance numbers, latency percentiles, accuracy rates, and operational comparisons may only be asserted after the execution of the evaluation runner (`VLD-EVAL-02`) and manual baseline study (`VLD-EVAL-03`), with raw run logs committed to `docs/evaluation/results/`.
+- **Implementation Invariant**: Test-suite PASS proves implementation conformance but does not by itself constitute an empirical benchmark PASS.
 
 ### 1.3 System Boundary & Division of Responsibilities
 In accordance with `AGENTS.md` and ADR 0001:
-- **AI Component**: Strictly bounded to probabilistic interpretation (unstructured document intake, fuzzy field extraction, candidate SKU semantic ranking, and ambiguity detection). The AI component is untrusted; its output must validate against a strict JSON schema and grounded source citations.
+- **AI Component**: Strictly bounded to probabilistic interpretation (unstructured document intake, fuzzy field extraction, candidate SKU semantic ranking, and ambiguity detection). The AI component is untrusted; its output must validate against a strict schema and grounded source citations.
 - **Deterministic Rules Engine**: Strictly responsible for all business arithmetic, contract price tier resolution, minimum order quantity (MOQ) checks, packaging increment validation, discrepancy generation, draft status progression, and immutable audit logging.
 - **Human Operator**: Sole entity authorized to resolve discrepancies (via source-grounded field edits or explicit SKU candidate selection), remove invalid lines, or reject/approve order drafts.
 
@@ -37,11 +41,12 @@ Evaluation leverages frozen, version-controlled repository assets defined in `do
                                         │
          ┌──────────────────────────────┼──────────────────────────────┐
          ▼                              ▼                              ▼
-Historical Spike Corpus        App MVP Reconciliation Corpus    Synthetic Rule Suite
-  - 10 cases (h01..h10)          - clean_acme (2 lines)           - Arithmetic errors
-  - Frozen ground truth          - discrepancy_apex (2 lines)     - MOQ/Increment breaches
-  - Semantic/negation traps      - ambiguous_apex (1 line)        - Unrecognized SKU traps
-  - Multi-provider bake-off      - unextractable_pdf (damaged)    - Commercial override traps
+Historical Bake-Off Corpus      App MVP Reconciliation Corpus    Synthetic Rule Suite
+  - 10 cases (h01..h10)           - sc001_prepared_5line (5 lines) - Arithmetic errors
+  - Frozen spike schema           - clean_acme (2 lines)           - Packaging breaches
+  - AI-boundary review traps      - discrepancy_apex (stateful)    - Unrecognized SKU traps
+  - Multi-provider evidence       - ambiguous_apex (1 line)        - Gate 409 rejections
+                                  - unextractable_pdf (damaged)
 ```
 
 ### 2.1 Historical Bake-off Corpus (`h01` through `h10`)
@@ -50,19 +55,23 @@ Reused directly from `spikes/ordershield/live/fixtures/` and `spikes/ordershield
 - **Semantic & Dangerous Negation Traps**:
   - `h07_not_medium`: Requests large gloves; explicitly states "NOT medium". Must resolve to `GLOVE-N-L`.
   - `h08_not_large`: Requests medium gloves; explicitly states "NOT large". Must resolve to `GLOVE-N-M`.
-- **Review Traps (Ambiguity & Out-of-Catalog)**:
-  - `h05_no_size`: Powderless nitrile gloves with omitted size. Must route to `HUMAN_REVIEW` with no automated SKU proposal.
-  - `h06_no_pack`: Medium nitrile gloves with missing pack count attribute. Must route to `HUMAN_REVIEW`.
-  - `h09_latex`: Requests latex exam gloves. Catalog exclusively stocks nitrile. Must route to `HUMAN_REVIEW` as an incompatible material trap.
+- **Review Traps (AI Boundary Evaluation)**:
+  - `h05_no_size`: Powderless nitrile gloves with omitted size. AI must abstain from confident commitment, returning `expected_sku = null` and `needs_sku_review = true` (`HUMAN_REVIEW`).
+  - `h06_no_pack`: Medium nitrile gloves with missing pack count attribute. AI must abstain from confident commitment (`HUMAN_REVIEW`).
+  - `h09_latex`: Requests latex exam gloves. Catalog exclusively stocks nitrile. AI must abstain from confident commitment (`HUMAN_REVIEW`).
 - **Damaged & Incomplete Input**:
-  - `h10_damaged`: Truncated/damaged text lacking customer name, quantity, and price. Must extract valid nulls with null provenance, resolving SKU where description permits, but routing to `HUMAN_REVIEW` due to missing mandatory header/line fields.
+  - `h10_damaged`: Truncated/damaged text lacking customer name, quantity, and price. Must extract valid nulls with null provenance, resolving SKU where description permits, but marking for human review due to missing mandatory header/line fields.
 
 ### 2.2 Application MVP Reconciliation Corpus
 Committed application fixtures evaluated against active database master data (`app.cli.BASELINE_PRODUCTS` and `BASELINE_TIERS`):
-- **`clean_acme`** (`tests/fixtures/po_clean_acme.txt`, `app/fixtures/clean_acme.json`): 2-line purchase order for Acme Industrial Supplies (`CUST-ACME`). 0 discrepancies, high-confidence SKU mapping, valid arithmetic. Evaluates clean intake velocity and approval workflow.
-- **`discrepancy_apex`** (`tests/fixtures/po_discrepancy_apex.txt`, `app/fixtures/discrepancy_apex.json`): 2-line purchase order for Apex Distribution (`CUST-APEX`). 3 seeded discrepancies across 3 distinct categories (`PriceMismatch` on line 1, `QuantityOrPackagingBreach` MOQ breach on line 2, `CatalogMatchingMismatch` ambiguous SKU on line 2). Evaluates multi-category detection and approval blocking.
-- **`ambiguous_apex`** (`tests/fixtures/po_ambiguous_apex.txt`, `app/fixtures/ambiguous_apex.json`): 1-line purchase order for Apex Distribution. Seeded `CatalogMatchingMismatch` (ambiguous description "Standard pallet wrap"). Evaluates operator SKU disambiguation workflow.
-- **`unextractable_pdf`** (`tests/fixtures/po_unextractable.pdf`): Digital PDF with corrupted/unextractable text stream. Evaluates explicit diagnostic error surfacing under SC-006.
+- **`sc001_prepared_5line`** (`docs/evaluation/fixtures/sc001_prepared_5line_po.txt`): Dedicated synthetic 5-line purchase order for Acme Industrial Supplies (`CUST-ACME`). 0 discrepancies, high-confidence SKU mapping, valid integer-cents arithmetic, total $2,212.50. Evaluates end-to-end processing velocity under SC-001 and serves as the standardized test case for the manual baseline study.
+- **`clean_acme`** (`tests/fixtures/po_clean_acme.txt`, `app/fixtures/clean_acme.json`): 2-line purchase order for Acme Industrial Supplies (`CUST-ACME`). 0 discrepancies, high-confidence SKU mapping, valid arithmetic ($350.00). Evaluates clean intake workflow.
+- **`discrepancy_apex`** (`tests/fixtures/po_discrepancy_apex.txt`, `app/fixtures/discrepancy_apex.json`): Stateful 2-line purchase order for Apex Distribution (`CUST-APEX`). Demonstrates sequential discrepancy emergence:
+  - *State A (Intake)*: Line 1 exhibits `PriceMismatch` ($18.00 requested vs $22.00 contract tier for qty 10); Line 2 exhibits `CatalogMatchingMismatch` (ambiguous description "Standard pallet wrap"). The MOQ rule on Line 2 remains latent/inactive because line 2 has not yet been resolved to a catalog SKU.
+  - *State B (Operator SKU Selection)*: Operator selects candidate `SKU-WRAP-15` on Line 2. `CatalogMatchingMismatch` is resolved; deterministic revalidation reveals `QuantityOrPackagingBreach` because requested quantity $2 < \text{MOQ } 5$.
+  - *State C (Rejection)*: Draft cannot transition to `Ready for Approval` or `Approved` due to commercial price breach and MOQ violation; operator rejects draft with recorded reason.
+- **`ambiguous_apex`** (`tests/fixtures/po_ambiguous_apex.txt`, `app/fixtures/ambiguous_apex.json`): 1-line purchase order for Apex Distribution. Seeded `CatalogMatchingMismatch` (ambiguous description "Standard pallet wrap", qty 10). Resolves to clean draft upon operator SKU selection (`SKU-WRAP-15`).
+- **`unextractable_pdf`** (`tests/fixtures/po_unextractable.pdf`): Digital PDF with corrupted/unextractable text stream. Intake returns HTTP `400` with error type `UnextractableTextError`, 0 provider invocations, 0 partial draft persistence, and 0 fixture fallback.
 
 ### 2.3 Synthetic Deterministic Rule Suite
 Synthetic edge-case fixtures verifying discrete arithmetic and packaging rules:
@@ -70,151 +79,170 @@ Synthetic edge-case fixtures verifying discrete arithmetic and packaging rules:
 - Order-level arithmetic error (`sum(line_totals) != order_total`).
 - Packaging increment breach (requested quantity not an integer multiple of package increment).
 - Unrecognized description (zero catalog candidate matches).
-- Commercial override rejection (verifying that operator edits to unit price or quantity are rejected or re-evaluated against canonical source text).
+- Gate enforcement: `POST /api/v1/drafts/{draft_id}/approve` on an unreviewed or discrepancy-laden draft strictly returns HTTP `409` Conflict, blocking approval and preventing illegal state transitions.
 
 ---
 
 ## 3. Metric Definitions & Mathematical Semantics
 
-Each evaluation metric is governed by strict mathematical calculation rules, explicit denominators, exclusion policies, and failure-handling procedures.
+### 3.1 Schema Separation Principle
+The evaluation framework strictly separates metrics between historical provider research and current application runtime contracts:
 
-### 3.1 AI Extraction & Grounding Metrics
+```text
+                  Schema Separation Architecture
+                                │
+        ┌───────────────────────┴───────────────────────┐
+        ▼                                               ▼
+Historical Bake-off Metrics                     Current App Metrics
+(spikes/ordershield/**)                         (app.models.schemas)
+- Fields: currency, sale_unit,                  - Fields: customer_name, po_number,
+  requested_quantity, customer_unit_price,        extracted_order_total, customer_description,
+  customer_stated_total                           extracted_quantity, extracted_unit_price,
+- AI-boundary review routing                      extracted_line_total, matched_sku, sku_confidence
+- Reproduces historical bake-off                - LocationDataSchema provenance
+                                                - Canonical API contracts (is_replay_mode)
+```
 
-#### Metric AI-1: Schema-Valid Extraction Rate
-- **Objective**: Measure the reliability of the AI provider in returning well-formed JSON conforming to the target Pydantic schema without parser or validation failure.
+The runner must never silently map or conflate these schemas.
+
+---
+
+### 3.2 AI Extraction & Grounding Metrics
+
+#### Metric AI-1: Schema-Valid Extraction Rate *(REPORT ONLY)*
+- **Objective**: Measure the proportion of attempted inference requests returning well-formed JSON conforming to the applicable target schema.
+- **Status**: **REPORT ONLY**. No invented normative threshold ($\ge 99\%$) is enforced as an MVP pass/fail gate.
 - **Calculation**:
   $$\text{Schema-Valid Rate} = \frac{N_{\text{valid}}}{D_{\text{attempted}}}$$
-- **Numerator ($N_{\text{valid}}$)**: Count of provider calls where raw response text parses as valid JSON and satisfies the Pydantic schema (`ExtractionPayloadSchema`) with 0 validation errors.
+- **Numerator ($N_{\text{valid}}$)**: Count of provider calls where raw response text parses as valid JSON and satisfies schema validation with 0 errors.
 - **Denominator ($D_{\text{attempted}}$)**: Total attempted inference requests dispatched to the provider.
-- **Excluded Cases**: Calls blocked locally prior to HTTP dispatch (e.g. invalid local configuration).
-- **Provider Failure Handling**: Connection timeouts, HTTP 4xx/5xx status codes, or empty responses earn 0 in the numerator and increment the denominator.
-- **Malformed Handling**: Syntax errors or schema rejections earn 0 in the numerator.
-- **Target**: $\ge 99.0\%$.
+- **Excluded Cases**: Calls blocked locally prior to HTTP dispatch (e.g. missing API keys).
+- **Failure Handling**: Network timeouts, HTTP 4xx/5xx, or empty responses earn 0 in the numerator and count in the denominator.
 
-#### Metric AI-2: Mandatory Field Exactness
+#### Metric AI-2: Mandatory Field Exactness *(REPORT ONLY)*
 - **Objective**: Measure exact string-level extraction accuracy of core business fields compared to ground truth.
+- **Status**: **REPORT ONLY**. No invented normative threshold ($\ge 95\%$) is enforced as an MVP pass/fail gate.
 - **Fields Evaluated**:
-  - Header: `customer_name`, `po_number`, `currency`, `customer_stated_total`.
-  - Line Item: `customer_description`, `requested_quantity`, `sale_unit`, `customer_unit_price`.
+  - *Current App Schema*: `customer_name`, `po_number`, `extracted_order_total` (when present), `customer_description`, `extracted_quantity`, `extracted_unit_price`, `extracted_line_total`.
+  - *Historical Spike Schema*: `customer_name`, `po_number`, `currency`, `customer_stated_total`, `customer_description`, `requested_quantity`, `sale_unit`, `customer_unit_price`.
 - **Comparison Rule**: Exact string equality after whitespace collapsing (`" ".join(v.split())`). Numbers normalized to standard decimal representation (e.g. `"25.00"`). Null strictly equals null.
 - **Calculation**:
   $$\text{Field Exactness} = \frac{\sum_{i=1}^{M} \mathbb{I}(\text{extracted}_i = \text{ground\_truth}_i)}{M}$$
   where $M$ is total expected field instances across all evaluated documents.
-- **Provider Failure / Malformed Handling**: If a document extraction fails or produces malformed JSON, all fields for that document earn 0 in the numerator.
-- **Aggregation**: Macro-averaged across documents; per-field breakdown reported independently.
-- **Target**: $\ge 95.0\%$.
 
-#### Metric AI-3: Provenance Citation Validity Rate
+#### Metric AI-3: Provenance Citation Validity Rate *(Normative: 100% for SC-004)*
 - **Objective**: Ensure extracted fields are verifiably grounded in the source text, preventing hallucinated numbers or identifiers.
 - **Rule**:
   - If field is non-null: `verbatim_snippet` must be non-empty, must exist as an exact substring in the source document, and character/line offsets must point to the snippet location.
   - If field is null: `verbatim_snippet` must be null or empty string (valid missingness).
 - **Calculation**:
   $$\text{Provenance Validity} = \frac{N_{\text{grounded\_fields}}}{D_{\text{evaluated\_fields}}}$$
-- **Provider Failure Handling**: Provider failure yields 0 valid citations.
-- **Target**: $100.0\%$.
+- **Normative Target**: $100.0\%$ (SC-004).
 
 #### Metric AI-4: Determinate SKU Accuracy
 - **Objective**: Measure SKU matching accuracy exclusively on clear, determinate order lines where a catalog SKU can be unambiguously resolved.
 - **Calculation**:
   $$\text{Determinate SKU Accuracy} = \frac{N_{\text{correct\_sku}}}{D_{\text{determinate\_lines}}}$$
 - **Numerator ($N_{\text{correct\_sku}}$)**: Count of determinate lines where `matched_sku == expected_sku` and `sku_confidence == "High"`.
-- **Denominator ($D_{\text{determinate\_lines}}$)**: Total determinate lines across evaluated documents (e.g. 7 lines in $h01..h10$, 2 lines in `clean_acme`).
+- **Denominator ($D_{\text{determinate\_lines}}$)**: Total determinate lines across evaluated documents.
 - **Abstention Handling**: A conservative abstention (`matched_sku = null` with `sku_confidence = Ambiguous`) earns 0 in this numerator, but is logged as a safe abstention rather than a false match.
-- **Target**: $\ge 95.0\%$.
 
-#### Metric AI-5: Ambiguous / Unrecognized Review-Routing Rate (Review Trap Catch Rate)
+#### Metric AI-5: Ambiguous / Unrecognized Review-Routing Rate *(Normative: 100% for SC-003)*
 - **Objective**: Measure the system's ability to catch ambiguous descriptions, missing attributes, or out-of-catalog items and route them to human review.
+- **Evaluation Semantics**:
+  - *Historical Bake-off*: Evaluated strictly at the **AI boundary**. Successful when the provider abstains from confident commitment, returns `needs_sku_review = true`, and produces 0 wrong-confident SKUs.
+  - *Current App Reconciliation*: Evaluated at the **Reconciliation boundary**. Successful when the line produces a `CatalogMatchingMismatch` discrepancy and sets draft status to `Needs Review`.
 - **Calculation**:
   $$\text{Review-Routing Rate} = \frac{N_{\text{routed\_to\_review}}}{D_{\text{trap\_lines}}}$$
-- **Numerator ($N_{\text{routed\_to\_review}}$)**: Count of review-trap lines where the system sets `sku_confidence` to `Ambiguous` or `Unrecognized`, sets `matched_sku = null` (or provides ranked candidates without automated commitment), and triggers a `CatalogMatchingMismatch` discrepancy.
-- **Denominator ($D_{\text{trap\_lines}}$)**: Total lines in the test corpus designed as review traps (e.g. $h05$, $h06$, $h09$, line 2 of `discrepancy_apex`, line 1 of `ambiguous_apex`).
-- **Provider Failure Handling**: Network or parse errors do NOT count as successful routing; only valid extractions that explicitly route to operator review increment the numerator.
-- **Target**: $100.0\%$.
+- **Normative Target**: $100.0\%$ (SC-003).
 
-#### Metric AI-6: Wrong-Confident SKU Count & Rate (Hallucinated Commitment Rate)
+#### Metric AI-6: Wrong-Confident SKU Count & Rate *(Normative: 0 for SC-003)*
 - **Objective**: Measure catastrophic false commitments where the system confidently assigns an incorrect SKU or assigns a SKU to an ambiguous/out-of-catalog item.
 - **Definition**: Any instance where `sku_confidence == "High"` AND:
   - The line is determinate, but `matched_sku != expected_sku`; OR
   - The line is a review trap / out-of-catalog item, but a SKU was confidently assigned.
 - **Calculation**:
   $$\text{Wrong-Confident Rate} = \frac{N_{\text{wrong\_confident}}}{D_{\text{total\_lines}}}$$
-- **Target**: **Strictly 0 (0.0%)**. Any occurrence represents an immediate evaluation blocker.
+- **Normative Target**: **Strictly 0 (0.0%)** (SC-003).
 
-#### Metric AI-7: Provider Latency Distribution
+#### Metric AI-7: Provider Latency Distribution *(Normative: SC-006 & ADR 0001)*
 - **Objective**: Measure end-to-end HTTP wall-clock elapsed time for live inference requests.
 - **Metrics Computed**: Minimum, median ($p50$), mean, $p90$, $p95$, and maximum latency in seconds.
 - **Separation Policy**:
   - `latency_success_distribution`: Latency distribution of completed, schema-valid inference requests.
   - `latency_all_attempts_distribution`: Latency distribution including aborted timeouts and HTTP errors.
-- **Target**:
+- **Normative Target**:
   - Immediately detectable errors $\le 5.0\text{ s}$ from request intake (SC-006).
   - Healthy live inference bounded within $\le 15.0\text{ s}$ budget (ADR 0001).
 
 ---
 
-### 3.2 Deterministic Reconciliation Metrics
+### 3.3 Deterministic Reconciliation Metrics
 
-#### Metric DET-1: Seeded Discrepancy Catch Rate
+#### Metric DET-1: Seeded Discrepancy Catch Rate *(Normative: 100% for SC-002)*
 - **Objective**: Verify that 100% of seeded pricing mismatches, arithmetic errors, MOQ violations, and catalog matching discrepancies are detected by the rules engine.
 - **Calculation**:
   $$\text{Catch Rate} = \frac{N_{\text{discrepancies\_detected}}}{D_{\text{discrepancies\_seeded}}}$$
-- **Condition**: A discrepancy is counted as detected if and only if:
-  1. It is attached to the correct order draft and line item.
-  2. Its `discrepancy_type` exactly matches the expected category (`PriceMismatch`, `QuantityOrPackagingBreach`, `ArithmeticMismatch`, or `CatalogMatchingMismatch`).
-  3. Its initial `resolution_state == "Unresolved"` and `severity == "Blocking"`.
-- **Target**: $100.0\%$.
+- **Condition**: Discrepancy detected with matching category (`PriceMismatch`, `QuantityOrPackagingBreach`, `ArithmeticMismatch`, or `CatalogMatchingMismatch`), attached to correct line, with `resolution_state == "Unresolved"` and `severity == "Blocking"`.
+- **Stateful Accounting**: In stateful fixtures (`discrepancy_apex`), latent discrepancies (such as MOQ breach on an unresolved SKU) are evaluated at the appropriate lifecycle state (State B after SKU selection), not falsely expected at initial intake.
+- **Normative Target**: $100.0\%$ (SC-002).
 
 #### Metric DET-2: False-Positive Discrepancy Rate
 - **Objective**: Verify that clean drafts do not generate spurious discrepancy flags.
 - **Calculation**:
   $$\text{False-Positive Rate} = \frac{N_{\text{spurious\_flags}}}{D_{\text{clean\_lines}}}$$
-- **Target**: Strictly 0 flags on clean inputs ($0.0\%$).
+- **Normative Target**: Strictly 0 flags on clean inputs ($0.0\%$).
 
 #### Metric DET-3: Commercial-Rule Enforcement Rate
 - **Objective**: Verify exact integer-cents contract tier price selection, MOQ gating, and packaging increment division.
 - **Verification Rule**: 100% agreement with precomputed contract matrices without floating-point intermediate rounding. Rejection of direct commercial price/quantity modifications by operators.
-- **Target**: $100.0\%$.
+- **Normative Target**: $100.0\%$.
 
-#### Metric DET-4: Unresolved-Discrepancy Approval Blocking Rate (Gate Enforcement)
+#### Metric DET-4: Unresolved-Discrepancy Approval Blocking Rate *(Normative: 100% for SC-005)*
 - **Objective**: Ensure no order draft with unresolved discrepancies or incomplete mandatory fields can transition to `Approved`.
+- **Canonical API Route**:
+  $$\text{POST } /api/v1/drafts/\{draft\_id\}/approve$$
+- **Canonical Behavior**:
+  - Returns HTTP `409` (Conflict).
+  - Surfaces an explicit error message: `"Cannot approve draft: unresolved discrepancies or invalid status"`.
+  - Creates 0 `VerifiedOrder` records.
+  - Causes 0 illegal state transitions (draft remains in `Needs Review`).
 - **Calculation**:
   $$\text{Gate Blocking Rate} = \frac{N_{\text{blocked\_approvals}}}{D_{\text{invalid\_approval\_attempts}}}$$
-- **Condition**: Attempting `POST /api/v1/orders/{id}/approve` on an order with unresolved discrepancy flags must return HTTP 400/409/422 and leave the draft in `Needs Review` status.
-- **Target**: $100.0\%$ (0% approval leakage).
+- **Normative Target**: $100.0\%$ (0% approval leakage) (SC-005).
 
 #### Metric DET-5: Terminal-State Immutability Rate
 - **Objective**: Ensure committed orders (`Approved` or `Rejected`) cannot be modified, re-evaluated, or re-transitioned.
-- **Target**: $100.0\%$ rejection with explicit error.
+- **Normative Target**: $100.0\%$ rejection with explicit error (`ValueError` / HTTP 400).
 
 ---
 
-### 3.3 End-to-End Operational Metrics
+### 3.4 End-to-End Operational Metrics
 
 - **Processing Duration**: Wall-clock time elapsed from document ingestion request to terminal order commitment (`Approved` or `Rejected`).
 - **Operator Action Count**: Number of discrete operator interactions required to achieve terminal state:
-  - Clean scenario: 1 action (operator visual inspection and final approval sign-off).
-  - Ambiguous scenario: 2 actions (manual candidate SKU selection + final approval sign-off).
-  - Unresolvable discrepancy: 1 action (rejection with mandatory recorded reason).
-- **Execution Mode Badge Verification**: 100% of API responses and UI views in replay/fixture mode must contain `is_replay: true` and visible non-live badging.
+  - Clean scenario (`sc001_prepared_5line`, `clean_acme`): 1 action (operator visual inspection and final approval sign-off).
+  - Ambiguous scenario (`ambiguous_apex`): 2 actions (manual candidate SKU selection + final approval sign-off).
+  - Unresolvable discrepancy (`discrepancy_apex`): 1 action (rejection with mandatory recorded reason).
+- **Execution Mode Badge Verification**: 100% of API responses and UI views in replay/fixture mode must contain `is_replay_mode: true` and visible non-live badging.
 
 ---
 
 ## 4. Success Criteria Traceability Matrix
 
-This table maps specification success criteria (SC-001 through SC-006) directly to protocol metrics, supporting evidence, and evaluation asset status.
+This table maps specification success criteria (SC-001 through SC-006) directly to protocol metrics, supporting evidence, and pre-execution status.
 
-| Success Criterion | Specification Requirement | Mapped Metric | Evaluation Assets / Evidence | Status / Target |
+| Success Criterion | Specification Requirement | Mapped Metric | Evaluation Assets / Evidence | Pre-Execution Status |
 |:---|:---|:---|:---|:---:|
-| **SC-001** | Prepared Demo Processing Velocity: Operations coordinator completes reconciliation & approval of prepared 5-line PO in $<60\text{ s}$. | E2E Processing Duration & Operator Actions | `tests/fixtures/po_clean_acme.txt` (2-line), `po_discrepancy_apex.txt` (2-line). **Note**: A dedicated 5-line PO fixture is currently a **`MISSING EVALUATION ASSET`**. Available 2-line demo completes in $<15\text{ s}$. | **`MISSING EVALUATION ASSET`** *(5-line asset required)* |
-| **SC-002** | Discrepancy Catch Rate: 100% of seeded pricing mismatches, arithmetic errors, and MOQ violations detected before approval. | `DET-1` Seeded Discrepancy Catch Rate | `discrepancy_apex.json`, `synthetic_deterministic_suite`, unit test suites (`test_reconciliation.py`). | **PASS** *(Target: 100%)* |
-| **SC-003** | Zero Hallucinated Commitments: 100% of ambiguous/out-of-catalog items routed to review; zero unrecognized descriptions assigned to unverified SKUs. | `AI-5` Review-Routing Rate & `AI-6` Wrong-Confident SKUs | Traps `h05`, `h06`, `h09`; `ambiguous_apex.json`; `test_ai_matcher.py`. | **PASS** *(Target: 100% routed, 0 wrong-confident)* |
-| **SC-004** | Full Provenance Visibility: 100% of extracted line items provide visible textual grounding citations back to source PO text. | `AI-3` Provenance Citation Validity Rate | `app/fixtures/*.json`, `expected.json`, `test_schemas.py`. | **PASS** *(Target: 100%)* |
-| **SC-005** | Mandatory Gate Enforcement: 0% of unreviewed or discrepancy-laden drafts can transition to committed order record without operator sign-off/resolution. | `DET-4` Approval Gate Blocking Rate | `test_order_service.py`, `test_api_contracts.py`. | **PASS** *(Target: 0% transition of unreviewed drafts)* |
-| **SC-006** | Explicit Failure & Replay Transparency: Immediate diagnostic error $\le 5\text{ s}$ target; healthy live inference $\le 15\text{ s}$ budget; silent/stalled aborted at $\le 15\text{ s}$; 0 silent fallback; 100% visible replay badge. | `AI-7` Latency Profile, Replay Badge Presence | `po_unextractable.pdf`, `test_ai_provider.py`, `test_api_wiring.py`. | **PASS** *(Immediate $\le 5\text{ s}$, Live $\le 15\text{ s}$, 0 silent fallback)* |
+| **SC-001** | Prepared Demo Processing Velocity: Operations coordinator completes reconciliation & approval of prepared 5-line PO in $<60\text{ s}$. | E2E Processing Duration & Operator Actions | `docs/evaluation/fixtures/sc001_prepared_5line_po.txt` (`sc001_prepared_5line`). Canonical 5-line fixture authored; awaiting runner timing execution. | **`NOT_YET_MEASURED`** *(Asset available; target $<60\text{ s}$)* |
+| **SC-002** | Discrepancy Catch Rate: 100% of seeded pricing mismatches, arithmetic errors, and MOQ violations detected before approval. | `DET-1` Seeded Discrepancy Catch Rate | `discrepancy_apex.json` (stateful), `synthetic_deterministic_suite`, unit test suites (`test_reconciliation.py`). | **`NOT_YET_MEASURED`** *(Target: 100.0%)* |
+| **SC-003** | Zero Hallucinated Commitments: 100% of ambiguous/out-of-catalog items routed to review; zero unrecognized descriptions assigned to unverified SKUs. | `AI-5` Review-Routing Rate & `AI-6` Wrong-Confident SKUs | Traps `h05`, `h06`, `h09`; `ambiguous_apex.json`; `test_ai_matcher.py`. | **`NOT_YET_MEASURED`** *(Target: 100% routed, 0 wrong-confident)* |
+| **SC-004** | Full Provenance Visibility: 100% of extracted line items provide visible textual grounding citations back to source PO text. | `AI-3` Provenance Citation Validity Rate | `app/fixtures/*.json`, `expected.json`, `test_schemas.py`. | **`NOT_YET_MEASURED`** *(Target: 100.0%)* |
+| **SC-005** | Mandatory Gate Enforcement: 0% of unreviewed or discrepancy-laden drafts can transition to committed order record without operator sign-off/resolution. | `DET-4` Approval Gate Blocking Rate (`POST /api/v1/drafts/{id}/approve` $\to 409$) | `test_order_service.py`, `test_api_contracts.py`. | **`NOT_YET_MEASURED`** *(Target: 0% approval leakage)* |
+| **SC-006** | Explicit Failure & Replay Transparency: Immediate diagnostic error $\le 5\text{ s}$ target; healthy live inference $\le 15\text{ s}$ budget; silent/stalled aborted at $\le 15\text{ s}$; 0 silent fallback; 100% visible replay badge. | `AI-7` Latency Profile, Replay Mode Badge Presence, `po_unextractable.pdf` HTTP 400 | `po_unextractable.pdf`, `test_ai_provider.py`, `test_api_wiring.py`. | **`NOT_YET_MEASURED`** *(Target: Immediate $\le 5\text{ s}$, Live $\le 15\text{ s}$, 0 fallback)* |
 
 > [!IMPORTANT]
-> **Declaration on SC-001**: In strict adherence to the project constitution, SC-001 is formally designated **`MISSING EVALUATION ASSET`** because the repository currently contains 2-line and 1-line prepared fixtures, but no prepared 5-line purchase order fixture. No benchmark result may be fabricated for SC-001 until a canonical 5-line fixture is authored or measured during the manual baseline study.
+> **Pre-Execution Invariant**: Every Success Criterion is strictly marked **`NOT_YET_MEASURED`** until the evaluation runner (`VLD-EVAL-02`) executes against the ground-truth manifest and records timestamped, verifiable result artifacts in `docs/evaluation/results/`. Implementation conformance tests prove architectural presence but do not replace empirical evaluation.
 
 ---
 
@@ -225,22 +253,23 @@ To validate operational acceleration without relying on ungrounded claims, this 
 ### 5.1 Objective
 Measure the baseline duration, cognitive burden, and error rate of human operators performing manual purchase order reconciliation without OrderShield.
 
-### 5.2 Cohort Design
-- **Participants**: 2 to 3 independent participants representing wholesale operations coordinators.
-- **Familiarity**: Basic familiarity with wholesale ordering, unit conversions, and spreadsheet calculation.
-- **Independence**: Participants execute the benchmark independently without collaboration or hints.
+### 5.2 Cohort Design & Limitations
+- **Cohort Size**: 2 to 3 independent participants.
+- **Participant Profile**: Small convenience sample performing a standardized synthetic reconciliation task.
+- **Explicit Limitation**: The sample does not establish industry-wide operator performance or universal commercial baselines; it provides an empirical, auditable point of comparison for the evaluated scenarios.
+- **Independence**: Participants execute the benchmark independently without collaboration, assistance, or prior knowledge of the test order solutions.
 
 ### 5.3 Benchmark Inputs Provided to Participant
 Each participant is provided with identical materials:
 1. **Source Documents**:
-   - Case A: Clean 2-line purchase order (`po_clean_acme.txt`).
+   - Case A: Clean 5-line purchase order (`docs/evaluation/fixtures/sc001_prepared_5line_po.txt`).
    - Case B: Multi-discrepancy 2-line purchase order (`po_discrepancy_apex.txt`).
    - Case C: Ambiguous description 1-line purchase order (`po_ambiguous_apex.txt`).
 2. **Product Master Catalog Sheet**: Listing SKU code, product title, unit of measure, base price, MOQ, and packaging increments.
 3. **Customer Contract Pricing Sheet**: Listing customer contract terms, authorized SKUs, and volume tier price breaks.
 4. **Reconciliation Decision Template**: Form where the participant records matched SKU, verified unit price, total line price, discrepancies discovered, and final Approve/Reject recommendation.
 
-### 5.4 Allowed Tools
+### 5.4 Allowed Tools & Boundaries
 - Standard desktop calculator or basic spreadsheet (e.g. Excel/Google Sheets).
 - Text editor or PDF viewer for reading source documents.
 - **Prohibited**: Automated reconciliation scripts, LLM tools (ChatGPT, Claude, etc.), or OrderShield software.
@@ -278,8 +307,8 @@ The following phrases are **strictly prohibited** unless backed by committed, au
 - `"Industry-wide accuracy"` or generalized claims beyond the evaluated test suite.
 
 ### 6.2 Grounded Claims Standards
-- All velocity claims must reference the exact test scenario (e.g. *"Prepared 2-line demo reconciled in $<15$ seconds; manual baseline required $X$ seconds"*).
-- All accuracy claims must report exact numerators and denominators (e.g. *"100% discrepancy catch rate across 3 seeded categories in discrepancy_apex"*).
+- All velocity claims must reference the exact test scenario (e.g. *"Prepared 5-line demo reconciled in $X$ seconds; manual baseline required $Y$ seconds"*).
+- All accuracy claims must report exact numerators and denominators (e.g. *"100% discrepancy catch rate across seeded categories in discrepancy_apex"*).
 - Demo numbers must be explicitly labeled as **Prepared Demo Scenario Measurements**, not enterprise statistical generalities.
 
 ---
@@ -312,10 +341,15 @@ Every evaluation run must produce:
 
 Before proceeding to runner implementation (`VLD-EVAL-02`), this protocol requires formal sign-off:
 
-- [ ] All 6 Success Criteria (SC-001..SC-006) mapped to explicit metrics.
-- [ ] SC-001 honestly classified as `MISSING EVALUATION ASSET` pending 5-line PO fixture.
-- [ ] AI metrics define exact numerator, denominator, exclusions, and failure handling.
-- [ ] Deterministic rules define exact discrepancy catch criteria across 4 MVP categories.
-- [ ] Manual baseline design specifies participants, timer triggers, allowed tools, and error classification.
-- [ ] Claims policy strictly prohibits ungrounded marketing assertions.
-- [ ] Machine-readable manifest and results schema validated.
+- [x] All 6 Success Criteria (SC-001..SC-006) initialized to `NOT_YET_MEASURED`.
+- [x] Dedicated 5-line PO fixture authored at `docs/evaluation/fixtures/sc001_prepared_5line_po.txt`.
+- [x] Canonical approval endpoint verified as `POST /api/v1/drafts/{draft_id}/approve` returning HTTP 409.
+- [x] Replay mode badging verified as `is_replay_mode`.
+- [x] Unextractable PDF fixture verified as HTTP 400 `UnextractableTextError`.
+- [x] Historical bake-off and current application schemas strictly separated.
+- [x] Historical review routing evaluated at AI boundary without catalog discrepancy requirement.
+- [x] `discrepancy_apex` represented as stateful lifecycle (latent MOQ rule evaluated at State B).
+- [x] Manual baseline cohort documented as small convenience sample with explicit limitations.
+- [x] Invented AI acceptance thresholds removed (AI-1 and AI-2 designated REPORT ONLY).
+- [x] Claims policy strictly prohibits ungrounded marketing assertions.
+- [x] Implementation conformance tests explicitly separated from empirical benchmark results.

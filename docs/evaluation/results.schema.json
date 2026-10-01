@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "OrderShield Evaluation Run Results Schema",
-  "description": "Formal contract schema for evaluation run result artifacts produced by OrderShield evaluation runner.",
+  "description": "Formal contract schema for evaluation run result artifacts produced by OrderShield evaluation runner (VLD-EVAL-02).",
   "type": "object",
   "required": [
     "run_id",
@@ -43,81 +43,131 @@
     },
     "ai_metrics": {
       "type": "object",
+      "description": "Evaluated AI metrics separated by contract schema to prevent silent distortion.",
       "properties": {
-        "schema_valid_rate": {
+        "historical_bakeoff_metrics": {
           "type": "object",
-          "required": ["numerator", "denominator", "rate_percentage"],
+          "description": "Metrics evaluated using the frozen schema and field vocabulary of spikes/ordershield/**",
           "properties": {
-            "numerator": { "type": "integer" },
-            "denominator": { "type": "integer" },
-            "rate_percentage": { "type": "number" }
-          }
-        },
-        "mandatory_field_exactness": {
-          "type": "object",
-          "required": ["numerator", "denominator", "rate_percentage", "per_field_breakdown"],
-          "properties": {
-            "numerator": { "type": "integer" },
-            "denominator": { "type": "integer" },
-            "rate_percentage": { "type": "number" },
-            "per_field_breakdown": {
+            "schema_valid_rate": {
               "type": "object",
-              "additionalProperties": {
-                "type": "object",
-                "properties": {
-                  "exact": { "type": "integer" },
-                  "total": { "type": "integer" },
-                  "rate_percentage": { "type": "number" }
-                }
+              "properties": {
+                "numerator": { "type": "integer" },
+                "denominator": { "type": "integer" },
+                "rate_percentage": { "type": "number" }
+              }
+            },
+            "mandatory_field_exactness": {
+              "type": "object",
+              "properties": {
+                "numerator": { "type": "integer" },
+                "denominator": { "type": "integer" },
+                "rate_percentage": { "type": "number" },
+                "per_field_breakdown": { "type": "object" }
+              }
+            },
+            "determinate_sku_accuracy": {
+              "type": "object",
+              "properties": {
+                "numerator": { "type": "integer" },
+                "denominator": { "type": "integer" },
+                "rate_percentage": { "type": "number" },
+                "abstentions": { "type": "integer" }
+              }
+            },
+            "review_trap_catch_rate": {
+              "type": "object",
+              "description": "Evaluated at AI boundary: provider abstains from confident commitment, returns expected review/uncertainty state, zero wrong-confident SKU",
+              "properties": {
+                "numerator": { "type": "integer" },
+                "denominator": { "type": "integer" },
+                "rate_percentage": { "type": "number" }
+              }
+            },
+            "wrong_confident_skus": {
+              "type": "object",
+              "properties": {
+                "count": { "type": "integer" },
+                "rate_percentage": { "type": "number" }
+              }
+            },
+            "latency_profile_seconds": {
+              "type": "object",
+              "properties": {
+                "min": { "type": "number" },
+                "p50": { "type": "number" },
+                "mean": { "type": "number" },
+                "p90": { "type": "number" },
+                "p95": { "type": "number" },
+                "max": { "type": "number" }
               }
             }
           }
         },
-        "provenance_validity": {
+        "app_ai_metrics": {
           "type": "object",
-          "required": ["numerator", "denominator", "rate_percentage"],
+          "description": "Metrics evaluated using the canonical current OrderShield application contracts (AIExtractionPayload, LocationDataSchema)",
           "properties": {
-            "numerator": { "type": "integer" },
-            "denominator": { "type": "integer" },
-            "rate_percentage": { "type": "number" }
-          }
-        },
-        "determinate_sku_accuracy": {
-          "type": "object",
-          "required": ["numerator", "denominator", "rate_percentage"],
-          "properties": {
-            "numerator": { "type": "integer" },
-            "denominator": { "type": "integer" },
-            "rate_percentage": { "type": "number" },
-            "abstentions": { "type": "integer" }
-          }
-        },
-        "review_trap_catch_rate": {
-          "type": "object",
-          "required": ["numerator", "denominator", "rate_percentage"],
-          "properties": {
-            "numerator": { "type": "integer" },
-            "denominator": { "type": "integer" },
-            "rate_percentage": { "type": "number" }
-          }
-        },
-        "wrong_confident_skus": {
-          "type": "object",
-          "required": ["count", "rate_percentage"],
-          "properties": {
-            "count": { "type": "integer" },
-            "rate_percentage": { "type": "number" }
-          }
-        },
-        "latency_profile_seconds": {
-          "type": "object",
-          "properties": {
-            "min": { "type": "number" },
-            "p50": { "type": "number" },
-            "mean": { "type": "number" },
-            "p90": { "type": "number" },
-            "p95": { "type": "number" },
-            "max": { "type": "number" }
+            "schema_valid_rate": {
+              "type": "object",
+              "properties": {
+                "numerator": { "type": "integer" },
+                "denominator": { "type": "integer" },
+                "rate_percentage": { "type": "number" }
+              }
+            },
+            "mandatory_field_exactness": {
+              "type": "object",
+              "properties": {
+                "numerator": { "type": "integer" },
+                "denominator": { "type": "integer" },
+                "rate_percentage": { "type": "number" },
+                "per_field_breakdown": { "type": "object" }
+              }
+            },
+            "provenance_validity": {
+              "type": "object",
+              "properties": {
+                "numerator": { "type": "integer" },
+                "denominator": { "type": "integer" },
+                "rate_percentage": { "type": "number" }
+              }
+            },
+            "determinate_sku_accuracy": {
+              "type": "object",
+              "properties": {
+                "numerator": { "type": "integer" },
+                "denominator": { "type": "integer" },
+                "rate_percentage": { "type": "number" },
+                "abstentions": { "type": "integer" }
+              }
+            },
+            "review_trap_catch_rate": {
+              "type": "object",
+              "properties": {
+                "numerator": { "type": "integer" },
+                "denominator": { "type": "integer" },
+                "rate_percentage": { "type": "number" }
+              }
+            },
+            "wrong_confident_skus": {
+              "type": "object",
+              "properties": {
+                "count": { "type": "integer" },
+                "rate_percentage": { "type": "number" }
+              }
+            },
+            "latency_profile_seconds": {
+              "type": "object",
+              "properties": {
+                "min": { "type": "number" },
+                "p50": { "type": "number" },
+                "mean": { "type": "number" },
+                "p90": { "type": "number" },
+                "p95": { "type": "number" },
+                "max": { "type": "number" }
+              }
+            }
           }
         }
       }
@@ -177,7 +227,7 @@
       "required": [
         "average_reconciliation_duration_ms",
         "operator_actions_recorded",
-        "visible_replay_badge_rate"
+        "visible_replay_mode_badge_rate"
       ],
       "properties": {
         "average_reconciliation_duration_ms": { "type": "number" },
@@ -189,7 +239,10 @@
             "Rejected": { "type": "integer" }
           }
         },
-        "visible_replay_badge_rate": { "type": "number" }
+        "visible_replay_mode_badge_rate": {
+          "type": "number",
+          "description": "Proportion of replay/fixture sessions where is_replay_mode: true is visibly badged"
+        }
       }
     },
     "sc_traceability": {
@@ -200,7 +253,10 @@
           "type": "object",
           "required": ["status", "metric_name", "notes"],
           "properties": {
-            "status": { "type": "string", "enum": ["PASS", "FAIL", "MISSING_EVALUATION_ASSET", "PARTIALLY_MEASURED"] },
+            "status": {
+              "type": "string",
+              "enum": ["NOT_YET_MEASURED", "MISSING_EVALUATION_ASSET", "PARTIALLY_MEASURED", "PASS", "FAIL"]
+            },
             "metric_name": { "type": "string" },
             "value": { "type": ["number", "string", "null"] },
             "unit": { "type": ["string", "null"] },
@@ -209,56 +265,71 @@
         },
         "SC_002": {
           "type": "object",
-          "required": ["status", "metric_name", "value", "unit", "notes"],
+          "required": ["status", "metric_name", "notes"],
           "properties": {
-            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "status": {
+              "type": "string",
+              "enum": ["NOT_YET_MEASURED", "MISSING_EVALUATION_ASSET", "PARTIALLY_MEASURED", "PASS", "FAIL"]
+            },
             "metric_name": { "type": "string" },
-            "value": { "type": "number" },
-            "unit": { "type": "string" },
+            "value": { "type": ["number", "string", "null"] },
+            "unit": { "type": ["string", "null"] },
             "notes": { "type": "string" }
           }
         },
         "SC_003": {
           "type": "object",
-          "required": ["status", "metric_name", "value", "unit", "notes"],
+          "required": ["status", "metric_name", "notes"],
           "properties": {
-            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "status": {
+              "type": "string",
+              "enum": ["NOT_YET_MEASURED", "MISSING_EVALUATION_ASSET", "PARTIALLY_MEASURED", "PASS", "FAIL"]
+            },
             "metric_name": { "type": "string" },
-            "value": { "type": "number" },
-            "unit": { "type": "string" },
+            "value": { "type": ["number", "string", "null"] },
+            "unit": { "type": ["string", "null"] },
             "notes": { "type": "string" }
           }
         },
         "SC_004": {
           "type": "object",
-          "required": ["status", "metric_name", "value", "unit", "notes"],
+          "required": ["status", "metric_name", "notes"],
           "properties": {
-            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "status": {
+              "type": "string",
+              "enum": ["NOT_YET_MEASURED", "MISSING_EVALUATION_ASSET", "PARTIALLY_MEASURED", "PASS", "FAIL"]
+            },
             "metric_name": { "type": "string" },
-            "value": { "type": "number" },
-            "unit": { "type": "string" },
+            "value": { "type": ["number", "string", "null"] },
+            "unit": { "type": ["string", "null"] },
             "notes": { "type": "string" }
           }
         },
         "SC_005": {
           "type": "object",
-          "required": ["status", "metric_name", "value", "unit", "notes"],
+          "required": ["status", "metric_name", "notes"],
           "properties": {
-            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "status": {
+              "type": "string",
+              "enum": ["NOT_YET_MEASURED", "MISSING_EVALUATION_ASSET", "PARTIALLY_MEASURED", "PASS", "FAIL"]
+            },
             "metric_name": { "type": "string" },
-            "value": { "type": "number" },
-            "unit": { "type": "string" },
+            "value": { "type": ["number", "string", "null"] },
+            "unit": { "type": ["string", "null"] },
             "notes": { "type": "string" }
           }
         },
         "SC_006": {
           "type": "object",
-          "required": ["status", "metric_name", "value", "unit", "notes"],
+          "required": ["status", "metric_name", "notes"],
           "properties": {
-            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "status": {
+              "type": "string",
+              "enum": ["NOT_YET_MEASURED", "MISSING_EVALUATION_ASSET", "PARTIALLY_MEASURED", "PASS", "FAIL"]
+            },
             "metric_name": { "type": "string" },
-            "value": { "type": "number" },
-            "unit": { "type": "string" },
+            "value": { "type": ["number", "string", "null"] },
+            "unit": { "type": ["string", "null"] },
             "notes": { "type": "string" }
           }
         }
@@ -272,8 +343,19 @@
         "properties": {
           "case_id": { "type": "string" },
           "status": { "type": "string", "enum": ["PASS", "FAIL", "ERROR", "SKIPPED"] },
-          "latency_seconds": { "type": "number" },
+          "latency_seconds": { "type": ["number", "null"] },
           "discrepancies_detected": { "type": "integer" },
+          "state_transitions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state_name": { "type": "string" },
+                "draft_status": { "type": "string" },
+                "unresolved_discrepancies": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
           "details": { "type": "object" }
         }
       }
