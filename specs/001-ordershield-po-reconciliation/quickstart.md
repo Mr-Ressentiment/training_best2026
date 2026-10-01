@@ -2,7 +2,7 @@
 
 **Feature Branch**: `001-ordershield-po-reconciliation`  
 **Date**: 2026-09-29  
-**Status**: Ready for Planning (Human Gate Final Reconciliation)  
+**Status**: Implemented & Verified (T041 GO)
 
 ---
 
@@ -71,12 +71,12 @@ python -m app.cli init-db --seed
 ## 3. Running the Application
 
 ### 3.1 Live Mode
-Configure environment variables for the reconciled primary training provider (Alibaba Qwen 3.8 Flash with reasoning disabled; see ADR 0001) or secondary fallback (Google Gemini 3.5 Flash-Lite):
+Configure environment variables for the reconciled primary training provider (Alibaba Qwen 3.8 Flash with reasoning disabled; see ADR 0001) or alternate explicitly configured provider (Google Gemini 3.5 Flash-Lite):
 ```bash
 # Windows PowerShell (Primary Live Provider: Alibaba Qwen 3.8 Flash):
 $env:LLM_PROVIDER="qwen" # Primary training/demo live provider (qwen3.8-flash)
 $env:LLM_API_KEY="your-dashscope-api-key"
-# Windows PowerShell (Fallback Candidate: Google Gemini 3.5 Flash-Lite):
+# Windows PowerShell (Alternate Live Provider: Google Gemini 3.5 Flash-Lite):
 # $env:LLM_PROVIDER="gemini"
 # $env:LLM_API_KEY="your-gemini-api-key"
 
@@ -87,9 +87,9 @@ export LLM_API_KEY="your-dashscope-api-key"
 # Launch the FastAPI server
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
-Open your browser to: `http://127.0.0.1:8000`
+Open your browser to: `http://127.0.0.1:8000/static/index.html`
 
-*Note on Provider Governance*: Provider selection is strictly configuration-driven. The system does not perform automatic runtime provider failover or silent provider substitution. Switching from primary (Qwen) to secondary candidate (Gemini) requires explicit operator environment configuration and server restart. All generated drafts and audit events record the actual provider and model used.
+*Note on Provider Governance*: Provider selection is strictly configuration-driven. The system does not perform automatic runtime provider failover or silent provider substitution. Switching from primary (Qwen) to alternate provider (Gemini) requires explicit operator environment configuration and server restart. All generated drafts and audit events record the actual provider and model used.
 
 ### 3.2 Offline / Replay Mode (Deterministic Demo Path)
 To establish a deterministic, offline, reproducible demo path without external network calls or API quotas:
@@ -98,7 +98,7 @@ To establish a deterministic, offline, reproducible demo path without external n
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 Then trigger demo fixtures via the web UI or via the dedicated fixture endpoints (`/api/v1/fixtures/...`).  
-*Note*: The UI will visibly badge all screens with `[DEMO / REPLAY MODE (NON-LIVE)]`.
+*Note*: The UI will visibly badge all screens with `⚠️ DEMO / REPLAY MODE (NON-LIVE FIXTURE DATA)`.
 
 ---
 
@@ -131,17 +131,17 @@ Then trigger demo fixtures via the web UI or via the dedicated fixture endpoints
    - Line 1: `PriceMismatch` flagged (PO requested $18.00 vs contract tier price $22.00).
    - Line 2: `CatalogMatchingMismatch` flagged (`Ambiguous`, offers candidate SKUs including `SKU-WRAP-15` and `SKU-WRAP-18`).
 3. **Operator Resolution**:
-   - Operator selects candidate `SKU-WRAP-15` for Line 2 (`PATCH /api/v1/drafts/{id}/lines/2` with `action="SelectSKU"`).
+   - Operator selects candidate `SKU-WRAP-15` for Line 2 (`PATCH /api/v1/drafts/{draft_id}/lines/{line_2_id}` with `action="SelectSKU"`; use the `line_id` returned in the draft response, as `line_number` is not the route identifier).
    - Line 2 `sku_resolution_source` transitions to `"OPERATOR_SELECTED"`.
    - Deterministic revalidation (business rules, not AI) immediately evaluates catalog attributes and reveals `QuantityOrPackagingBreach` because customer requested quantity 2 is below catalog MOQ 5 (`min_order_quantity = 5`). Correcting quantity to bypass MOQ is prohibited because the source PO document genuinely specifies 2.
-   - For Line 1, commercial price violation cannot be overridden: operator deletes the non-compliant line (`DELETE /api/v1/drafts/{id}/lines/1`).
+   - For Line 1, commercial price violation cannot be overridden: operator deletes the non-compliant line (`DELETE /api/v1/drafts/{draft_id}/lines/{line_1_id}`).
    - Line 1 becomes `Removed`; its discrepancy flag transitions to `ResolvedByLineRemoval` (history preserved).
 4. **Final State & Explicit Rejection**:
    - Line 2 still carries the unresolved `QuantityOrPackagingBreach` discrepancy.
    - Draft status remains `Needs Review` (Amber badge); "Approve Order" remains blocked.
    - Because commercial violations cannot be resolved without altering genuine source PO facts, the operator rejects the draft:
      ```bash
-     curl -X POST "http://127.0.0.1:8000/api/v1/drafts/{id}/reject" \
+     curl -X POST "http://127.0.0.1:8000/api/v1/drafts/{draft_id}/reject" \
        -H "Content-Type: application/json" \
        -d '{"operator_id": "quickstart-op", "reason": "Valid MOQ breach cannot be resolved without changing the source order."}'
      ```
@@ -154,9 +154,9 @@ Then trigger demo fixtures via the web UI or via the dedicated fixture endpoints
 2. **Expected Outcome**:
    - Immediately detectable connection, auth, or invalid key errors return HTTP 503 with a target of ≤5 seconds from request intake.
    - Stalled inference conditions are aborted at the bounded **15-second** client deadline, returning HTTP 503 per approved SC-006 amendment.
-   - UI displays clear diagnostic banner: *"External AI extraction service failed: request timed out / connection error. Live inference failed; fixture data was not silently substituted."*
-   - Zero automatic runtime failover to fallback provider and zero silent substitution of fixture data.
-   - Zero corrupted or partial drafts created.
+   - UI displays the HTTP 503 provider diagnostic returned by the backend (`AIProviderUnavailableError`) rather than fabricating success.
+   - Zero automatic runtime failover to any alternate provider and zero silent substitution of fixture data.
+   - Zero corrupted or partial drafts created (zero partial persistence).
 
 ---
 
@@ -172,13 +172,19 @@ Then trigger demo fixtures via the web UI or via the dedicated fixture endpoints
 ---
 
 ### Scenario 5: Audit Trail & Grounded Provenance Inspection (P3)
-1. **Action**: Navigate to `http://127.0.0.1:8000/orders/VO-2026-0001` or run:
-   ```bash
-   curl "http://127.0.0.1:8000/api/v1/orders/VO-2026-0001"
-   ```
+1. **Action**:
+   1. Approve an order using Scenario 1 and retain the returned `order_id`.
+   2. In the SPA at:
+      `http://127.0.0.1:8000/static/index.html`
+      use the approved-order audit action ("View audit trail"),
+      OR query the API directly:
+      ```bash
+      curl "http://127.0.0.1:8000/api/v1/orders/{order_id}"
+      ```
+   3. Do not substitute human-readable `order_number` (for example `VO-2026-0001`) for `{order_id}`.
 2. **Expected Outcome**:
-   - Displays verbatim source text snippet next to each mandatory header and line-item field with exact canonical text offsets.
-   - Chronological audit log displays all lifecycle transitions, operator field corrections, line removals, and approval timestamp.
+   - Displays verbatim source text snippet next to each mandatory header and line-item field with exact canonical source locations (field-level provenance).
+   - Chronological audit log displays all lifecycle transitions, operator mutations (field corrections, line removals), and the approval event.
 
 ---
 
