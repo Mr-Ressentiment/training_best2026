@@ -308,6 +308,9 @@
 
   /** Hands server-returned provenance to the T037 drawer; nothing is built, cached or fetched here. */
   function openFieldProvenance(label, value, provenance, matching) {
+    if (state.loading !== null) {
+      return;
+    }
     var drawer = window.OrderShieldProvenanceDrawer;
     if (!drawer || typeof drawer.open !== "function") {
       showError(new ApiError("Source evidence unavailable", null, "ProvenanceDrawerUnavailable",
@@ -336,7 +339,7 @@
   function sourceCell(line, field, label, className, matching) {
     var td = cell(line[field], className);
     var wrapper = el("span", "sub");
-    var button = el("button", "btn btn--small btn--outline", "Source");
+    var button = el("button", "btn btn--small btn--outline source-evidence-control", "Source");
     button.type = "button";
     button.setAttribute("aria-label", "Source evidence for line " +
       (isMissing(line.line_number) ? "" : line.line_number) + " " + label);
@@ -631,6 +634,12 @@
         control.disabled = busy;
       });
     }
+    Array.prototype.forEach.call(
+      document.querySelectorAll(".source-evidence-control"),
+      function (control) {
+        control.disabled = busy;
+      }
+    );
     if (!dom.approvalHint.classList.contains("is-warning")) {
       if (draft === null) {
         dom.approvalHint.textContent = "";
