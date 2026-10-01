@@ -891,3 +891,341 @@ def test_approved_draft_blocks_p2_mutations_with_terminal_conflict(client, seede
         assert observer.scalars(
             select(AuditEvent).where(AuditEvent.draft_id == draft_id, AuditEvent.event_type == "DraftRejected")
         ).all() == []
+
+
+# =============================================================================
+# T035 / VLD-P3-ACC-01: Verified Order Audit Inspection Acceptance Contract
+# =============================================================================
+
+
+def _assert_txt_grounding(raw_text: str, citation: dict) -> None:
+    assert citation is not None
+    assert "verbatim_snippet" in citation
+    assert "location" in citation
+    location = citation["location"]
+    assert location["type"] == "txt"
+
+    lines = raw_text.splitlines()
+    line_number = location["line_number"]
+    assert 1 <= line_number <= len(lines), f"line_number {line_number} out of bounds"
+    line = lines[line_number - 1]
+
+    snippet = citation["verbatim_snippet"]
+    start = location["char_offset"]
+
+    assert line[start:start + len(snippet)] == snippet
+
+
+def test_verified_order_retrieval_returns_committed_record_and_snapshot(client, seeded_db):
+    """T035 Test 1: Clean approved order retrieval returns HTTP 200 with committed attributes and valid timestamp."""
+    _require_p1_application()
+    intake = client.post("/api/v1/fixtures/fixture-clean-acme/ingest")
+    assert intake.status_code in (200, 201), intake.text
+    draft = intake.json()
+    draft_id = draft["draft_id"]
+    assert draft["status"] == "Ready for Approval"
+
+    approve_resp = client.post(
+        f"/api/v1/drafts/{draft_id}/approve",
+        json={"operator_id": "op-sarah"},
+    )
+    assert approve_resp.status_code == 200, approve_resp.text
+    approved_body = approve_resp.json()
+    order_id = approved_body["order_id"]
+
+    get_resp = client.get(f"/api/v1/orders/{order_id}")
+    assert get_resp.status_code == 200, get_resp.text
+    retrieved = get_resp.json()
+
+    assert retrieved["order_id"] == approved_body["order_id"]
+    assert retrieved["order_number"] == approved_body["order_number"]
+    assert retrieved["customer_id"] == approved_body["customer_id"]
+    assert retrieved["po_number"] == approved_body["po_number"]
+    assert retrieved["grand_total"] == approved_body["grand_total"]
+    assert retrieved["approved_by"] == approved_body["approved_by"]
+    assert retrieved["is_replay_mode"] == approved_body["is_replay_mode"]
+    assert retrieved["approved_at"] == approved_body["approved_at"]
+
+    approved_at_parsed = datetime.fromisoformat(retrieved["approved_at"])
+    assert approved_at_parsed.utcoffset() is not None
+
+
+def test_verified_order_lines_match_immutable_persisted_snapshot(client, seeded_db):
+    """T035 Test 2: Returned order lines match immutable VerifiedOrderRecord snapshot without price recalculation."""
+    _require_p1_application()
+    intake = client.post("/api/v1/fixtures/fixture-clean-acme/ingest")
+    assert intake.status_code in (200, 201), intake.text
+    draft_id = intake.json()["draft_id"]
+
+    approve_resp = client.post(
+        f"/api/v1/drafts/{draft_id}/approve",
+        json={"operator_id": "op-sarah"},
+    )
+    assert approve_resp.status_code == 200, approve_resp.text
+    order_id = approve_resp.json()["order_id"]
+
+    get_resp = client.get(f"/api/v1/orders/{order_id}")
+    assert get_resp.status_code == 200, get_resp.text
+    retrieved = get_resp.json()
+
+    with _observer(seeded_db) as observer:
+        record = observer.get(VerifiedOrderRecord, order_id)
+        assert record is not None
+        snapshot_lines = json.loads(record.line_items_snapshot_json)
+
+        assert len(retrieved["line_items"]) == len(snapshot_lines)
+        for ret_line, snap_line in zip(retrieved["line_items"], snapshot_lines):
+            assert ret_line["line_number"] == snap_line["line_number"]
+            assert ret_line["sku"] == snap_line["sku"]
+            product = observer.get(CatalogProduct, snap_line["sku"])
+            assert ret_line["sku_name"] == (product.name if product else None)
+            assert ret_line["quantity"] == snap_line["quantity"]
+            assert ret_line["sku_resolution_source"] == snap_line["sku_resolution_source"]
+
+            expected_unit_price = f"{snap_line['contract_price_cents'] / 100:.2f}"
+            assert ret_line["unit_price"] == expected_unit_price
+            assert len(ret_line["unit_price"].split(".")[1]) == 2
+
+            expected_line_total = f"{snap_line['calculated_line_total_cents'] / 100:.2f}"
+            assert ret_line["line_total"] == expected_line_total
+            assert len(ret_line["line_total"].split(".")[1]) == 2
+
+
+def test_verified_order_header_provenance_matches_canonical_source(client, seeded_db):
+    """T035 Test 3: Header provenance fields are canonically grounded against PurchaseOrderDocument.raw_text."""
+    _require_p1_application()
+    intake = client.post("/api/v1/fixtures/fixture-clean-acme/ingest")
+    assert intake.status_code in (200, 201), intake.text
+    draft_id = intake.json()["draft_id"]
+
+    approve_resp = client.post(
+        f"/api/v1/drafts/{draft_id}/approve",
+        json={"operator_id": "op-sarah"},
+    )
+    assert approve_resp.status_code == 200, approve_resp.text
+    order_id = approve_resp.json()["order_id"]
+
+    get_resp = client.get(f"/api/v1/orders/{order_id}")
+    assert get_resp.status_code == 200, get_resp.text
+    retrieved = get_resp.json()
+
+    with _observer(seeded_db) as observer:
+        record = observer.get(VerifiedOrderRecord, order_id)
+        assert record is not None
+        raw_text = record.draft.document.raw_text
+
+    header_prov = retrieved["header_provenance"]
+    assert "customer_name" in header_prov
+    assert "po_number" in header_prov
+    assert header_prov["customer_name"] is not None
+    assert header_prov["po_number"] is not None
+
+    _assert_txt_grounding(raw_text, header_prov["customer_name"])
+    _assert_txt_grounding(raw_text, header_prov["po_number"])
+
+
+def test_verified_order_line_provenance_matches_canonical_source(client, seeded_db):
+    """T035 Test 4: Line item provenance fields are canonically grounded against PurchaseOrderDocument.raw_text."""
+    _require_p1_application()
+    intake = client.post("/api/v1/fixtures/fixture-clean-acme/ingest")
+    assert intake.status_code in (200, 201), intake.text
+    draft_id = intake.json()["draft_id"]
+
+    approve_resp = client.post(
+        f"/api/v1/drafts/{draft_id}/approve",
+        json={"operator_id": "op-sarah"},
+    )
+    assert approve_resp.status_code == 200, approve_resp.text
+    order_id = approve_resp.json()["order_id"]
+
+    get_resp = client.get(f"/api/v1/orders/{order_id}")
+    assert get_resp.status_code == 200, get_resp.text
+    retrieved = get_resp.json()
+
+    with _observer(seeded_db) as observer:
+        record = observer.get(VerifiedOrderRecord, order_id)
+        assert record is not None
+        raw_text = record.draft.document.raw_text
+
+    required_fields = (
+        "customer_description",
+        "extracted_quantity",
+        "extracted_unit_price",
+        "extracted_line_total",
+    )
+    assert len(retrieved["line_items"]) >= 1
+    for line in retrieved["line_items"]:
+        field_prov = line["field_provenance"]
+        for field in required_fields:
+            assert field in field_prov, f"Field {field} missing in line {line['line_number']} provenance"
+            citation = field_prov[field]
+            assert citation is not None, f"Field {field} citation is None in line {line['line_number']}"
+            _assert_txt_grounding(raw_text, citation)
+
+
+def test_verified_order_audit_trail_is_complete_and_chronological(client, seeded_db):
+    """T035 Test 5: Audit history is complete, non-decreasing, and corresponds to persisted AuditEvent records."""
+    from datetime import timezone
+
+    _require_p1_application()
+    intake = client.post("/api/v1/fixtures/fixture-clean-acme/ingest")
+    assert intake.status_code in (200, 201), intake.text
+    draft_id = intake.json()["draft_id"]
+
+    approve_resp = client.post(
+        f"/api/v1/drafts/{draft_id}/approve",
+        json={"operator_id": "op-sarah"},
+    )
+    assert approve_resp.status_code == 200, approve_resp.text
+    order_id = approve_resp.json()["order_id"]
+
+    get_resp = client.get(f"/api/v1/orders/{order_id}")
+    assert get_resp.status_code == 200, get_resp.text
+    retrieved = get_resp.json()
+
+    with _observer(seeded_db) as observer:
+        persisted_events = observer.scalars(
+            select(AuditEvent)
+            .where(AuditEvent.draft_id == draft_id)
+            .order_by(AuditEvent.timestamp.asc(), AuditEvent.id.asc())
+        ).all()
+
+    audit_trail = retrieved["audit_trail"]
+    assert len(audit_trail) == len(persisted_events)
+    assert len(audit_trail) >= 3
+
+    event_types = [e["event_type"] for e in audit_trail]
+    assert "DocumentIngested" in event_types
+    assert "AIExtractionCompleted" in event_types
+    assert "OrderApproved" in event_types
+
+    parsed_timestamps = [datetime.fromisoformat(e["timestamp"]) for e in audit_trail]
+    for i in range(len(parsed_timestamps) - 1):
+        assert parsed_timestamps[i] <= parsed_timestamps[i + 1], "Audit timestamps must be non-decreasing"
+
+    for api_event, db_event in zip(audit_trail, persisted_events):
+        assert api_event["event_type"] == db_event.event_type
+        assert api_event["actor"] == db_event.actor
+        assert api_event["details"] == json.loads(db_event.details_json)
+
+        db_ts = db_event.timestamp
+        if db_ts.tzinfo is None:
+            db_ts = db_ts.replace(tzinfo=timezone.utc)
+        api_ts = datetime.fromisoformat(api_event["timestamp"])
+        assert api_ts == db_ts
+
+
+def test_verified_order_audit_preserves_operator_reconciliation_history(client, seeded_db):
+    """T035 Test 6: Operator actions (SKUSelected, LineRemoved, OrderApproved) survive in audit; snapshot excludes removed line."""
+    from datetime import timezone
+
+    _require_p1_application()
+    intake = client.post("/api/v1/fixtures/fixture-clean-acme/ingest")
+    assert intake.status_code in (200, 201), intake.text
+    draft = intake.json()
+    draft_id = draft["draft_id"]
+    line_1 = _get_line_by_number(draft, 1)
+    line_2 = _get_line_by_number(draft, 2)
+    line_1_id = line_1["line_id"]
+    line_2_id = line_2["line_id"]
+
+    # 1. Operator selects SKU on line 1
+    patch_resp = client.patch(
+        f"/api/v1/drafts/{draft_id}/lines/{line_1_id}",
+        json={"action": "SelectSKU", "matched_sku": "SKU-WRAP-18"},
+    )
+    assert patch_resp.status_code == 200, patch_resp.text
+
+    # 2. Operator removes line 2
+    del_resp = client.delete(f"/api/v1/drafts/{draft_id}/lines/{line_2_id}")
+    assert del_resp.status_code == 200, del_resp.text
+
+    # 3. Server returns Ready for Approval
+    inspected = client.get(f"/api/v1/drafts/{draft_id}")
+    assert inspected.status_code == 200, inspected.text
+    assert inspected.json()["status"] == "Ready for Approval"
+
+    # 4. Approve
+    approve_resp = client.post(
+        f"/api/v1/drafts/{draft_id}/approve",
+        json={"operator_id": "op-sarah"},
+    )
+    assert approve_resp.status_code == 200, approve_resp.text
+    order_id = approve_resp.json()["order_id"]
+
+    # 5. GET verified order
+    get_resp = client.get(f"/api/v1/orders/{order_id}")
+    assert get_resp.status_code == 200, get_resp.text
+    retrieved = get_resp.json()
+
+    # Surviving line item in retrieval
+    assert len(retrieved["line_items"]) == 1
+    surviving_line = retrieved["line_items"][0]
+    assert surviving_line["line_number"] == 1
+    assert surviving_line["sku"] == "SKU-WRAP-18"
+    assert surviving_line["sku_resolution_source"] == "OPERATOR_SELECTED"
+
+    with _observer(seeded_db) as observer:
+        # DB observation: removed line is excluded from immutable approved snapshot
+        record = observer.get(VerifiedOrderRecord, order_id)
+        assert record is not None
+        snapshot = json.loads(record.line_items_snapshot_json)
+        assert len(snapshot) == 1
+        assert snapshot[0]["line_number"] == 1
+        assert snapshot[0]["sku"] == "SKU-WRAP-18"
+        assert snapshot[0]["sku_resolution_source"] == "OPERATOR_SELECTED"
+
+        # Removed line remains part of draft history with status="Removed"
+        db_line_2 = observer.get(DraftLineItem, line_2_id)
+        assert db_line_2 is not None
+        assert db_line_2.status == "Removed"
+
+        # Compare audit trail against all persisted events
+        persisted_events = observer.scalars(
+            select(AuditEvent)
+            .where(AuditEvent.draft_id == draft_id)
+            .order_by(AuditEvent.timestamp.asc(), AuditEvent.id.asc())
+        ).all()
+
+    audit_trail = retrieved["audit_trail"]
+    assert len(audit_trail) == len(persisted_events)
+
+    events_by_type = {e["event_type"]: e for e in audit_trail}
+    assert "DocumentIngested" in events_by_type
+    assert "AIExtractionCompleted" in events_by_type
+    assert "SKUSelected" in events_by_type
+    assert "LineRemoved" in events_by_type
+    assert "OrderApproved" in events_by_type
+
+    sku_event = events_by_type["SKUSelected"]
+    assert sku_event["actor"] == "Operator"
+    assert sku_event["details"]["line_number"] == 1
+    assert sku_event["details"]["selected_sku"] == "SKU-WRAP-18"
+    assert sku_event["details"]["resolution_source"] == "OPERATOR_SELECTED"
+
+    remove_event = events_by_type["LineRemoved"]
+    assert remove_event["actor"] == "Operator"
+    assert remove_event["details"]["line_number"] == 2
+
+    approve_event = events_by_type["OrderApproved"]
+    assert approve_event["actor"] == "Operator"
+    assert approve_event["details"]["operator_id"] == "op-sarah"
+
+    for api_event, db_event in zip(audit_trail, persisted_events):
+        assert api_event["event_type"] == db_event.event_type
+        assert api_event["actor"] == db_event.actor
+        assert api_event["details"] == json.loads(db_event.details_json)
+        db_ts = db_event.timestamp
+        if db_ts.tzinfo is None:
+            db_ts = db_ts.replace(tzinfo=timezone.utc)
+        api_ts = datetime.fromisoformat(api_event["timestamp"])
+        assert api_ts == db_ts
+
+
+def test_verified_order_retrieval_returns_404_for_unknown_order(client, seeded_db):
+    """T035 Test 7: GET /api/v1/orders/{order_id} returns 404 for unknown order ID."""
+    _require_p1_application()
+    response = client.get("/api/v1/orders/vo-order-does-not-exist")
+    assert response.status_code == 404, response.text
+    body = response.json()
+    assert body.get("message") == "Order not found"
