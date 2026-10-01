@@ -1,0 +1,12 @@
+PURCHASE ORDER
+Customer: Apex Distribution
+Account: CUST-APEX
+PO Number: PO-APEX-8820
+Date: 2026-09-29
+
+Item Description                         Qty   Unit Price   Line Total
+----------------------------------------------------------------------
+Standard pallet wrap                      10       $20.00      $200.00
+----------------------------------------------------------------------
+Subtotal: $200.00
+Total: $200.00

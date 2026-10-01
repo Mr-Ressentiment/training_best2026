@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OrderShield — Purchase Order Reconciliation</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true"></span>
+        <div>
+          <h1 class="brand__name">OrderShield</h1>
+          <p class="brand__tagline">Purchase Order Reconciliation</p>
+        </div>
+      </div>
+      <p id="activity" class="activity" role="status" aria-live="polite" hidden></p>
+    </div>
+  </header>
+
+  <!-- Replay disclosure: shown whenever the rendered draft has is_replay_mode === true. No close control by design. -->
+  <div id="replay-banner" class="banner-nonlive" role="alert" hidden>
+    ⚠️ DEMO / REPLAY MODE (NON-LIVE FIXTURE DATA)
+  </div>
+
+  <main class="workspace">
+    <section id="diagnostics" class="diagnostic" role="alert" aria-live="assertive" hidden>
+      <div class="diagnostic__body">
+        <p class="diagnostic__title">
+          <span id="diagnostic-context"></span>
+          <span id="diagnostic-status" class="diagnostic__status"></span>
+          <code id="diagnostic-error" class="diagnostic__error"></code>
+        </p>
+        <p id="diagnostic-message" class="diagnostic__message"></p>
+      </div>
+      <button id="diagnostic-dismiss" type="button" class="btn btn--quiet">Dismiss</button>
+    </section>
+
+    <section class="intake" aria-label="Document intake">
+      <article class="panel panel--live">
+        <header class="panel__head">
+          <span class="mode-tag mode-tag--live">LIVE</span>
+          <h2>Live document intake</h2>
+        </header>
+        <p class="panel__hint">Upload a customer purchase order. It is sent to the configured live AI provider — once, with no fallback.</p>
+        <form id="live-form" novalidate>
+          <label id="dropzone" class="dropzone" for="live-file">
+            <input id="live-file" name="file" type="file" accept=".txt,.pdf,text/plain,application/pdf" class="dropzone__input">
+            <span class="dropzone__title">Drop a <strong>.txt</strong> or <strong>.pdf</strong> purchase order here</span>
+            <span class="dropzone__sub">or click to choose a file</span>
+            <span id="live-file-name" class="dropzone__file" hidden></span>
+          </label>
+          <button id="live-submit" type="submit" class="btn btn--primary" disabled>Ingest live document</button>
+        </form>
+      </article>
+
+      <article class="panel panel--replay">
+        <header class="panel__head">
+          <span class="mode-tag mode-tag--replay">REPLAY</span>
+          <h2>Demo / replay fixtures</h2>
+        </header>
+        <p class="panel__hint">Ingest a committed, pre-recorded fixture. This is non-live data and is always labelled as such.</p>
+        <form id="fixture-form" novalidate>
+          <label class="field" for="fixture-select">
+            <span class="field__label">Registered fixture</span>
+            <select id="fixture-select" disabled>
+              <option value="">Loading fixtures…</option>
+            </select>
+          </label>
+          <p id="fixture-description" class="fixture-description"></p>
+          <button id="fixture-submit" type="submit" class="btn btn--replay" disabled>Ingest selected fixture (replay)</button>
+        </form>
+      </article>
+    </section>
+
+    <section id="draft-empty" class="empty">
+      <p>No draft loaded yet. Upload a live document or ingest a replay fixture to begin reconciliation.</p>
+    </section>
+
+    <section id="draft-section" class="draft" aria-label="Order draft" hidden>
+      <div class="section-head">
+        <h2>Order draft</h2>
+        <code id="draft-id" class="mono-id"></code>
+      </div>
+
+      <dl class="summary">
+        <div class="summary__card">
+          <dt>Customer</dt>
+          <dd id="summary-customer">—</dd>
+          <dd id="summary-customer-id" class="summary__sub"></dd>
+          <dd><button id="summary-customer-source" type="button" class="btn btn--small btn--outline source-evidence-control" aria-label="Source evidence for Customer">Source</button></dd>
+        </div>
+        <div class="summary__card">
+          <dt>PO number</dt>
+          <dd id="summary-po">—</dd>
+          <dd><button id="summary-po-source" type="button" class="btn btn--small btn--outline source-evidence-control" aria-label="Source evidence for PO number">Source</button></dd>
+        </div>
+        <div class="summary__card">
+          <dt>Draft status</dt>
+          <dd id="summary-status">—</dd>
+        </div>
+        <div class="summary__card">
+          <dt>Mode</dt>
+          <dd id="summary-mode">—</dd>
+        </div>
+        <div class="summary__card summary__card--total">
+          <dt>Subtotal</dt>
+          <dd id="summary-subtotal" class="num">—</dd>
+        </div>
+      </dl>
+
+      <div class="section-head">
+        <h3>Line-item reconciliation</h3>
+        <span id="line-count" class="muted"></span>
+      </div>
+      <div class="table-wrap">
+        <table class="lines">
+          <thead>
+            <tr>
+              <th scope="col" class="num">#</th>
+              <th scope="col">Customer description</th>
+              <th scope="col" class="num">Qty</th>
+              <th scope="col">Matched SKU</th>
+              <th scope="col" class="num">Extracted unit price</th>
+              <th scope="col" class="num">Customer line total</th>
+              <th scope="col" class="num">Contract price</th>
+              <th scope="col" class="num">Line total</th>
+              <th scope="col">Resolution</th>
+            </tr>
+          </thead>
+          <tbody id="line-rows"></tbody>
+        </table>
+      </div>
+
+      <form id="approve-form" class="approval" novalidate>
+        <label class="field" for="operator-id">
+          <span class="field__label">Operator ID</span>
+          <input id="operator-id" type="text" autocomplete="off" placeholder="e.g. operator-01" maxlength="120">
+        </label>
+        <button id="approve-submit" type="submit" class="btn btn--primary btn--approve" disabled>Approve Order</button>
+        <p id="approval-hint" class="approval__hint"></p>
+      </form>
+    </section>
+
+    <section id="result-section" class="result" aria-label="Verified order" aria-live="polite" hidden>
+      <div class="section-head">
+        <h2>✓ Verified order confirmed</h2>
+        <span id="result-mode"></span>
+      </div>
+      <dl class="result__grid">
+        <div><dt>Order number</dt><dd id="result-order-number" class="result__headline">—</dd></div>
+        <div><dt>Grand total</dt><dd id="result-grand-total" class="result__headline num">—</dd></div>
+        <div><dt>PO number</dt><dd id="result-po">—</dd></div>
+        <div><dt>Customer ID</dt><dd id="result-customer-id">—</dd></div>
+        <div><dt>Approved by</dt><dd id="result-approved-by">—</dd></div>
+        <div><dt>Approved at</dt><dd id="result-approved-at">—</dd></div>
+        <div><dt>Line items</dt><dd id="result-lines">—</dd></div>
+        <div><dt>Order ID</dt><dd id="result-order-id" class="mono-id">—</dd></div>
+      </dl>
+
+      <!-- Audit trail (T038): loaded on request from GET /api/v1/orders/{order_id}; rendered in server order. -->
+      <div class="approval">
+        <button id="audit-load" type="button" class="btn btn--outline">View audit trail</button>
+        <p id="audit-hint" class="approval__hint"></p>
+      </div>
+      <section id="audit-section" aria-label="Audit trail" hidden>
+        <hr>
+        <div class="section-head">
+          <h3>Audit trail</h3>
+          <span id="audit-count" class="muted"></span>
+        </div>
+        <p class="panel__hint">Committed lifecycle events in chronological order, exactly as returned by the server.</p>
+        <ol id="audit-events" class="flags"></ol>
+      </section>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>OrderShield P1 workspace · served locally · no external assets</p>
+  </footer>
+
+  <script src="js/components/provenance_drawer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

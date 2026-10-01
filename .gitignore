@@ -16,3 +16,26 @@
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Python virtual environments and bytecode
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Test and static-analysis caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Coverage artifacts
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Local runtime database and SQLite auxiliary files
+/ordershield.db
+/ordershield.db-journal
+/ordershield.db-wal
+/ordershield.db-shm
