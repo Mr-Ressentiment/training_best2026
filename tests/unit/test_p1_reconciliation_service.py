@@ -112,12 +112,19 @@ def test_no_eligible_tier_has_no_base_or_lowest_tier_fallback(db_session, clean_
     assert clean_draft.line_items[0].calculated_line_total_cents == 0
 
 
-def test_po_unit_price_mismatch_blocks_readiness_without_p2_flags(db_session, clean_draft):
+def test_po_unit_price_mismatch_creates_p2_flag_and_blocks_readiness(db_session, clean_draft):
     clean_draft.line_items[0].extracted_unit_price_cents = 2499
     assert evaluate_clean_draft(db_session, clean_draft).status == "Needs Review"
     assert clean_draft.line_items[0].contract_price_cents == 2500
     assert clean_draft.line_items[0].calculated_line_total_cents == 25000
-    assert db_session.scalars(select(DiscrepancyFlag)).all() == []
+    price_flags = [
+        flag for flag in clean_draft.discrepancy_flags
+        if flag.discrepancy_type == "PriceMismatch"
+    ]
+    assert len(price_flags) == 1
+    assert price_flags[0].line_item is clean_draft.line_items[0]
+    assert price_flags[0].severity == "Blocking"
+    assert price_flags[0].resolution_state == "Unresolved"
 
 
 def test_multiple_eligible_contracts_fail_closed_without_selecting_one(db_session, clean_draft):

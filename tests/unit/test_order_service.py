@@ -152,8 +152,13 @@ def test_intake_preserves_canonical_crlf_text_without_renormalizing(service_db, 
     assert live_provider.last_call_kwargs["raw_text"] == canonical
 
 
-@pytest.mark.parametrize("fixture_id", ["fixture-ambiguous-apex", "fixture-discrepancy-apex"])
-def test_nonclean_fixture_keeps_candidates_as_valid_json_without_p2_flags(service_db, fixtures_dir, app_fixtures_dir, fixture_id):
+@pytest.mark.parametrize(("fixture_id", "expected_flags"), [
+    ("fixture-ambiguous-apex", {(1, "CatalogMatchingMismatch")}),
+    ("fixture-discrepancy-apex", {(1, "PriceMismatch"), (2, "CatalogMatchingMismatch")}),
+])
+def test_nonclean_fixture_preserves_candidates_and_creates_expected_p2_flags(
+    service_db, fixtures_dir, app_fixtures_dir, fixture_id, expected_flags,
+):
     filename = "ambiguous_apex.json" if "ambiguous" in fixture_id else "discrepancy_apex.json"
     dataset = json.loads((app_fixtures_dir / filename).read_text(encoding="utf-8"))
     parsed = parse_document(fixtures_dir / dataset["document_filename"])
@@ -165,7 +170,17 @@ def test_nonclean_fixture_keeps_candidates_as_valid_json_without_p2_flags(servic
             original = dataset["extraction"]["line_items"][line.line_number - 1]
             assert json.loads(line.candidate_skus_json) == original["candidate_skus"]
             assert line.matching_rationale == original["matching_rationale"]
-        assert _rows(observer, DiscrepancyFlag) == []
+            assert line.matched_sku == original["matched_sku"]
+        flags = _rows(observer, DiscrepancyFlag)
+        line_numbers = {line.id: line.line_number for line in draft.line_items}
+        actual_flags = {
+            (line_numbers[flag.line_item_id] if flag.line_item_id is not None else None, flag.discrepancy_type)
+            for flag in flags
+        }
+        assert actual_flags == expected_flags
+        assert len(flags) == len(expected_flags)
+        assert all(flag.severity == "Blocking" for flag in flags)
+        assert all(flag.resolution_state == "Unresolved" for flag in flags)
 
 
 @pytest.mark.parametrize("error_type", [AIProviderUnavailableError, AIOutputValidationError])
