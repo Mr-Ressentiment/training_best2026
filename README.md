@@ -104,11 +104,13 @@ Activate the virtual environment:
 source .venv/bin/activate
 ```
 
-Install application dependencies:
+Install application dependencies using the reproducible dependency lock:
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.lock
 ```
+
+*(Note: `requirements.txt` remains the direct dependency manifest; `requirements.lock` provides exact pinned versions for deterministic setup).*
 
 ---
 
