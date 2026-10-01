@@ -6,14 +6,26 @@ Canonical project specifications and task definitions define `ArithmeticMismatch
 
 1. **Line-level arithmetic**:
    ```text
-   stated line total != extracted quantity × stated unit price
+   customer-stated line total != extracted quantity × customer-stated unit price
    ```
 2. **Order-level arithmetic**:
    ```text
-   stated order total != sum of stated line totals
+   customer-stated order total != sum of customer-stated line totals
    ```
 
 *(References: `specs/001-ordershield-po-reconciliation/spec.md` FR-010, `data-model.md` §2.7, `tasks.md` T026).*
+
+### Separation of Discrepancy Categories
+Discrepancy categories must remain strictly independent:
+- **`PriceMismatch`**: Customer-stated unit price != authoritative contract-tier unit price.
+- **Line `ArithmeticMismatch`**: Customer-stated line total != quantity × customer-stated unit price.
+- **Order `ArithmeticMismatch`**: Customer-stated order total != sum of customer-stated line totals.
+
+For example, if an order has quantity 10, customer unit price $24.00, customer stated line total $240.00, customer stated order total $240.00, but contract-tier price is $25.00:
+- `PriceMismatch` = YES (stated $24.00 vs contract $25.00)
+- `ArithmeticMismatch` = NO (10 × $24.00 = $240.00, and stated order total $240.00 equals stated line sum $240.00)
+
+The system MUST NOT evaluate order-level arithmetic against contract-priced totals (`calculated_line_total_cents` = quantity × contract_price_cents = $250.00), as doing so would incorrectly conflate pricing with customer arithmetic.
 
 However, the current extraction, domain, and database schemas provide **no source-backed stated order total field**:
 
@@ -77,9 +89,10 @@ Follow-up contract work prior to T028 will introduce a source-backed optional st
 **Invariants under Option A**:
 - AI may extract the document's stated total verbatim from raw text;
 - AI MUST NOT calculate or verify whether the stated total is mathematically correct;
-- Deterministic reconciliation engine compares stated total against the calculated line sum;
+- Deterministic reconciliation engine compares the source-backed stated order total against the sum of source-backed stated line totals. This arithmetic check is independent from contract pricing. `calculated_line_total_cents` (quantity × contract_price_cents) MUST NOT be used as the expected value for order-level `ArithmeticMismatch`, because doing so would conflate `PriceMismatch` with `ArithmeticMismatch`;
 - Provenance must ground the extracted stated total against canonical `PurchaseOrderDocument.raw_text`;
-- Absence of a stated total in customer documents must be handled cleanly (optional field; no false discrepancies if the customer document omitted a grand total).
+- Absence of a stated total in customer documents must be handled cleanly (optional field; no false discrepancies if the customer document omitted a grand total);
+- If the document contains a stated order total but one or more applicable source-stated line totals are unavailable, the system MUST NOT invent missing line totals and MUST NOT raise an order-level `ArithmeticMismatch` from incomplete arithmetic evidence. (Incomplete source arithmetic remains non-clean / requires the applicable review semantics without inventing an `ArithmeticMismatch` flag).
 
 ### Option B — Narrow MVP Arithmetic Scope
 
@@ -101,8 +114,8 @@ stated line total != quantity × stated unit price
 
 **Option A** is the recommended direction because:
 
-1. **Natural Deterministic Gate**: Comparing customer-stated PO grand total against line item sum is a classic commercial discrepancy in wholesale operations and order entry.
-2. **Demo Value**: Strengthens the OrderShield demo by catching documents where customer line items do not sum to the customer's own PO total.
+1. **Natural Deterministic Gate**: Comparing customer-stated PO grand total against the sum of customer-stated line totals is a classic commercial discrepancy in wholesale operations and order entry.
+2. **Demo Value**: Strengthens the OrderShield demo by catching documents where customer-stated line totals do not sum to the customer's stated PO total.
 3. **Bounded Complexity**: The change is localized to schema/payload extension, text grounding, and deterministic integer comparison without requiring architectural redesign.
 
 This recommendation is submitted for project lead decision. Neither option is marked accepted below.
