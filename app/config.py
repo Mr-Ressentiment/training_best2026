@@ -42,7 +42,6 @@ class Settings:
         llm_api_key: Optional[str] = None,
         database_url: Optional[str] = None,
         live_inference_timeout: Optional[float] = None,
-        immediate_failure_timeout: Optional[float] = None,
     ) -> None:
         self.llm_provider: str = (
             llm_provider
@@ -64,11 +63,6 @@ class Settings:
             if live_inference_timeout is not None
             else _get_float_env("LIVE_INFERENCE_TIMEOUT", 15.0)
         )
-        self.immediate_failure_timeout: float = (
-            immediate_failure_timeout
-            if immediate_failure_timeout is not None
-            else _get_float_env("IMMEDIATE_FAILURE_TIMEOUT", 5.0)
-        )
 
     @property
     def LLM_PROVIDER(self) -> str:
@@ -85,10 +79,6 @@ class Settings:
     @property
     def LIVE_INFERENCE_TIMEOUT(self) -> float:
         return self.live_inference_timeout
-
-    @property
-    def IMMEDIATE_FAILURE_TIMEOUT(self) -> float:
-        return self.immediate_failure_timeout
 
 
 # Global singleton settings instance

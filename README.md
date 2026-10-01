@@ -129,7 +129,6 @@ LLM_API_KEY=""
 QWEN_BASE_URL=""
 DATABASE_URL="sqlite:///ordershield.db"
 LIVE_INFERENCE_TIMEOUT=15.0
-IMMEDIATE_FAILURE_TIMEOUT=5.0
 ```
 
 ### Configuration Variables
@@ -141,7 +140,9 @@ IMMEDIATE_FAILURE_TIMEOUT=5.0
 | `QWEN_BASE_URL` | `""` | **Required when `LLM_PROVIDER="qwen"`.** Workspace-specific approved Singapore compatible-mode base URL of the form `https://<workspace-host>.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`. `LLM_API_KEY` alone is not sufficient for Qwen. |
 | `DATABASE_URL` | `"sqlite:///ordershield.db"` | SQLAlchemy database connection URL. |
 | `LIVE_INFERENCE_TIMEOUT` | `15.0` | Maximum client timeout in seconds for live AI inference before aborting. |
-| `IMMEDIATE_FAILURE_TIMEOUT`| `5.0` | Reference/configuration value for the immediate-failure target used by the accepted requirements/tests; LiveAIProvider does not currently enforce it as a separate timer. |
+
+> [!NOTE]
+> Per ADR 0001 and SC-006, immediately detectable failures (unreadable documents, connection errors, authentication rejections, quota limits) surface explicit diagnostics with a target of ≤5 seconds from request intake without requiring a separate configurable client timer. Stalled or slow inferences are aborted at the bounded client deadline (`LIVE_INFERENCE_TIMEOUT`, capped at ≤15.0 s).
 
 ### Setting Environment Variables for Live Intake
 
