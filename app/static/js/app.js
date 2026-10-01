@@ -1,4 +1,4 @@
-/* OrderShield P1/P2 workspace logic.
+/* OrderShield P1/P2/P3 workspace logic.
  *
  * The backend is authoritative for status, pricing, totals, readiness, SKU
  * resolution, discrepancy resolution, rejection and approval outcome. This
@@ -11,6 +11,9 @@
  *
  * P2 operator mutations (SelectSKU, line removal, rejection) each replace
  * state.draft with the server response and rerender; nothing is patched locally.
+ *
+ * The P3 audit trail is read-only inspection of GET /api/v1/orders/{order_id}:
+ * events are rendered in the order returned and never built or sorted here.
  */
 (function () {
   "use strict";
@@ -70,6 +73,7 @@
   var state = {
     draft: null,           // current draft (its draft_id and is_replay_mode are the current id / mode)
     approvedOrder: null,   // verified-order response for the current draft
+    audit: null,           // null | {orderId, events: null | [], failed} for the current verified order only
     fixtures: [],
     selectedFixtureId: "",
     liveFile: null,
@@ -125,7 +129,12 @@
     resultApprovedBy: $("result-approved-by"),
     resultApprovedAt: $("result-approved-at"),
     resultLines: $("result-lines"),
-    resultOrderId: $("result-order-id")
+    resultOrderId: $("result-order-id"),
+    auditLoad: $("audit-load"),
+    auditHint: $("audit-hint"),
+    auditSection: $("audit-section"),
+    auditCount: $("audit-count"),
+    auditEvents: $("audit-events")
   };
 
   // ---------- Render helpers ----------
@@ -381,6 +390,7 @@
   function renderVerifiedOrder() {
     var order = state.approvedOrder;
     dom.resultSection.hidden = order === null;
+    renderAudit();
     if (order === null) {
       return;
     }
@@ -393,6 +403,126 @@
     setText(dom.resultApprovedAt, order.approved_at);
     setText(dom.resultLines, order.line_items_count);
     setText(dom.resultOrderId, order.order_id);
+  }
+
+  // ---------- Audit trail (read-only inspection) ----------
+
+  /** Untrusted server value as display text; nested data is shown as JSON text, never dropped. */
+  function auditText(value) {
+    if (isMissing(value)) {
+      return PLACEHOLDER;
+    }
+    if (typeof value === "object") {
+      try {
+        return JSON.stringify(value);
+      } catch (jsonError) {
+        return String(value);
+      }
+    }
+    return String(value);
+  }
+
+  function auditRow(list, label, value) {
+    list.appendChild(el("dt", "", label));
+    list.appendChild(el("dd", "", auditText(value)));
+  }
+
+  /** One server-returned event, known or not, rendered generically from the values received. */
+  function renderAuditEvent(event, index) {
+    var item = el("li", "flag");
+    var head = el("p", "flag__head");
+    head.appendChild(el("span", "muted", (index + 1) + "."));
+    if (event === null || typeof event !== "object" || Array.isArray(event)) {
+      head.appendChild(el("span", "flag__type", auditText(event)));
+      item.appendChild(head);
+      return item;
+    }
+    head.appendChild(el("span", "flag__type", auditText(event.event_type)));
+    item.appendChild(head);
+
+    var values = el("dl", "flag__values");
+    auditRow(values, "Actor", event.actor);
+    auditRow(values, "Timestamp", event.timestamp);
+    var details = event.details;
+    if (details !== null && typeof details === "object" && !Array.isArray(details)) {
+      // Detail keys are server data: every key is shown as returned, none is interpreted.
+      Object.keys(details).forEach(function (key) {
+        auditRow(values, "Details · " + key, details[key]);
+      });
+      if (Object.keys(details).length === 0) {
+        auditRow(values, "Details", "none");
+      }
+    } else {
+      auditRow(values, "Details", details);
+    }
+    // Fields beyond the accepted four are still displayed rather than hidden.
+    Object.keys(event).forEach(function (key) {
+      if (["event_type", "actor", "timestamp", "details"].indexOf(key) === -1) {
+        auditRow(values, key, event[key]);
+      }
+    });
+    item.appendChild(values);
+    return item;
+  }
+
+  function renderAudit() {
+    var order = state.approvedOrder;
+    var available = order !== null && !isMissing(order.order_id);
+    // Only audit data fetched for the verified order on screen may ever be shown.
+    var audit = available && state.audit !== null && state.audit.orderId === order.order_id ? state.audit : null;
+    var events = audit !== null ? audit.events : null;
+
+    dom.auditLoad.hidden = !available;
+    dom.auditLoad.textContent = events === null ? "View audit trail" : "Reload audit trail";
+    dom.auditHint.classList.toggle("is-warning", audit !== null && audit.failed);
+    if (audit !== null && audit.failed) {
+      dom.auditHint.textContent = "The audit trail could not be loaded; no audit events are shown. " +
+        "The verified order above is unaffected. Use the button to try again.";
+    } else if (events !== null) {
+      dom.auditHint.textContent = "Audit trail loaded from the server for this verified order.";
+    } else {
+      dom.auditHint.textContent = available ? "Loads the committed audit trail of this verified order from the server." : "";
+    }
+
+    dom.auditSection.hidden = events === null;
+    if (events === null) {
+      dom.auditEvents.replaceChildren();
+      dom.auditCount.textContent = "";
+      return;
+    }
+    dom.auditCount.textContent = events.length + (events.length === 1 ? " event" : " events") + " · oldest first";
+    if (events.length === 0) {
+      dom.auditEvents.replaceChildren(el("li", "muted", "The server returned no audit events for this order."));
+    } else {
+      // Rendered in exactly the order returned; never sorted, merged or filtered here.
+      dom.auditEvents.replaceChildren.apply(dom.auditEvents, events.map(renderAuditEvent));
+    }
+  }
+
+  /** Explicit operator action only: one GET, no retry, no fallback. Never touches draft or approval state. */
+  function loadAuditTrail() {
+    var order = state.approvedOrder;
+    if (order === null || isMissing(order.order_id) || state.loading !== null) {
+      return;
+    }
+    var audit = { orderId: order.order_id, events: null, failed: false };
+    state.audit = audit;
+    renderAudit();
+    return runAction("Loading audit trail…", async function () {
+      try {
+        var record = await requestJson("Audit trail could not be loaded", "/orders/" + encodeURIComponent(order.order_id));
+        if (!Array.isArray(record.audit_trail)) {
+          throw new ApiError("Audit trail could not be loaded", null, "InvalidResponse",
+            "The server response did not contain an audit trail list.");
+        }
+        audit.events = record.audit_trail;
+      } catch (error) {
+        audit.failed = true;
+        throw error;
+      } finally {
+        renderAudit();
+      }
+    });
   }
 
   function renderError() {
@@ -436,6 +566,7 @@
     });
     rejectButton.hidden = !canMutateDraft();
     rejectButton.disabled = busy;
+    dom.auditLoad.disabled = busy;
     if (rejectDialog !== null) {
       [rejectDialog.operatorId, rejectDialog.reason, rejectDialog.submit, rejectDialog.cancel].forEach(function (control) {
         control.disabled = busy;
@@ -500,6 +631,7 @@
   function showNewDraft(draft) {
     state.draft = draft;
     state.approvedOrder = null;
+    state.audit = null;
     dom.operatorId.value = "";
     renderDraft();
     renderVerifiedOrder();
@@ -638,6 +770,7 @@
     }
     return runAction("Approving order…", async function () {
       // Nothing is shown as approved until the backend confirms it.
+      state.audit = null;
       state.approvedOrder = await requestJson(
         "Approval failed",
         "/drafts/" + encodeURIComponent(draft.draft_id) + "/approve",
@@ -1032,6 +1165,8 @@
   });
 
   dom.diagnosticDismiss.addEventListener("click", clearError);
+
+  dom.auditLoad.addEventListener("click", loadAuditTrail);
 
   // ---------- Initialization ----------
 
