@@ -227,3 +227,50 @@ def approve_order(db: Session, *, draft_id: str, operator_id: str) -> VerifiedOr
     except Exception:
         db.rollback()
         raise
+
+
+def reject_order(
+    db: Session,
+    *,
+    draft_id: str,
+    operator_id: str,
+    reason: str,
+) -> OrderDraft:
+    """Atomically transition a non-terminal order draft to Rejected.
+
+    Persists the mandatory rejection reason and records a single DraftRejected
+    audit event. Does not create a VerifiedOrderRecord or modify discrepancy
+    flags. Owned by the supplied Session's transaction.
+    """
+    try:
+        draft = db.scalar(
+            select(OrderDraft).where(OrderDraft.id == draft_id).execution_options(
+                populate_existing=True,
+            )
+        )
+        if draft is None:
+            raise DraftNotFoundError("Draft does not exist")
+        if draft.status in ("Approved", "Rejected"):
+            raise TerminalDraftStateError(f"Cannot reject a terminal {draft.status} draft")
+        if not isinstance(operator_id, str) or not operator_id.strip():
+            raise ValueError("Rejection requires a nonblank operator identity")
+        if not isinstance(reason, str) or not reason.strip():
+            raise ValueError("Rejection requires a nonblank reason")
+
+        draft.status = "Rejected"
+        draft.rejection_reason = reason
+        db.add(
+            AuditEvent(
+                draft=draft,
+                event_type="DraftRejected",
+                actor="Operator",
+                details_json=_json({"operator_id": operator_id, "reason": reason}),
+                timestamp=datetime.now(timezone.utc),
+            )
+        )
+        db.flush()
+        db.commit()
+        return draft
+    except Exception:
+        db.rollback()
+        raise
