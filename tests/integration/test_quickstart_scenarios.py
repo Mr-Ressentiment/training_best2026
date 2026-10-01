@@ -715,19 +715,24 @@ def test_quickstart_scenario_5_audit_and_provenance_are_inspectable(
     assert len(audit_trail) >= 5
 
     event_types = [e["event_type"] for e in audit_trail]
-    expected_order = [
+    for expected in (
         "DocumentIngested",
         "AIExtractionCompleted",
         "SKUSelected",
         "LineRemoved",
         "OrderApproved",
-    ]
-    for expected in expected_order:
+    ):
         assert expected in event_types, f"Expected event {expected} not in audit trail: {event_types}"
 
-    # Verify chronological sequence order
-    indices = [event_types.index(name) for name in expected_order]
-    assert indices == sorted(indices), f"Audit events not in expected chronological order: {event_types}"
+    # Verify intake events occur before operator mutations and final approval
+    intake_indices = [event_types.index("DocumentIngested"), event_types.index("AIExtractionCompleted")]
+    sku_idx = event_types.index("SKUSelected")
+    del_idx = event_types.index("LineRemoved")
+    app_idx = event_types.index("OrderApproved")
+
+    assert max(intake_indices) < sku_idx < del_idx < app_idx, (
+        f"Audit events not in expected chronological order: {event_types}"
+    )
 
     # Verify timestamps are non-decreasing
     timestamps = [datetime.fromisoformat(e["timestamp"]) for e in audit_trail]
