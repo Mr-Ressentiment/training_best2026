@@ -2,11 +2,14 @@
 
 from copy import deepcopy
 from datetime import datetime, timezone
+import io
 import json
 from unittest.mock import Mock
 
 import httpx
 import pytest
+from pypdf import PdfWriter
+from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject
 from sqlalchemy import event, select
 from sqlalchemy.orm import Session
 
@@ -17,7 +20,10 @@ from app.models.entities import (
     OrderDraft, PurchaseOrderDocument, VerifiedOrderRecord,
 )
 from app.models.schemas import AIExtractionPayload
-from app.services.ai_provider import AIOutputValidationError, AIProviderUnavailableError, FixtureAIProvider, LiveAIProvider
+from app.services.ai_provider import (
+    AIOutputValidationError, AIProviderConfigurationError, AIProviderUnavailableError,
+    FixtureAIProvider, LiveAIProvider,
+)
 from app.services.document_parser import parse_document
 from app.services import order_service
 from app.services.order_service import (
@@ -430,3 +436,331 @@ def test_malformed_provider_envelope_is_validation_failure_without_persistence(s
         with pytest.raises(AIOutputValidationError):
             ingest_order(service_db, document=document, provider=provider)
     _assert_no_intake_state(service_db)
+
+
+def test_fix1_qwen_owned_client_requires_endpoint_before_any_request(monkeypatch):
+    monkeypatch.delenv("QWEN_BASE_URL", raising=False)
+    request_spy = Mock(side_effect=AssertionError("Configuration failure must precede HTTP"))
+    monkeypatch.setattr(httpx.HTTPTransport, "handle_request", request_spy)
+    with pytest.raises(AIProviderConfigurationError, match="explicit workspace-specific") as captured:
+        LiveAIProvider(settings=Settings(llm_provider="qwen", llm_api_key=""))
+    assert isinstance(captured.value, AIProviderUnavailableError)
+    request_spy.assert_not_called()
+
+
+@pytest.mark.parametrize("source", ["argument", "environment"])
+@pytest.mark.parametrize("base", [
+    "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+    "http://training.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+    "https://training.ap-southeast-1.maas.aliyuncs.com:444/compatible-mode/v1",
+    "https://training.ap-southeast-1.maas.aliyuncs.com/wrong-path",
+    "https://training.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1?value=unit-test-only",
+    "https://training.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1#unit-test-only",
+    "https://unit-test-only:unit-test-only@training.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+    "https://training.eu-central-1.maas.aliyuncs.com/compatible-mode/v1",
+    "",
+])
+def test_fix1_qwen_invalid_runtime_base_is_rejected_without_alternative_attempt(monkeypatch, source, base):
+    monkeypatch.delenv("QWEN_BASE_URL", raising=False)
+    if source == "environment":
+        monkeypatch.setenv("QWEN_BASE_URL", base)
+    request_spy = Mock(side_effect=AssertionError("No endpoint probing or fallback permitted"))
+    monkeypatch.setattr(httpx.HTTPTransport, "handle_request", request_spy)
+    with pytest.raises(AIProviderConfigurationError) as captured:
+        LiveAIProvider(
+            settings=Settings(llm_provider="qwen", llm_api_key=""),
+            qwen_base_url=base if source == "argument" else None,
+        )
+    if base:
+        assert base not in str(captured.value)
+    assert "unit-test-only" not in str(captured.value)
+    request_spy.assert_not_called()
+
+
+@pytest.mark.parametrize("source,base", [
+    ("argument", "https://training.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"),
+    ("environment", "https://training.ap-southeast-1.maas.aliyuncs.com:443/compatible-mode/v1"),
+])
+def test_fix1_qwen_owned_client_uses_explicit_workspace_once(monkeypatch, clean_acme_fixture, source, base):
+    monkeypatch.delenv("QWEN_BASE_URL", raising=False)
+    if source == "environment":
+        monkeypatch.setenv("QWEN_BASE_URL", base)
+    calls = []
+
+    def controlled_transport(transport, request):
+        calls.append(request)
+        assert request.url.host == "training.ap-southeast-1.maas.aliyuncs.com"
+        assert request.url.path == "/compatible-mode/v1/chat/completions"
+        assert json.loads(request.content)["model"] == "qwen3.8-flash"
+        return httpx.Response(200, json={"choices": [{"message": {
+            "content": json.dumps(clean_acme_fixture["extraction"]),
+        }}]})
+
+    monkeypatch.setattr(httpx.HTTPTransport, "handle_request", controlled_transport)
+    provider = LiveAIProvider(
+        settings=Settings(llm_provider="qwen", llm_api_key=""),
+        qwen_base_url=base if source == "argument" else None,
+    )
+    assert provider.extract(raw_text="controlled source", catalog=[]) == AIExtractionPayload.model_validate(
+        clean_acme_fixture["extraction"],
+    )
+    assert len(calls) == 1
+
+
+def test_fix1_qwen_injected_mock_supports_frozen_seam_without_endpoint(monkeypatch, clean_acme_fixture):
+    monkeypatch.delenv("QWEN_BASE_URL", raising=False)
+    calls = []
+
+    def controlled_transport(request):
+        calls.append(request)
+        assert request.url.host == "test.ap-southeast-1.maas.aliyuncs.com"
+        assert request.url.path == "/compatible-mode/v1/chat/completions"
+        return httpx.Response(200, json={"choices": [{"message": {
+            "content": json.dumps(clean_acme_fixture["extraction"]),
+        }}]})
+
+    with httpx.Client(transport=httpx.MockTransport(controlled_transport), trust_env=False) as client:
+        provider = LiveAIProvider(settings=Settings(llm_provider="qwen", llm_api_key=""), client=client)
+        provider.extract(raw_text="controlled source", catalog=[])
+    assert len(calls) == 1
+
+
+@pytest.mark.parametrize("mounted", [False, True])
+def test_fix1_qwen_dummy_endpoint_cannot_use_injected_real_transport(monkeypatch, mounted):
+    monkeypatch.delenv("QWEN_BASE_URL", raising=False)
+    request_spy = Mock(side_effect=AssertionError("Dummy endpoint must never reach a real transport"))
+    monkeypatch.setattr(httpx.HTTPTransport, "handle_request", request_spy)
+    with httpx.Client(
+        transport=httpx.MockTransport(lambda request: pytest.fail("No mock request expected")) if mounted else None,
+        mounts={"all://test.ap-southeast-1.maas.aliyuncs.com": httpx.HTTPTransport()} if mounted else None,
+        trust_env=False,
+    ) as client:
+        with pytest.raises(AIProviderConfigurationError):
+            LiveAIProvider(settings=Settings(llm_provider="qwen", llm_api_key=""), client=client)
+    request_spy.assert_not_called()
+
+
+def test_fix1_qwen_dummy_endpoint_rechecks_transport_before_send(monkeypatch):
+    monkeypatch.delenv("QWEN_BASE_URL", raising=False)
+    request_spy = Mock(side_effect=AssertionError("Changed transport must be rejected before sending"))
+    monkeypatch.setattr(httpx.HTTPTransport, "handle_request", request_spy)
+    with httpx.Client(transport=httpx.MockTransport(lambda request: pytest.fail("No request expected"))) as client:
+        provider = LiveAIProvider(settings=Settings(llm_provider="qwen", llm_api_key=""), client=client)
+        client._transport = httpx.HTTPTransport()
+        with pytest.raises(AIProviderConfigurationError):
+            provider.extract(raw_text="controlled source", catalog=[])
+    request_spy.assert_not_called()
+
+
+def test_fix1_qwen_owned_provider_failure_has_no_endpoint_retry_or_substitution(monkeypatch):
+    monkeypatch.delenv("QWEN_BASE_URL", raising=False)
+    calls = []
+
+    def controlled_failure(transport, request):
+        calls.append(request)
+        return httpx.Response(503)
+
+    monkeypatch.setattr(httpx.HTTPTransport, "handle_request", controlled_failure)
+    fixture_spy = Mock(side_effect=AssertionError("No replay substitution permitted"))
+    monkeypatch.setattr(FixtureAIProvider, "extract", fixture_spy)
+    provider = LiveAIProvider(
+        settings=Settings(llm_provider="qwen", llm_api_key=""),
+        qwen_base_url="https://training.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+    )
+    with pytest.raises(AIProviderUnavailableError, match="HTTP 503"):
+        provider.extract(raw_text="controlled source", catalog=[])
+    assert len(calls) == 1
+    assert calls[0].url.host == "training.ap-southeast-1.maas.aliyuncs.com"
+    fixture_spy.assert_not_called()
+
+
+def _assert_grounding_failure_before_inserts(db, document, provider):
+    inserts = []
+
+    def record_insert(mapper, connection, target):
+        inserts.append(type(target).__name__)
+
+    entities = (PurchaseOrderDocument, OrderDraft, DraftLineItem, FieldProvenance, AuditEvent)
+    for entity in entities:
+        event.listen(entity, "before_insert", record_insert)
+    try:
+        with pytest.raises(AIOutputValidationError, match="not grounded"):
+            ingest_order(db, document=document, provider=provider)
+    finally:
+        for entity in entities:
+            event.remove(entity, "before_insert", record_insert)
+    assert inserts == []
+    _assert_no_intake_state(db)
+
+
+@pytest.mark.parametrize("group,field", [
+    ("header", "customer_name"), ("header", "po_number"),
+    *((line, field) for line in (0, 1) for field in (
+        "customer_description", "extracted_quantity", "extracted_unit_price", "extracted_line_total",
+    )),
+])
+def test_fix1_grounding_checks_each_of_ten_txt_records_before_persistence(service_db, document, live_provider, group, field):
+    payload = live_provider.default_payload.model_dump(mode="python")
+    evidence = (payload["header_provenance"] if group == "header" else
+                payload["line_items"][group]["field_provenance"])[field]
+    evidence["location"]["char_offset"] += 1
+    live_provider.default_payload = AIExtractionPayload.model_validate(payload)
+    _assert_grounding_failure_before_inserts(service_db, document, live_provider)
+
+
+@pytest.mark.parametrize("defect", ["wrong-existing-line", "missing-line", "past-line-end", "wrong-snippet", "cross-line"])
+def test_fix1_grounding_rejects_txt_location_and_snippet_defects(service_db, document, live_provider, defect):
+    payload = live_provider.default_payload.model_dump(mode="python")
+    evidence = payload["header_provenance"]["customer_name"]
+    if defect == "wrong-existing-line":
+        evidence["location"]["line_number"] = 3
+    elif defect == "missing-line":
+        evidence["location"]["line_number"] = 999
+    elif defect == "past-line-end":
+        evidence["location"]["char_offset"] = len(document.line_spans[1].text)
+    elif defect == "wrong-snippet":
+        evidence["verbatim_snippet"] = "Acme Industrial SupplieX"
+    else:
+        # The canonical raw substring exists, but spans two TXT lines.
+        evidence["verbatim_snippet"] += "\nAccount: CUST-ACME"
+    live_provider.default_payload = AIExtractionPayload.model_validate(payload)
+    _assert_grounding_failure_before_inserts(service_db, document, live_provider)
+
+
+def test_fix1_grounding_does_not_search_for_a_different_occurrence(service_db, document, live_provider):
+    payload = live_provider.default_payload.model_dump(mode="python")
+    # The name remains present at its original valid location elsewhere.
+    payload["header_provenance"]["customer_name"]["location"]["line_number"] = 4
+    live_provider.default_payload = AIExtractionPayload.model_validate(payload)
+    _assert_grounding_failure_before_inserts(service_db, document, live_provider)
+
+
+@pytest.fixture
+def pdf_grounding_case(document, clean_acme_fixture):
+    """Parse a selectable-text PDF with a blank page and two actual text pages.
+
+    Skipping the blank page makes page numbers differ from page_spans indices.
+    Evidence positions derive from known source lines, without modifying fixtures.
+    """
+    writer = PdfWriter()
+    writer.add_blank_page(width=612, height=792)
+    font = DictionaryObject({
+        NameObject("/Type"): NameObject("/Font"), NameObject("/Subtype"): NameObject("/Type1"),
+        NameObject("/BaseFont"): NameObject("/Helvetica"),
+    })
+    source_lines = document.raw_text.splitlines()
+    for lines in (source_lines[:6], source_lines[6:]):
+        page = writer.add_blank_page(width=612, height=792)
+        page[NameObject("/Resources")] = DictionaryObject({
+            NameObject("/Font"): DictionaryObject({NameObject("/F1"): font}),
+        })
+        commands = ["BT /F1 12 Tf 72 720 Td"]
+        for index, line in enumerate(lines):
+            if index:
+                commands.append("0 -16 Td")
+            escaped = line.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
+            commands.append(f"({escaped}) Tj")
+        commands.append("ET")
+        stream = DecodedStreamObject()
+        stream.set_data("\n".join(commands).encode("ascii"))
+        page[NameObject("/Contents")] = stream
+    buffer = io.BytesIO()
+    writer.write(buffer)
+    parsed = parse_document(buffer.getvalue(), filename="grounding.pdf", content_type="application/pdf")
+    assert [page.page_number for page in parsed.page_spans] == [2, 3]
+    payload = deepcopy(clean_acme_fixture["extraction"])
+    groups = [payload["header_provenance"], *(item["field_provenance"] for item in payload["line_items"])]
+    for group in groups:
+        for evidence in group.values():
+            original = evidence["location"]
+            source_line = source_lines[original["line_number"] - 1]
+            page_number = 2 if original["line_number"] <= 6 else 3
+            line_location = parsed.locate_snippet(source_line, page_number=page_number)
+            assert line_location is not None
+            start = line_location["char_start"] + original["char_offset"]
+            evidence["location"] = {
+                "type": "pdf", "page_number": page_number,
+                "char_start": start, "char_end": start + len(evidence["verbatim_snippet"]),
+            }
+    return parsed, AIExtractionPayload.model_validate(payload)
+
+
+def test_fix1_grounding_valid_pdf_persists_ten_exact_page_citations(service_db, live_provider, pdf_grounding_case):
+    parsed, extraction = pdf_grounding_case
+    live_provider.default_payload = extraction
+    draft_id = ingest_order(service_db, document=parsed, provider=live_provider).id
+    with _observer(service_db) as observer:
+        draft = observer.get(OrderDraft, draft_id)
+        assert draft.status == "Ready for Approval"
+        assert draft.calculated_subtotal_cents == 35000
+        assert draft.document.raw_text == parsed.raw_text
+        assert len(draft.provenance_records) == 10
+        for evidence in draft.provenance_records:
+            location = json.loads(evidence.location_data_json)
+            assert evidence.location_type == "pdf"
+            page = next(span for span in parsed.page_spans if span.page_number == location["page_number"])
+            assert page.char_start <= location["char_start"] < location["char_end"] <= page.char_end
+            assert parsed.raw_text[location["char_start"]:location["char_end"]] == evidence.verbatim_snippet
+
+
+@pytest.mark.parametrize("defect", [
+    "missing-page", "blank-page", "wrong-existing-page", "before-page", "after-page",
+    "wrong-offset", "wrong-snippet", "cross-page",
+])
+def test_fix1_grounding_rejects_pdf_page_span_and_snippet_defects(service_db, live_provider, pdf_grounding_case, defect):
+    parsed, extraction = pdf_grounding_case
+    payload = extraction.model_dump(mode="python")
+    evidence = payload["line_items"][0]["field_provenance"]["customer_description"]
+    location = evidence["location"]
+    if defect in ("missing-page", "blank-page", "wrong-existing-page"):
+        location["page_number"] = {"missing-page": 99, "blank-page": 1, "wrong-existing-page": 2}[defect]
+    elif defect == "before-page":
+        location["char_start"] = parsed.page_spans[1].char_start - 1
+        location["char_end"] = location["char_start"] + len(evidence["verbatim_snippet"])
+    elif defect == "after-page":
+        location["char_end"] = parsed.page_spans[1].char_end + 1
+    elif defect == "wrong-offset":
+        location["char_start"] += 1
+        location["char_end"] += 1
+    elif defect == "wrong-snippet":
+        evidence["verbatim_snippet"] = "unsubstantiated PDF evidence"
+    else:
+        location.update(page_number=2, char_start=parsed.page_spans[0].char_end - 1, char_end=parsed.page_spans[1].char_start + 1)
+    live_provider.default_payload = AIExtractionPayload.model_validate(payload)
+    _assert_grounding_failure_before_inserts(service_db, parsed, live_provider)
+
+
+@pytest.mark.parametrize("direction", ["pdf-location-on-txt", "txt-location-on-pdf"])
+def test_fix1_grounding_rejects_both_cross_type_directions(service_db, document, live_provider, pdf_grounding_case, direction):
+    parsed, extraction = pdf_grounding_case
+    if direction == "pdf-location-on-txt":
+        payload = live_provider.default_payload.model_dump(mode="python")
+        payload["header_provenance"]["customer_name"]["location"] = (
+            extraction.header_provenance.customer_name.location.model_dump(mode="json")
+        )
+        source = document
+    else:
+        payload = extraction.model_dump(mode="python")
+        payload["header_provenance"]["customer_name"]["location"] = {
+            "type": "txt", "line_number": 2, "char_offset": 10,
+        }
+        source = parsed
+    live_provider.default_payload = AIExtractionPayload.model_validate(payload)
+    _assert_grounding_failure_before_inserts(service_db, source, live_provider)
+
+
+@pytest.mark.parametrize("missing", ["customer_name", "extracted_quantity"])
+def test_fix1_grounding_preserves_null_field_and_null_provenance_semantics(service_db, document, live_provider, missing):
+    payload = live_provider.default_payload.model_dump(mode="python")
+    if missing == "customer_name":
+        payload[missing] = None
+        payload["header_provenance"][missing] = None
+    else:
+        payload["line_items"][0][missing] = None
+        payload["line_items"][0]["field_provenance"][missing] = None
+    live_provider.default_payload = AIExtractionPayload.model_validate(payload)
+    draft_id = ingest_order(service_db, document=document, provider=live_provider).id
+    with _observer(service_db) as observer:
+        draft = observer.get(OrderDraft, draft_id)
+        assert draft.status == "Needs Review"
+        assert len(draft.provenance_records) == 9

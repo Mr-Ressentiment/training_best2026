@@ -27,6 +27,10 @@ class AIProviderUnavailableError(Exception):
     """The configured provider could not complete its single request."""
 
 
+class AIProviderConfigurationError(AIProviderUnavailableError):
+    """Live provider configuration is invalid; no request has been attempted."""
+
+
 class AIOutputValidationError(Exception):
     """Provider output failed the application-owned extraction contract."""
 
@@ -62,11 +66,13 @@ def _parse_extraction(text: str) -> AIExtractionPayload:
     return validate_extraction(value)
 
 
-def _qwen_endpoint(base: str) -> str:
-    """Accept only the Singapore HTTPS bases allowed by bake-off preflight.py."""
+def _qwen_endpoint(base: str | None) -> str:
+    """Require the workspace Singapore base proven by bake-off phase1.py."""
+    if not isinstance(base, str) or not base:
+        raise AIProviderConfigurationError("Qwen requires an explicit workspace-specific Singapore base URL")
     try:
         url = urlsplit(base)
-        allowed = url.hostname == "dashscope-intl.aliyuncs.com" or bool(re.fullmatch(
+        allowed = bool(re.fullmatch(
             r"[a-zA-Z0-9-]+\.ap-southeast-1\.maas\.aliyuncs\.com", url.hostname or "",
         ))
         valid = (
@@ -77,17 +83,30 @@ def _qwen_endpoint(base: str) -> str:
     except ValueError:
         valid = False
     if not valid:
-        raise ValueError("Qwen requires an approved Singapore HTTPS compatible-mode base")
+        raise AIProviderConfigurationError("Qwen requires a workspace-specific Singapore HTTPS compatible-mode base")
     return base.rstrip("/") + "/chat/completions"
+
+
+def _require_mock_qwen_transport(client: httpx.Client, endpoint: str) -> None:
+    """Keep the missing-endpoint test seam entirely inside MockTransport.
+
+    httpx has no public transport-inspection API. Inspect the selected transport,
+    including mounts, so an injected real client cannot reach the dummy hostname.
+    The same guard runs immediately before sending in case mounts were changed.
+    """
+    if not isinstance(client._transport_for_url(httpx.URL(endpoint)), httpx.MockTransport):
+        raise AIProviderConfigurationError("Qwen requires an explicit workspace-specific Singapore base URL")
 
 
 class LiveAIProvider:
     """Use exactly the provider selected at construction, with no retry/fallback.
 
-    QWEN_BASE_URL, when configured, selects the workspace-specific Singapore
-    base used by the successful bake-off. The general Singapore base is the
-    accepted preflight default. An injected Client remains caller-owned;
-    otherwise each extraction owns and closes its non-retrying Client.
+    Real Qwen requests require qwen_base_url or QWEN_BASE_URL with the validated
+    workspace-specific Singapore base. There is no production default endpoint.
+    Only an injected MockTransport may use a deterministic dummy workspace base
+    when no endpoint is configured, preserving the credential-free T015 seam.
+    An injected Client remains caller-owned; otherwise each extraction owns
+    and closes its non-retrying Client.
     """
 
     is_replay_mode = False
@@ -109,13 +128,18 @@ class LiveAIProvider:
         self._api_key = settings.llm_api_key
         self._timeout = httpx.Timeout(min(budget, 15.0))
         self._client = client
-        self._endpoint = (
-            _qwen_endpoint(qwen_base_url if qwen_base_url is not None else os.getenv(
-                "QWEN_BASE_URL", "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
-            ))
-            if self.provider_name == "qwen" else
-            f"https://generativelanguage.googleapis.com/v1beta/models/{self.model_name}:generateContent"
-        )
+        self._using_test_endpoint = False
+        if self.provider_name == "qwen":
+            base = qwen_base_url if qwen_base_url is not None else os.getenv("QWEN_BASE_URL")
+            if base is None and client is not None:
+                # Never available to an owned runtime client or a real transport.
+                base = "https://test.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+                self._using_test_endpoint = True
+            self._endpoint = _qwen_endpoint(base)
+            if self._using_test_endpoint:
+                _require_mock_qwen_transport(client, self._endpoint)
+        else:
+            self._endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model_name}:generateContent"
 
     def _request(self, raw_text: str, catalog: list[dict]) -> tuple[dict, dict]:
         # Commercial catalog data must not become an AI rule evaluation prompt.
@@ -187,6 +211,8 @@ class LiveAIProvider:
     def extract(self, *, raw_text: str, catalog: list[dict]) -> AIExtractionPayload:
         headers, body = self._request(raw_text, catalog)
         if self._client is not None:
+            if self._using_test_endpoint:
+                _require_mock_qwen_transport(self._client, self._endpoint)
             return self._extract_with_client(self._client, headers, body)
         with httpx.Client(transport=httpx.HTTPTransport(retries=0), follow_redirects=False) as client:
             return self._extract_with_client(client, headers, body)

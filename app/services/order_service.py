@@ -3,7 +3,8 @@
 Each public operation owns the supplied Session's transaction: one commit on
 success, rollback on failure. Use a dedicated request/service Session without
 unrelated pending writes. An existing implicit read transaction is supported.
-Provider extraction is validated before any intake entities are added.
+Provider extraction and canonical provenance grounding are validated before
+any intake entities are added.
 """
 
 from __future__ import annotations
@@ -18,8 +19,8 @@ from app.models.entities import (
     AuditEvent, CatalogProduct, DraftLineItem, FieldProvenance, OrderDraft,
     PurchaseOrderDocument, VerifiedOrderRecord,
 )
-from app.models.schemas import FieldProvenanceSchema, decimal_to_cents
-from app.services.ai_provider import OrderShieldAIProvider, validate_extraction
+from app.models.schemas import AIExtractionPayload, FieldProvenanceSchema, decimal_to_cents
+from app.services.ai_provider import AIOutputValidationError, OrderShieldAIProvider, validate_extraction
 from app.services.document_parser import ParsedDocument
 from app.services.reconciliation import evaluate_clean_draft
 
@@ -38,6 +39,45 @@ class DraftNotFoundError(LookupError):
 
 def _json(value: object) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)
+
+
+def _validate_provenance_grounding(
+    document: ParsedDocument, evidence: FieldProvenanceSchema | None,
+) -> None:
+    """Verify the exact claimed location; never search or repair source evidence."""
+    if evidence is None:
+        return
+    location = evidence.location.root
+    snippet = evidence.verbatim_snippet
+    grounded = False
+    if location.type == "txt" and document.content_type == "text/plain":
+        line = next((span for span in document.line_spans if span.line_number == location.line_number), None)
+        if line is not None:
+            start = location.char_offset
+            end = start + len(snippet)
+            grounded = (
+                0 <= start < end <= len(line.text)
+                and line.text[start:end] == snippet
+                and line.char_start + end <= line.char_end
+                and document.raw_text[line.char_start + start:line.char_start + end] == snippet
+            )
+    elif location.type == "pdf" and document.content_type == "application/pdf":
+        page = next((span for span in document.page_spans if span.page_number == location.page_number), None)
+        if page is not None:
+            start, end = location.char_start, location.char_end
+            grounded = (
+                page.char_start <= start < end <= page.char_end
+                and document.raw_text[start:end] == snippet
+            )
+    if not grounded:
+        raise AIOutputValidationError(f"AI provenance for {evidence.field_name} is not grounded at its claimed location")
+
+
+def _validate_extraction_grounding(document: ParsedDocument, extraction: AIExtractionPayload) -> None:
+    """Check every non-null header/line citation before any ORM object is added."""
+    for group in [extraction.header_provenance, *(item.field_provenance for item in extraction.line_items)]:
+        for field in type(group).model_fields:
+            _validate_provenance_grounding(document, getattr(group, field))
 
 
 def _add_provenance(
@@ -70,6 +110,7 @@ def ingest_order(
             for product in db.scalars(select(CatalogProduct).order_by(CatalogProduct.sku))
         ]
         extraction = validate_extraction(provider.extract(raw_text=document.raw_text, catalog=catalog))
+        _validate_extraction_grounding(document, extraction)
         stored_document = PurchaseOrderDocument(
             filename=document.filename, content_type=document.content_type,
             raw_text=document.raw_text, status="Ingested",
