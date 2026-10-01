@@ -236,14 +236,15 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 ### Accessing the Web Application
-Open your web browser to the committed Single Page Application (SPA) entrypoint:
+Open your web browser to the root application URL or directly to the static SPA entrypoint:
 
 ```text
-http://127.0.0.1:8000/static/index.html
+http://127.0.0.1:8000/
 ```
+*(or `http://127.0.0.1:8000/static/index.html`)*
 
 > [!NOTE]
-> Static assets are mounted under `/static`. FastAPI does not serve an HTML route at root `/`, nor does it define HTML routes for individual orders.
+> The root route `GET /` issues an explicit HTTP 307 temporary redirect to `/static/index.html`. Static assets are served from `/static`. FastAPI does not define HTML routes for individual orders.
 
 ---
 

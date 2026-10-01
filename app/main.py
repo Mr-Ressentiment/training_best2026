@@ -4,7 +4,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException
 
@@ -96,8 +96,11 @@ def create_app() -> FastAPI:
     application.include_router(routes_drafts.router)
     application.include_router(routes_catalog.router)
     application.mount("/static", StaticFiles(directory=Path(__file__).resolve().parent / "static"), name="static")
-    # Same-origin architecture defines no additional middleware policy.
-    # The SPA root awaits T023's committed index.html.
+
+    @application.get("/", include_in_schema=False)
+    async def root_redirect() -> RedirectResponse:
+        return RedirectResponse(url="/static/index.html", status_code=307)
+
     return application
 
 

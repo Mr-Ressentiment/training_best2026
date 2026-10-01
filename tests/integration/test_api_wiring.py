@@ -286,6 +286,31 @@ def test_application_factory_mounts_existing_static_tree_without_network():
     with TestClient(app) as client:
         assert client.get("/static/css/.gitkeep").status_code == 200
         assert client.get("/static/missing.css").status_code == 404
-        assert client.get("/").status_code == 404
+        # Root route redirects to SPA index.html via HTTP 307
+        root_resp = client.get("/", follow_redirects=False)
+        assert root_resp.status_code == 307
+        assert root_resp.headers["location"] == "/static/index.html"
         assert client.get("/docs").status_code == 404
         assert client.get("/redoc").status_code == 404
+
+
+def test_root_redirect_to_spa_index():
+    from app.main import create_app
+    from fastapi.testclient import TestClient
+
+    app = create_app()
+    with TestClient(app) as client:
+        # GET / returns 307 redirect to /static/index.html
+        response = client.get("/", follow_redirects=False)
+        assert response.status_code == 307
+        assert response.headers["location"] == "/static/index.html"
+
+        # Following redirect serves static SPA index.html with 200 OK
+        followed = client.get("/", follow_redirects=True)
+        assert followed.status_code == 200
+        assert "OrderShield" in followed.text
+
+        # /static/index.html remains directly available
+        direct = client.get("/static/index.html")
+        assert direct.status_code == 200
+        assert "OrderShield" in direct.text

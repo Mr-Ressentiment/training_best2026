@@ -97,7 +97,7 @@ export QWEN_BASE_URL="https://<workspace-host>.ap-southeast-1.maas.aliyuncs.com/
 # Launch the FastAPI server
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
-Open your browser to: `http://127.0.0.1:8000/static/index.html`
+Open your browser to: `http://127.0.0.1:8000/` (or `http://127.0.0.1:8000/static/index.html`)
 
 *Note on Provider Governance*: Provider selection is strictly configuration-driven. The system does not perform automatic runtime provider failover or silent provider substitution. Switching from primary (Qwen) to alternate provider (Gemini) requires explicit operator environment configuration and server restart. All generated drafts and audit events record the actual provider and model used.
 
