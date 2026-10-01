@@ -648,6 +648,9 @@
         }
       );
       renderVerifiedOrder();
+      // canMutateDraft() is now false: rerender so stale P2 mutation controls
+      // disappear even if the following draft refresh fails.
+      renderDraft();
       renderControls();
       dom.resultSection.scrollIntoView({ block: "nearest" });
       // Re-read the draft so the displayed status is the server's post-approval state.
