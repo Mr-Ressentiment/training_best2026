@@ -129,14 +129,23 @@ Then trigger demo fixtures via the web UI or via the dedicated fixture endpoints
 2. **Expected Outcome**:
    - Status: `Needs Review` (Amber badge). "Approve Order" button is **disabled**.
    - Line 1: `PriceMismatch` flagged (PO requested $18.00 vs contract tier price $22.00).
-   - Line 2: `CatalogMatchingMismatch` flagged (`Ambiguous`, offers 2 candidate SKUs).
+   - Line 2: `CatalogMatchingMismatch` flagged (`Ambiguous`, offers candidate SKUs including `SKU-WRAP-15` and `SKU-WRAP-18`).
 3. **Operator Resolution**:
-   - Operator selects candidate SKU for Line 2 or searches catalog via `GET /api/v1/catalog?query=...` (`PATCH /api/v1/drafts/{id}/lines/2` with `action="SelectSKU"`).
-   - Line 2 `sku_resolution_source` becomes `"OPERATOR_SELECTED"`.
+   - Operator selects candidate `SKU-WRAP-15` for Line 2 (`PATCH /api/v1/drafts/{id}/lines/2` with `action="SelectSKU"`).
+   - Line 2 `sku_resolution_source` transitions to `"OPERATOR_SELECTED"`.
+   - Deterministic revalidation (business rules, not AI) immediately evaluates catalog attributes and reveals `QuantityOrPackagingBreach` because customer requested quantity 2 is below catalog MOQ 5 (`min_order_quantity = 5`). Correcting quantity to bypass MOQ is prohibited because the source PO document genuinely specifies 2.
    - For Line 1, commercial price violation cannot be overridden: operator deletes the non-compliant line (`DELETE /api/v1/drafts/{id}/lines/1`).
    - Line 1 becomes `Removed`; its discrepancy flag transitions to `ResolvedByLineRemoval` (history preserved).
-   - Unresolved discrepancies drop to 0 → Draft automatically transitions to `Ready for Approval` (Green badge).
-   - Click **"Approve Order"** → Order committed.
+4. **Final State & Explicit Rejection**:
+   - Line 2 still carries the unresolved `QuantityOrPackagingBreach` discrepancy.
+   - Draft status remains `Needs Review` (Amber badge); "Approve Order" remains blocked.
+   - Because commercial violations cannot be resolved without altering genuine source PO facts, the operator rejects the draft:
+     ```bash
+     curl -X POST "http://127.0.0.1:8000/api/v1/drafts/{id}/reject" \
+       -H "Content-Type: application/json" \
+       -d '{"operator_id": "quickstart-op", "reason": "Valid MOQ breach cannot be resolved without changing the source order."}'
+     ```
+   - Draft transitions to terminal `Rejected` status. Zero `VerifiedOrderRecord` is created, and a `DraftRejected` audit event is recorded.
 
 ---
 
