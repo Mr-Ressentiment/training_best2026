@@ -12,6 +12,9 @@
  * P2 operator mutations (SelectSKU, line removal, rejection) each replace
  * state.draft with the server response and rerender; nothing is patched locally.
  *
+ * P3 source evidence is shown through the accepted T037 provenance drawer and
+ * is fed only server-returned provenance of the currently rendered draft.
+ *
  * The P3 audit trail is read-only inspection of GET /api/v1/orders/{order_id}:
  * events are rendered in the order returned and never built or sorted here.
  */
@@ -111,6 +114,8 @@
     summaryCustomer: $("summary-customer"),
     summaryCustomerId: $("summary-customer-id"),
     summaryPo: $("summary-po"),
+    summaryCustomerSource: $("summary-customer-source"),
+    summaryPoSource: $("summary-po-source"),
     summaryStatus: $("summary-status"),
     summaryMode: $("summary-mode"),
     summarySubtotal: $("summary-subtotal"),
@@ -299,11 +304,66 @@
     return actions;
   }
 
+  // ---------- Source evidence (accepted T037 drawer, read-only) ----------
+
+  /** Hands server-returned provenance to the T037 drawer; nothing is built, cached or fetched here. */
+  function openFieldProvenance(label, value, provenance, matching) {
+    if (state.loading !== null) {
+      return;
+    }
+    var drawer = window.OrderShieldProvenanceDrawer;
+    if (!drawer || typeof drawer.open !== "function") {
+      showError(new ApiError("Source evidence unavailable", null, "ProvenanceDrawerUnavailable",
+        "The provenance drawer component (js/components/provenance_drawer.js) is not loaded."));
+      return;
+    }
+    var payload = { label: label, value: value, provenance: provenance };
+    if (matching !== undefined) {
+      payload.matching = matching;
+    }
+    drawer.open(payload);
+  }
+
+  function closeFieldProvenance() {
+    var drawer = window.OrderShieldProvenanceDrawer;
+    if (drawer && typeof drawer.isOpen === "function" && drawer.isOpen()) {
+      drawer.close();
+    }
+  }
+
+  function provenanceEntry(container, field) {
+    return container !== null && typeof container === "object" ? container[field] : null;
+  }
+
+  /** Extracted line value plus its Source control; the control stays even when provenance is missing. */
+  function sourceCell(line, field, label, className, matching) {
+    var td = cell(line[field], className);
+    var wrapper = el("span", "sub");
+    var button = el("button", "btn btn--small btn--outline source-evidence-control", "Source");
+    button.type = "button";
+    button.setAttribute("aria-label", "Source evidence for line " +
+      (isMissing(line.line_number) ? "" : line.line_number) + " " + label);
+    button.addEventListener("click", function () {
+      openFieldProvenance(label, line[field], provenanceEntry(line.field_provenance, field), matching);
+    });
+    wrapper.appendChild(button);
+    td.appendChild(wrapper);
+    return td;
+  }
+
   function renderLine(line) {
     var tr = el("tr", line.status === "Removed" ? "is-removed" : "");
     tr.appendChild(cell(line.line_number, "num"));
-    tr.appendChild(cell(line.customer_description));
-    tr.appendChild(cell(line.extracted_quantity, "num"));
+    // Matching values are passed through as returned; the drawer shows them read-only.
+    tr.appendChild(sourceCell(line, "customer_description", "Customer description", "", {
+      matched_sku: line.matched_sku,
+      sku_name: line.sku_name,
+      sku_confidence: line.sku_confidence,
+      sku_resolution_source: line.sku_resolution_source,
+      candidate_skus: line.candidate_skus,
+      matching_rationale: line.matching_rationale
+    }));
+    tr.appendChild(sourceCell(line, "extracted_quantity", "Quantity", "num"));
 
     var skuCell = el("td");
     if (isMissing(line.matched_sku)) {
@@ -316,7 +376,9 @@
     }
     tr.appendChild(skuCell);
 
-    tr.appendChild(cell(line.extracted_unit_price, "num"));
+    tr.appendChild(sourceCell(line, "extracted_unit_price", "Extracted unit price", "num"));
+    tr.appendChild(sourceCell(line, "extracted_line_total", "Customer line total", "num"));
+    // Deterministic server calculations below carry no source citation.
     tr.appendChild(cell(line.contract_price, "num"));
     tr.appendChild(cell(line.calculated_line_total, "num"));
 
@@ -379,7 +441,7 @@
     if (lines.length === 0) {
       var emptyRow = el("tr", "lines__empty");
       var emptyCell = el("td", "", "The server returned no line items for this draft.");
-      emptyCell.colSpan = 8;
+      emptyCell.colSpan = 9;
       emptyRow.appendChild(emptyCell);
       dom.lineRows.replaceChildren(emptyRow);
     } else {
@@ -572,6 +634,12 @@
         control.disabled = busy;
       });
     }
+    Array.prototype.forEach.call(
+      document.querySelectorAll(".source-evidence-control"),
+      function (control) {
+        control.disabled = busy;
+      }
+    );
     if (!dom.approvalHint.classList.contains("is-warning")) {
       if (draft === null) {
         dom.approvalHint.textContent = "";
@@ -632,6 +700,8 @@
     state.draft = draft;
     state.approvedOrder = null;
     state.audit = null;
+    // Evidence of the previous draft must never stay on screen for the new one.
+    closeFieldProvenance();
     dom.operatorId.value = "";
     renderDraft();
     renderVerifiedOrder();
@@ -1167,6 +1237,23 @@
   dom.diagnosticDismiss.addEventListener("click", clearError);
 
   dom.auditLoad.addEventListener("click", loadAuditTrail);
+
+  // Header evidence is read from state.draft at click time, so it always matches the rendered draft.
+  dom.summaryCustomerSource.addEventListener("click", function () {
+    var draft = state.draft;
+    if (draft !== null) {
+      openFieldProvenance("Customer", draft.customer_name_extracted,
+        provenanceEntry(draft.header_provenance, "customer_name"));
+    }
+  });
+
+  dom.summaryPoSource.addEventListener("click", function () {
+    var draft = state.draft;
+    if (draft !== null) {
+      openFieldProvenance("PO number", draft.po_number_extracted,
+        provenanceEntry(draft.header_provenance, "po_number"));
+    }
+  });
 
   // ---------- Initialization ----------
 
