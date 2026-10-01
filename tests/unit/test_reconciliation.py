@@ -3,12 +3,20 @@
 Defines the RED acceptance boundary prior to T028 implementation for:
 - PriceMismatch (AC1)
 - QuantityOrPackagingBreach (AC2, AC3, AC4)
-- ArithmeticMismatch (AC5, AC6)
+- ArithmeticMismatch line-level (AC5)
 - CatalogMatchingMismatch (AC7, AC8, AC9)
 - Clean draft / false-positive prevention (AC10)
 - Readiness blocker invariant: unresolved discrepancy -> Needs Review (AC11)
 - Multiple concurrent discrepancy categories (AC12)
 - Pure deterministic execution without AI or network (AC13)
+- Operator-selected SKU resolution positive acceptance
+- Discrepancy re-evaluation and idempotency (no duplicate unresolved flags)
+
+NOTE on Order-Level ArithmeticMismatch:
+Order-level ArithmeticMismatch (stated order total != sum of line totals) is
+explicitly BLOCKED by Human Gate HG-P2-01 because the current canonical model
+lacks a source-backed stated order total. See test_hg_p2_01_current_model_has_no_source_backed_order_total
+and docs/gates/04_p2_order_total_arithmetic_gate.md.
 """
 
 from __future__ import annotations
@@ -26,7 +34,6 @@ from app.models.entities import (
     PurchaseOrderDocument,
 )
 from app.services.reconciliation import (
-    calculate_subtotal_cents,
     evaluate_clean_draft,
 )
 
@@ -329,27 +336,26 @@ def test_line_arithmetic_mismatch_creates_arithmetic_discrepancy(db_session):
 
 
 # -----------------------------------------------------------------------------
-# AC6 — ArithmeticMismatch: order-level arithmetic boundary & limitation
+# Human Gate HG-P2-01 Sentinel — Order-Level Arithmetic Stated Total Gap
+# (BLOCKED: Genuine order-level ArithmeticMismatch requirement is not satisfied
+# because the canonical domain model lacks a source-backed stated order total)
 # -----------------------------------------------------------------------------
 
-def test_order_level_stated_subtotal_model_boundary(db_session):
-    """AC6: Document canonical model boundary for order subtotal arithmetic.
+def test_hg_p2_01_current_model_has_no_source_backed_order_total(db_session):
+    """HG-P2-01 Sentinel: Evidence that canonical model lacks source-backed stated order total.
 
-    The canonical OrderDraft model stores derived calculated_subtotal_cents and does not
-    contain a source-backed stated order subtotal field. Line-level arithmetic serves as
-    the mandatory acceptance boundary, and order subtotal is purely calculated.
+    NOTE: This test proves the existence of a schema/contract gap.
+    Absence of the field != satisfaction of T026 order-level ArithmeticMismatch.
+    The genuine order-level ArithmeticMismatch acceptance test is BLOCKED pending
+    Human Gate HG-P2-01 decision.
     """
     seed_baseline(db_session)
     draft = _create_test_draft(db_session)
 
-    # Confirm model boundary: no source-backed stated subtotal column exists
+    # Confirm model gap: neither OrderDraft nor extraction schemas provide a source-backed stated order total
     assert not hasattr(draft, "extracted_subtotal_cents")
     assert not hasattr(draft, "stated_subtotal_cents")
     assert hasattr(draft, "calculated_subtotal_cents")
-
-    result = evaluate_clean_draft(db_session, draft)
-    expected_sum = calculate_subtotal_cents([line.calculated_line_total_cents for line in result.line_items])
-    assert result.calculated_subtotal_cents == expected_sum
 
 
 # -----------------------------------------------------------------------------
@@ -446,6 +452,51 @@ def test_clean_catalog_match_creates_no_catalog_matching_mismatch(db_session):
     flags = _get_discrepancies(db_session, result, line)
     cat_flags = [f for f in flags if f.discrepancy_type == "CatalogMatchingMismatch"]
     assert cat_flags == [], "High confidence catalog match must not create CatalogMatchingMismatch"
+
+
+# -----------------------------------------------------------------------------
+# Operator Selected SKU Acceptance Coverage
+# -----------------------------------------------------------------------------
+
+def test_operator_selected_sku_is_resolved_and_allows_ready_for_approval(db_session):
+    """Operator-selected SKU with High confidence is treated as resolved, allowing Ready for Approval."""
+    seed_baseline(db_session)
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2500,
+        extracted_line_total_cents=25000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="OPERATOR_SELECTED",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    # 1. No unresolved CatalogMatchingMismatch
+    flags = _get_discrepancies(db_session, result, line)
+    cat_flags = [
+        f for f in flags
+        if f.discrepancy_type == "CatalogMatchingMismatch" and f.resolution_state == "Unresolved"
+    ]
+    assert cat_flags == [], "Operator-selected SKU must not produce unresolved CatalogMatchingMismatch"
+
+    # 2. Valid SKU is preserved
+    assert line.matched_sku == "SKU-WRAP-18"
+
+    # 3. Deterministic contract tier is evaluated normally
+    assert line.contract_price_cents == 2500
+    assert line.calculated_line_total_cents == 25000
+    assert result.calculated_subtotal_cents == 25000
+
+    # 4. No discrepancy exists solely because resolution source is OPERATOR_SELECTED
+    assert flags == [], "No discrepancy should exist solely because resolution source is OPERATOR_SELECTED"
+
+    # 5. When no other discrepancy exists, draft can reach Ready for Approval
+    assert result.status == "Ready for Approval"
 
 
 # -----------------------------------------------------------------------------
@@ -595,6 +646,55 @@ def test_multiple_discrepancy_categories_accumulate_without_early_exit(db_sessio
     )
     assert all(f.severity == "Blocking" for f in flags)
     assert all(f.resolution_state == "Unresolved" for f in flags)
+
+
+# -----------------------------------------------------------------------------
+# Re-evaluation / Idempotency Acceptance Coverage
+# -----------------------------------------------------------------------------
+
+def test_discrepancy_re_evaluation_is_idempotent_without_duplicate_flags(db_session):
+    """Re-evaluating an unchanged draft must be idempotent and not create duplicate unresolved flags."""
+    seed_baseline(db_session)
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2400,  # Contract tier price is 2500 -> PriceMismatch
+        extracted_line_total_cents=24000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(db_session, line_items=[line])
+
+    # First evaluation
+    res1 = evaluate_clean_draft(db_session, draft)
+    assert res1.status == "Needs Review"
+    flags1 = _get_discrepancies(db_session, res1, line)
+    price_flags1 = [
+        f for f in flags1
+        if f.discrepancy_type == "PriceMismatch" and f.resolution_state == "Unresolved"
+    ]
+    assert len(price_flags1) == 1, f"Expected 1 unresolved PriceMismatch on first run, found {len(price_flags1)}"
+
+    # Second evaluation on the same unchanged draft
+    res2 = evaluate_clean_draft(db_session, draft)
+    assert res2.status == "Needs Review"
+    flags2 = _get_discrepancies(db_session, res2, line)
+    price_flags2 = [
+        f for f in flags2
+        if f.discrepancy_type == "PriceMismatch" and f.resolution_state == "Unresolved"
+    ]
+    # Idempotency requirement: exactly one unresolved PriceMismatch, no duplicates created
+    assert len(price_flags2) == 1, (
+        f"Expected exactly 1 unresolved PriceMismatch after re-evaluation, found {len(price_flags2)} (duplicates generated)"
+    )
+
+    # Derived pricing and calculation output remains deterministic
+    assert line.contract_price_cents == 2500
+    assert line.calculated_line_total_cents == 25000
+    assert res2.calculated_subtotal_cents == 25000
 
 
 # -----------------------------------------------------------------------------
