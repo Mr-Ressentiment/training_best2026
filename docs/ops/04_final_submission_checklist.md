@@ -4,29 +4,29 @@ Use this during the last 60–90 minutes.
 
 ## Product
 
-- [ ] Critical path works end to end.
-- [ ] Demo data is prepared.
-- [ ] Failure state is demonstrated or clearly available.
-- [ ] No dead buttons on the demo path.
-- [ ] Loading states are acceptable.
-- [ ] Important outputs are grounded or traceable.
+- [x] Critical path works end to end.
+- [x] Demo data is prepared.
+- [x] Failure state is demonstrated or clearly available.
+- [x] No dead buttons on the demo path.
+- [x] Loading states are acceptable.
+- [x] Important outputs are grounded or traceable.
 
 ## AI
 
-- [ ] Team can explain exactly where AI is used.
-- [ ] Team can explain why deterministic code alone is insufficient.
-- [ ] Unknown/uncertain cases do not silently produce confident answers.
-- [ ] Prompt/model/provider details are documented enough for explanation.
-- [ ] Any mocked AI behavior is clearly identified.
+- [x] Team can explain exactly where AI is used.
+- [x] Team can explain why deterministic code alone is insufficient.
+- [x] Unknown/uncertain cases do not silently produce confident answers.
+- [x] Prompt/model/provider details are documented enough for explanation.
+- [x] Any mocked AI behavior is clearly identified.
 
 ## Repository
 
-- [ ] README contains setup steps.
-- [ ] Run command works.
-- [ ] Environment variables are documented.
-- [ ] Secrets are not committed.
-- [ ] Main branch contains the demo-ready state.
-- [ ] Important tests/checks pass.
+- [x] README contains setup steps.
+- [x] Run command works.
+- [x] Environment variables are documented.
+- [x] Secrets are not committed.
+- [x] Main branch contains the demo-ready state.
+- [x] Important tests/checks pass.
 
 ## Demo
 
