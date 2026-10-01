@@ -13,7 +13,7 @@ from collections.abc import Iterable
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models.entities import ContractPriceTier, CustomerContract
+from app.models.entities import CatalogProduct, ContractPriceTier, CustomerContract, OrderDraft
 
 
 class PricingError(Exception):
@@ -162,3 +162,69 @@ def select_contract_price_tier(
         )
 
     return eligible_tiers[0]
+
+
+def evaluate_clean_draft(db: Session, draft: OrderDraft) -> OrderDraft:
+    """Evaluate P1 clean readiness using T010 prices and integer arithmetic.
+
+    Mutate derived line values and draft status only; the caller owns flush,
+    commit and rollback. No discrepancy rows, date-based contract selection,
+    MOQ/packaging checks or stated-total discrepancy checks are implemented here.
+    Non-clean input remains Needs Review even when no discrepancy rows exist.
+    """
+    if draft.status in ("Approved", "Rejected"):
+        raise ValueError("Cannot evaluate a terminal draft")
+
+    def present(value: str | None) -> bool:
+        return isinstance(value, str) and bool(value.strip())
+
+    # Evaluation must not flush an unverified SKU hint into a foreign key.
+    with db.no_autoflush:
+        known_customer = present(draft.customer_id) and db.scalar(
+            select(CustomerContract.id).where(CustomerContract.customer_id == draft.customer_id).limit(1)
+        ) is not None
+        active_lines = [line for line in draft.line_items if line.status == "Active"]
+        clean = bool(
+            known_customer and present(draft.customer_name_extracted)
+            and present(draft.po_number_extracted) and active_lines
+        )
+        for line in active_lines:
+            # Clear stale derived values before any failed lookup can reuse them.
+            line.contract_price_cents = None
+            line.calculated_line_total_cents = 0
+            resolvable = (
+                known_customer and type(line.extracted_quantity) is int and line.extracted_quantity >= 1
+                and present(line.matched_sku) and line.sku_confidence == "High"
+                and line.sku_resolution_source == "AI_HIGH_CONFIDENCE"
+                and db.get(CatalogProduct, line.matched_sku) is not None
+            )
+            if not resolvable:
+                clean = False
+                continue
+            try:
+                tier = select_contract_price_tier(
+                    db, draft.customer_id, line.matched_sku, line.extracted_quantity,
+                )
+            except PricingConflictError:
+                # No contract choice or commercial fallback is made in P1.
+                clean = False
+                continue
+            if tier is None:
+                clean = False
+                continue
+            line.contract_price_cents = tier.tier_price_cents
+            line.calculated_line_total_cents = calculate_line_total_cents(
+                line.extracted_quantity, line.contract_price_cents,
+            )
+            if (
+                not present(line.customer_description) or line.extracted_line_total_cents is None
+                or line.extracted_unit_price_cents != line.contract_price_cents
+            ):
+                clean = False
+        draft.calculated_subtotal_cents = calculate_subtotal_cents(
+            line.calculated_line_total_cents for line in active_lines
+        )
+        if any(flag.resolution_state == "Unresolved" for flag in draft.discrepancy_flags):
+            clean = False
+        draft.status = "Ready for Approval" if clean else "Needs Review"
+    return draft
