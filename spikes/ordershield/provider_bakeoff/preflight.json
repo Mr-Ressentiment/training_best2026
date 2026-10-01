@@ -1,0 +1,189 @@
+{
+  "created_utc": "2026-09-29T22:06:56.061649+00:00",
+  "scope": "PREFLIGHT_ONLY",
+  "live_calls_attempted": 3,
+  "free_only_account_settings": "USER_CONFIRMED",
+  "candidates": [
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.7-flash",
+      "returned_model_id": "gemini-3.7-flash",
+      "thinking": {
+        "thinking_level": "low"
+      },
+      "output_mode": "application/json",
+      "state": "PASSED",
+      "http_status": 200,
+      "wall_clock_ms": 13682.8,
+      "response_json_parsed": true,
+      "json_parsed": true,
+      "expected_fields_present": true,
+      "expected_values_match": true,
+      "token_usage": {
+        "promptTokenCount": 19,
+        "candidatesTokenCount": 11,
+        "totalTokenCount": 30
+      },
+      "failure_class": null,
+      "blockers": [],
+      "access_status": "ACCEPTED",
+      "quota_status": "REQUEST_ACCEPTED; remaining quota unknown",
+      "phase1_eligible": true
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model_id": "gemini-3.8-flash",
+      "returned_model_id": null,
+      "thinking": {
+        "thinking_level": "low"
+      },
+      "output_mode": "application/json",
+      "state": "FAILED",
+      "http_status": 503,
+      "wall_clock_ms": 1091.58,
+      "response_json_parsed": null,
+      "json_parsed": null,
+      "expected_fields_present": null,
+      "expected_values_match": null,
+      "token_usage": null,
+      "failure_class": "PROVIDER_5XX",
+      "blockers": [],
+      "access_status": "UNVERIFIED",
+      "quota_status": "UNVERIFIED",
+      "phase1_eligible": false
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model_id": "qwen3.8-flash",
+      "returned_model_id": null,
+      "thinking": {
+        "enable_thinking": false
+      },
+      "output_mode": "compact JSON prompt; local validation",
+      "state": "FAILED",
+      "http_status": 403,
+      "wall_clock_ms": 904.18,
+      "response_json_parsed": null,
+      "json_parsed": null,
+      "expected_fields_present": null,
+      "expected_values_match": null,
+      "token_usage": null,
+      "failure_class": "AUTH_OR_ACCESS",
+      "blockers": [],
+      "access_status": "DENIED",
+      "quota_status": "UNVERIFIED",
+      "phase1_eligible": false
+    }
+  ],
+  "remediation_rounds": [
+    {
+      "round_id": "access-remediation-01",
+      "created_utc": "2026-09-29T22:17:06.782367+00:00",
+      "scope": "ACCESS_REMEDIATION_PREFLIGHT_ONLY",
+      "maximum_live_calls": 3,
+      "live_calls_attempted": 3,
+      "free_only_account_settings": "USER_CONFIRMED_EARLIER_IN_SESSION",
+      "endpoint_source": "QWEN_BASE_URL; workspace-specific Singapore required",
+      "thinking_reference": "https://ai.google.dev/gemini-api/docs/generate-content/thinking",
+      "free_tier_reference": "https://ai.google.dev/gemini-api/docs/pricing",
+      "candidates": [
+        {
+          "provider": "Alibaba Model Studio (Singapore)",
+          "requested_model_id": "qwen3.8-flash",
+          "returned_model_id": "qwen3.8-flash",
+          "thinking": {
+            "enable_thinking": false
+          },
+          "output_mode": "compact JSON prompt; local validation",
+          "state": "PASSED",
+          "live_calls_attempted": 1,
+          "http_status": 200,
+          "wall_clock_ms": 1820.32,
+          "response_json_parsed": true,
+          "json_parsed": true,
+          "expected_fields_present": true,
+          "expected_values_match": true,
+          "schema_success": true,
+          "token_usage": {
+            "prompt_tokens": 43,
+            "total_tokens": 54,
+            "completion_tokens": 11,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "text_tokens": 43
+            }
+          },
+          "failure_class": null,
+          "blockers": [],
+          "access_status": "ACCEPTED",
+          "quota_status": "REQUEST_ACCEPTED; remaining quota unknown",
+          "phase1_eligible": true,
+          "started_utc": "2026-09-29T22:37:17.647931+00:00",
+          "endpoint_configuration_source": "QWEN_BASE_URL from Windows user scope; transient process override",
+          "completed_utc": "2026-09-29T22:37:19.471704+00:00"
+        },
+        {
+          "provider": "Google Gemini API",
+          "requested_model_id": "gemini-3.8-flash",
+          "returned_model_id": "gemini-3.8-flash",
+          "thinking": {
+            "thinking_level": "low"
+          },
+          "output_mode": "application/json",
+          "state": "PASSED",
+          "live_calls_attempted": 1,
+          "http_status": 200,
+          "wall_clock_ms": 2902.99,
+          "response_json_parsed": true,
+          "json_parsed": true,
+          "expected_fields_present": true,
+          "expected_values_match": true,
+          "schema_success": true,
+          "token_usage": {
+            "promptTokenCount": 19,
+            "candidatesTokenCount": 11,
+            "totalTokenCount": 30
+          },
+          "failure_class": null,
+          "blockers": [],
+          "access_status": "ACCEPTED",
+          "quota_status": "REQUEST_ACCEPTED; remaining quota unknown",
+          "phase1_eligible": true,
+          "started_utc": "2026-09-29T22:17:06.783364+00:00",
+          "completed_utc": "2026-09-29T22:17:09.689080+00:00"
+        },
+        {
+          "provider": "Google Gemini API",
+          "requested_model_id": "gemini-3.5-flash-lite",
+          "returned_model_id": "gemini-3.5-flash-lite",
+          "thinking": {
+            "thinking_level": "minimal"
+          },
+          "output_mode": "application/json",
+          "state": "PASSED",
+          "live_calls_attempted": 1,
+          "http_status": 200,
+          "wall_clock_ms": 852.87,
+          "response_json_parsed": true,
+          "json_parsed": true,
+          "expected_fields_present": true,
+          "expected_values_match": true,
+          "schema_success": true,
+          "token_usage": {
+            "promptTokenCount": 19,
+            "candidatesTokenCount": 21,
+            "totalTokenCount": 40
+          },
+          "failure_class": null,
+          "blockers": [],
+          "access_status": "ACCEPTED",
+          "quota_status": "REQUEST_ACCEPTED; remaining quota unknown",
+          "phase1_eligible": true,
+          "started_utc": "2026-09-29T22:17:09.692530+00:00",
+          "completed_utc": "2026-09-29T22:17:10.547356+00:00"
+        }
+      ]
+    }
+  ],
+  "total_live_calls_attempted": 6
+}

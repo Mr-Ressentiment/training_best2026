@@ -1,0 +1,7 @@
+SYNTHETIC order HX-209, customer Cedar Care, currency EUR
+Goods required: Medium blue LATEX examination gloves without powder, 100 per box
+Material specification is latex; nitrile substitution is not permitted.
+Selling unit: box
+Quantity: 4
+Cost per selling unit: 8.00
+Net amount: 32.00

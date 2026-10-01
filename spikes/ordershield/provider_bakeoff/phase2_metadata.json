@@ -1,0 +1,486 @@
+{
+  "scope": "PHASE_2_FINALIST_STABILITY",
+  "started_utc": "2026-09-29T23:45:27.783778+00:00",
+  "max_new_live_calls": 36,
+  "configurations": [
+    {
+      "provider": "Google Gemini API",
+      "model": "gemini-3.5-flash-lite",
+      "thinking_level": "minimal",
+      "thinking": {
+        "thinking_level": "minimal"
+      },
+      "output_mode": "Gemini responseFormat.text JSON Schema (mimeType=APPLICATION_JSON)",
+      "max_output_tokens": 4096,
+      "temperature": 0,
+      "stream": false,
+      "timeout_seconds": 180,
+      "automatic_retries": 0,
+      "redirects": false,
+      "tools_search_grounding": false
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "model": "qwen3.8-flash",
+      "enable_thinking": false,
+      "thinking": {
+        "enable_thinking": false
+      },
+      "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+      "max_output_tokens": 4096,
+      "temperature": 0,
+      "stream": false,
+      "timeout_seconds": 180,
+      "automatic_retries": 0,
+      "redirects": false,
+      "tools_search_grounding": false
+    }
+  ],
+  "fixtures": [
+    "h05_no_size",
+    "h06_no_pack",
+    "h07_not_medium",
+    "h08_not_large",
+    "h09_latex",
+    "h10_damaged"
+  ],
+  "run_indices": [
+    2,
+    3,
+    4
+  ],
+  "additional_runs_per_fixture": 3,
+  "automatic_retries": 0,
+  "environment_selection": "Windows user scope; stale process value overridden in memory",
+  "free_only_settings": "Previously explicitly user-confirmed; same account and approved endpoint",
+  "baseline_provenance": [
+    {
+      "model": "gemini-3.5-flash-lite",
+      "artifact": "phase1_gemini_remediation_calls.json",
+      "sha256": "87d8272f4b80ab70eb6a4a08511a4aaa5f24e95be58f70084d8612f09c48b3ef",
+      "selected_calls": 6,
+      "scores_errors_grounding_and_request_hashes_identical": true
+    },
+    {
+      "model": "qwen3.8-flash",
+      "artifact": "phase1_calls.json",
+      "sha256": "08d05424858a91f703aea0d8bed11d5115c5a68ffec5cdc54a8adb5acd8fd879",
+      "selected_calls": 6,
+      "scores_errors_grounding_and_request_hashes_identical": true
+    }
+  ],
+  "integrity_before": {
+    "freeze_sha256": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+    "schema_sha256": "f5bd3918128dce7e8efd1e1c2a566e1cd166d692b534641345b9d5b70057f5c3",
+    "frozen_files": {
+      "live/expected.json": {
+        "sha256": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+        "verified_from": "working_tree"
+      },
+      "live/protocol.md": {
+        "sha256": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+        "verified_from": "working_tree"
+      },
+      "live/adapter.py": {
+        "sha256": "0a16b12de4eef3eaf5612fafc3ec379cfe2152cec9a60ded9f1456f5992f56e6",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/score.py": {
+        "sha256": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "live/run.py": {
+        "sha256": "2d46e5be5550ba4f17d48da3b74e21bacb9737bb10a755b4a5da70beb9e61c19",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/test_live.py": {
+        "sha256": "04aef30766727a6f2ce027143530896b3bd571150270c37828a41c5f1c7fc282",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/fixtures/h01_paper.txt": {
+        "sha256": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h02_large.txt": {
+        "sha256": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h03_alias.txt": {
+        "sha256": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h04_tape.txt": {
+        "sha256": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h05_no_size.txt": {
+        "sha256": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h06_no_pack.txt": {
+        "sha256": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h07_not_medium.txt": {
+        "sha256": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h08_not_large.txt": {
+        "sha256": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h09_latex.txt": {
+        "sha256": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h10_damaged.txt": {
+        "sha256": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+        "verified_from": "working_tree"
+      },
+      "ordershield.py": {
+        "sha256": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "catalog.json": {
+        "sha256": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+        "verified_from": "working_tree"
+      },
+      "prompt.txt": {
+        "sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "verified_from": "working_tree"
+      }
+    },
+    "reference_commit": "12a7e50"
+  },
+  "protected_sha256_before": {
+    "catalog.json": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+    "prompt.txt": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+    "live\\expected.json": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+    "live\\freeze.json": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+    "live\\protocol.md": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+    "live\\fixtures\\h01_paper.txt": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+    "live\\fixtures\\h02_large.txt": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+    "live\\fixtures\\h03_alias.txt": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+    "live\\fixtures\\h04_tape.txt": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+    "live\\fixtures\\h05_no_size.txt": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+    "live\\fixtures\\h06_no_pack.txt": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+    "live\\fixtures\\h07_not_medium.txt": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+    "live\\fixtures\\h08_not_large.txt": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+    "live\\fixtures\\h09_latex.txt": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+    "live\\fixtures\\h10_damaged.txt": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+    "provider_bakeoff\\gemini_diagnostic.json": "8ee65ae14656e43f7a07c0109879bfcd30bb636a546e72327b47789b4b9b9032",
+    "provider_bakeoff\\gemini_diagnostic.md": "0ce2fc2f9314763a9f1b701db8d5167f5cce822b166915814ecaa792c4ed77dc",
+    "provider_bakeoff\\gemini_diagnostic.py": "93bc168215b6091639a4060dc6bf81bdfed33e7065b136f7f467406286ecdb5f",
+    "provider_bakeoff\\phase1.md": "e04f82bfc763124b3b72f2ab2b6f2e5dc1b1f0b5f06cedd8449c81ed769fd90f",
+    "provider_bakeoff\\phase1.py": "83c529bc7d9baa2b14eecc3ae607ccf767ef89a692ce5db0d70bcdfc74000426",
+    "provider_bakeoff\\phase1_calls.json": "08d05424858a91f703aea0d8bed11d5115c5a68ffec5cdc54a8adb5acd8fd879",
+    "provider_bakeoff\\phase1_gemini_remediation.md": "0e468a7af915980d53d989f620f6f760b77071f6c66a83c17db49cd52ee902cc",
+    "provider_bakeoff\\phase1_gemini_remediation.py": "7a50ac54e47c87469e86a785b319b28d7faaf17b9b3e111bd8863291061a506f",
+    "provider_bakeoff\\phase1_gemini_remediation_calls.json": "87d8272f4b80ab70eb6a4a08511a4aaa5f24e95be58f70084d8612f09c48b3ef",
+    "provider_bakeoff\\phase1_gemini_remediation_metadata.json": "44cd05cc1b78d3f173f373508cd2de02703254fb0f21924962a6680488990a4c",
+    "provider_bakeoff\\phase1_gemini_remediation_summary.json": "a81648a0c0633a9ac179c10f3c70d8c032b3050c2e518ac5df5625ffa6c020b1",
+    "provider_bakeoff\\phase1_metadata.json": "8f8092a33b55feb739fda73ba151181df106bc6a2f6616641cf7668b6bfba20d",
+    "provider_bakeoff\\phase1_summary.json": "16dceeee6f29220a0082fa6772f60f267bf993da245d5e60aeb5b87f4807ece2",
+    "provider_bakeoff\\phase2.py": "a0ad0e72bd99bbfe6b7afdfe05c4ee35983b72975f76fe7444a6b35e8bb1c3e7",
+    "provider_bakeoff\\preflight.json": "16e642dcdef3391a55b6aebeed8231a2f63ef3a15353e31549cc58fea9f23719",
+    "provider_bakeoff\\preflight.md": "f4f19d61e033a8dc5f79718d54579e65704e4296aa8486c4db72baa79870d59b",
+    "provider_bakeoff\\preflight.py": "efb083d6b9b39a7b592d49bfc167ab59dfe1c04f1f0c1986667d8ea11f8bb6aa",
+    "provider_bakeoff\\test_gemini_diagnostic.py": "329e0bc9d798d665d893447ff55bbf0c458307147064b4e8d87a3a2da61e29a1",
+    "provider_bakeoff\\test_phase1.py": "694c138ec9371ce81a2a7077401913eb8571ea448b9801d62d2ee5682a5a80c7",
+    "provider_bakeoff\\test_phase1_gemini_remediation.py": "d7d7b07331ff90337deea177f0a185d36f82760846de1afeee2240e2becf592a",
+    "provider_bakeoff\\test_phase2.py": "fac2258b9272c1812ff5a758bb23b2884218a0a9f0ababa917e9899a595d5785",
+    "provider_bakeoff\\test_preflight.py": "082c462f9b77dd840dfbfe5390534128203af4310b9d019f290f4d87c4d548a3",
+    "provider_bakeoff\\frozen_reference\\ordershield.py": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+    "provider_bakeoff\\frozen_reference\\live\\score.py": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9"
+  },
+  "harness_sha256": "a0ad0e72bd99bbfe6b7afdfe05c4ee35983b72975f76fe7444a6b35e8bb1c3e7",
+  "schedule": [
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h05_no_size",
+      "run_index": 2
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h06_no_pack",
+      "run_index": 2
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h07_not_medium",
+      "run_index": 2
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h08_not_large",
+      "run_index": 2
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h09_latex",
+      "run_index": 2
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h10_damaged",
+      "run_index": 2
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h05_no_size",
+      "run_index": 2
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h06_no_pack",
+      "run_index": 2
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h07_not_medium",
+      "run_index": 2
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h08_not_large",
+      "run_index": 2
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h09_latex",
+      "run_index": 2
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h10_damaged",
+      "run_index": 2
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h05_no_size",
+      "run_index": 3
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h06_no_pack",
+      "run_index": 3
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h07_not_medium",
+      "run_index": 3
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h08_not_large",
+      "run_index": 3
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h09_latex",
+      "run_index": 3
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h10_damaged",
+      "run_index": 3
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h05_no_size",
+      "run_index": 3
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h06_no_pack",
+      "run_index": 3
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h07_not_medium",
+      "run_index": 3
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h08_not_large",
+      "run_index": 3
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h09_latex",
+      "run_index": 3
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h10_damaged",
+      "run_index": 3
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h05_no_size",
+      "run_index": 4
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h06_no_pack",
+      "run_index": 4
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h07_not_medium",
+      "run_index": 4
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h08_not_large",
+      "run_index": 4
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h09_latex",
+      "run_index": 4
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "fixture": "h10_damaged",
+      "run_index": 4
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h05_no_size",
+      "run_index": 4
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h06_no_pack",
+      "run_index": 4
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h07_not_medium",
+      "run_index": 4
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h08_not_large",
+      "run_index": 4
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h09_latex",
+      "run_index": 4
+    },
+    {
+      "model": "qwen3.8-flash",
+      "fixture": "h10_damaged",
+      "run_index": 4
+    }
+  ],
+  "stop_reason": "All 36 new single attempts finalized; Phase 2 STOP",
+  "protected_evidence_preserved": true,
+  "new_live_attempts": 36,
+  "completed_utc": "2026-09-29T23:50:03.090870+00:00",
+  "integrity_after": {
+    "freeze_sha256": "ab87f0db7e3843eccc5475d77b157c0b75ca696dab1380bdbb737778323b4d4f",
+    "schema_sha256": "f5bd3918128dce7e8efd1e1c2a566e1cd166d692b534641345b9d5b70057f5c3",
+    "frozen_files": {
+      "live/expected.json": {
+        "sha256": "9195209b71d3e04de7590d7a49d56bd642dda83281fe75232ed3626a6393ee32",
+        "verified_from": "working_tree"
+      },
+      "live/protocol.md": {
+        "sha256": "0e0603d7796a8ae93a6320fbc3db6b8383cc138a1ad9beab7db1cd2e075c7ee0",
+        "verified_from": "working_tree"
+      },
+      "live/adapter.py": {
+        "sha256": "0a16b12de4eef3eaf5612fafc3ec379cfe2152cec9a60ded9f1456f5992f56e6",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/score.py": {
+        "sha256": "8658e2d639f43e5a605f792ef0b1886f38dfb70677a78a71c05ef29013f1e8a9",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "live/run.py": {
+        "sha256": "2d46e5be5550ba4f17d48da3b74e21bacb9737bb10a755b4a5da70beb9e61c19",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/test_live.py": {
+        "sha256": "04aef30766727a6f2ce027143530896b3bd571150270c37828a41c5f1c7fc282",
+        "verified_from": "git_history_verification_only_not_executed"
+      },
+      "live/fixtures/h01_paper.txt": {
+        "sha256": "20987050336db0fb54ec67caa93a45b2597abd4b7818339c9b58bccb361907c4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h02_large.txt": {
+        "sha256": "6e15f084706db21c654788e00c2e75a1e56afc30993243e5de9495d4ee7fd0d4",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h03_alias.txt": {
+        "sha256": "6b004643ee2dd5ecb5ede27073f9a0b2b1915757b37022dd32d4b8dcc3143881",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h04_tape.txt": {
+        "sha256": "47d4cce61710107c576537bdfe859ea5846684cd3ea2c3667012d84794b6b759",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h05_no_size.txt": {
+        "sha256": "32774b808b41fce3b2d73d0727b802a2d493533f94f0a4bf62fd7b3845684004",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h06_no_pack.txt": {
+        "sha256": "3158ce29e2e3149ae0cf16bed3def21d852343a81502532bda328c3a6df50c44",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h07_not_medium.txt": {
+        "sha256": "5cce1d2fff1e872e9bf307ed0d36d743917df18ea70a33e6d4297c8bb93671d1",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h08_not_large.txt": {
+        "sha256": "0a57e0ff231313c53c322c909181f0d9801d0c80bfd9d21cef73d82e52d49313",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h09_latex.txt": {
+        "sha256": "5090ffa690cdef5dda28ea158996a9f6d9bd215f7a047f2d37a08056c9f9d003",
+        "verified_from": "working_tree"
+      },
+      "live/fixtures/h10_damaged.txt": {
+        "sha256": "a5f2818879877a3ca767d343c4dbcbc01a06d69dd44fca355b7dc00a183cc6b3",
+        "verified_from": "working_tree"
+      },
+      "ordershield.py": {
+        "sha256": "23a7eb2e67caf3574a1250c53ca086e5cea5ba3cd9b536e94b220d0813e5aa59",
+        "verified_from": "exact_git_blob_copy"
+      },
+      "catalog.json": {
+        "sha256": "0709f1b84f41a3f27c5fd27ad7dd1c5e47c7d734ca451fbbb2e4f7d14e58b6cc",
+        "verified_from": "working_tree"
+      },
+      "prompt.txt": {
+        "sha256": "f1418f9d01d3c0c4337e46619e17961ddf524300555fdbe7de0cf2ba3a873bf3",
+        "verified_from": "working_tree"
+      }
+    },
+    "reference_commit": "12a7e50"
+  },
+  "checks": [
+    "python -B -m unittest discover -s spikes/ordershield/provider_bakeoff -p \"test_*.py\" -q 1>$null: 50 offline tests PASS in 56.299 seconds before live execution",
+    "python -B spikes/ordershield/provider_bakeoff/phase2.py validate: PASS before and after run; zero model calls",
+    "36 exact authorized model/fixture/run identities finalized, each of six fixtures three times per finalist: PASS",
+    "48 recorded Phase-1/Phase-2 scores, errors, grounding, literal quote audits and supplemental observations recomputed identically: PASS",
+    "Each Phase-2 request-body hash matches the corresponding selected Phase-1 request; aggregate summary reproduces exactly: PASS",
+    "Previous evidence/evaluators and frozen corpus/schema SHA-256 comparisons: PASS; no tracked-file changes",
+    "git diff --check and all seven new files whitespace scan: PASS",
+    "All seven new files secret scan against selected and process environment values: PASS; values never displayed"
+  ],
+  "observed_findings": {
+    "review_traps": "Both finalists: h05/h06/h09 successful review 9/9 Phase 2 and 12/12 combined; zero clean/confident promotions.",
+    "distinguishing_skus": "Both finalists: h07 GLOVE-N-L and h08 GLOVE-N-M correct 3/3 each Phase 2 and 4/4 each combined.",
+    "h08_description": "Gemini includes additional verbatim source text 3/3 Phase 2 and 4/4 combined; literal/frozen description exactness 0/3 and 0/4. Qwen exact 3/3 and 4/4.",
+    "h10_null_values": "Both finalists extract all 12/12 expected null values in Phase 2 and 16/16 combined.",
+    "h10_provenance": "Gemini quantity/unit_price null values have non-empty [unreadable] quotes in all three new runs: valid null provenance 6/12 Phase 2 and 8/16 combined. Qwen valid null provenance 12/12 and 16/16.",
+    "h10_sku_separate_from_provenance": "Gemini PAPER-A4-80 scores are 0.8, 0.9, 0.8 in additional runs 1..3; the unchanged 0.90 threshold yields one resolved SKU and two conservative abstentions. All three separately fail null-quote provenance. Qwen resolves PAPER-A4-80 3/3.",
+    "other_description_variability": "One additional h07 description mismatch for each finalist. Qwen h05 mismatch 3/3 new runs and h09 mismatch 2/3; strict frozen scoring is retained.",
+    "provider_errors": "All 36 new calls HTTP 200; all 36 schema-valid; no provider, transport, quota or access errors observed."
+  }
+}

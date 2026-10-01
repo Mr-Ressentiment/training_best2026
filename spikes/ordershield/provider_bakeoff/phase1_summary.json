@@ -1,0 +1,1077 @@
+{
+  "scope": "PHASE_1_ONLY",
+  "planned_calls": 30,
+  "attempted_calls": 30,
+  "completed_calls": 10,
+  "finalized_attempts": 30,
+  "candidates": [
+    {
+      "provider": "Google Gemini API",
+      "requested_model": "gemini-3.5-flash-lite",
+      "configuration": {
+        "thinking": {
+          "thinking_level": "minimal"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "scheduled_calls": 10,
+      "attempted_calls": 10,
+      "completed_calls": 0,
+      "finalized_attempts": 10,
+      "http_2xx_calls": 0,
+      "parsed_model_outputs": 0,
+      "schema_valid_rate": {
+        "numerator": 0,
+        "denominator": 10,
+        "rate": 0.0
+      },
+      "schema_valid_per_scheduled": {
+        "numerator": 0,
+        "denominator": 10,
+        "rate": 0.0
+      },
+      "mandatory_field_accuracy": {
+        "numerator": 0,
+        "denominator": 80,
+        "rate": 0.0
+      },
+      "whole_order_field_accuracy": {
+        "numerator": 0,
+        "denominator": 10,
+        "rate": 0.0
+      },
+      "per_field_accuracy": {
+        "customer": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "po_number": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "currency": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "declared_total": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "line.description": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "line.quantity": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "line.sale_unit": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "line.unit_price": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        }
+      },
+      "strict_description_mismatches": [],
+      "determinate_sku_accuracy": {
+        "numerator": 0,
+        "denominator": 7,
+        "rate": 0.0
+      },
+      "correct_abstention": {
+        "numerator": 0,
+        "denominator": 3,
+        "rate": 0.0
+      },
+      "ambiguity_review_accuracy": {
+        "numerator": 0,
+        "denominator": 3,
+        "rate": 0.0
+      },
+      "h05_h06_ambiguity_review_accuracy": {
+        "numerator": 0,
+        "denominator": 2,
+        "rate": 0.0
+      },
+      "ambiguous_clean_promotions": 0,
+      "wrong_confident_sku_count": 0,
+      "wrong_confident_per_confident_proposal": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "dangerous_wrong_confident": {
+        "numerator": 0,
+        "denominator": 3,
+        "rate": 0.0
+      },
+      "evidence_grounding_rate": {
+        "numerator": 0,
+        "denominator": 80,
+        "rate": 0.0
+      },
+      "nonnull_evidence_coverage": {
+        "numerator": 0,
+        "denominator": 76,
+        "rate": 0.0
+      },
+      "whole_order_evidence_rate": {
+        "numerator": 0,
+        "denominator": 10,
+        "rate": 0.0
+      },
+      "returned_verbatim_snippets": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "provider_failures_by_class": {
+        "PROVIDER_4XX": 10
+      },
+      "all_failures_by_class": {
+        "PROVIDER_4XX": 10
+      },
+      "latency_all_attempts": {
+        "n": 10,
+        "min_ms": 322.88,
+        "p50_ms": 343.005,
+        "mean_ms": 345.334,
+        "p90_ms": 368.53,
+        "p95_ms": 377.79,
+        "max_ms": 377.79,
+        "method": "nearest rank p90/p95; median p50",
+        "p95_limitation": "With <=10 calls p95 is the observed maximum, not a reliable population tail estimate"
+      },
+      "latency_valid_core": null,
+      "token_usage": {
+        "input": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        },
+        "output": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        },
+        "total": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        },
+        "thinking": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        }
+      },
+      "hard_semantic_gates": {
+        "zero_wrong_confident_skus": true,
+        "h05_h06_h09_successful_review": false,
+        "h07_h08_correct_distinguishing_sku": false,
+        "zero_ambiguous_clean_promotions": true,
+        "every_returned_snippet_verbatim": null,
+        "all_mandatory_fields_match": false
+      },
+      "all_hard_gates_pass": false,
+      "per_fixture": {
+        "h01_paper": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 377.79
+        },
+        "h02_large": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 322.88
+        },
+        "h03_alias": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 339.31
+        },
+        "h04_tape": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 353.81
+        },
+        "h05_no_size": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 331.29
+        },
+        "h06_no_pack": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 346.7
+        },
+        "h07_not_medium": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 329.32
+        },
+        "h08_not_large": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 368.53
+        },
+        "h09_latex": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 352.46
+        },
+        "h10_damaged": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 331.25
+        }
+      },
+      "schema_valid_returned_verbatim_snippets": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      }
+    },
+    {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "requested_model": "qwen3.8-flash",
+      "configuration": {
+        "thinking": {
+          "enable_thinking": false
+        },
+        "output_mode": "Qwen response_format=json_object (Singapore excludes JSON Schema)",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "scheduled_calls": 10,
+      "attempted_calls": 10,
+      "completed_calls": 10,
+      "finalized_attempts": 10,
+      "http_2xx_calls": 10,
+      "parsed_model_outputs": 10,
+      "schema_valid_rate": {
+        "numerator": 9,
+        "denominator": 10,
+        "rate": 0.9
+      },
+      "schema_valid_per_scheduled": {
+        "numerator": 9,
+        "denominator": 10,
+        "rate": 0.9
+      },
+      "mandatory_field_accuracy": {
+        "numerator": 71,
+        "denominator": 80,
+        "rate": 0.8875
+      },
+      "whole_order_field_accuracy": {
+        "numerator": 8,
+        "denominator": 10,
+        "rate": 0.8
+      },
+      "per_field_accuracy": {
+        "customer": {
+          "numerator": 9,
+          "denominator": 10,
+          "rate": 0.9
+        },
+        "po_number": {
+          "numerator": 9,
+          "denominator": 10,
+          "rate": 0.9
+        },
+        "currency": {
+          "numerator": 9,
+          "denominator": 10,
+          "rate": 0.9
+        },
+        "declared_total": {
+          "numerator": 9,
+          "denominator": 10,
+          "rate": 0.9
+        },
+        "line.description": {
+          "numerator": 8,
+          "denominator": 10,
+          "rate": 0.8
+        },
+        "line.quantity": {
+          "numerator": 9,
+          "denominator": 10,
+          "rate": 0.9
+        },
+        "line.sale_unit": {
+          "numerator": 9,
+          "denominator": 10,
+          "rate": 0.9
+        },
+        "line.unit_price": {
+          "numerator": 9,
+          "denominator": 10,
+          "rate": 0.9
+        }
+      },
+      "strict_description_mismatches": [
+        "h05_no_size"
+      ],
+      "determinate_sku_accuracy": {
+        "numerator": 6,
+        "denominator": 7,
+        "rate": 0.857143
+      },
+      "correct_abstention": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate": 1.0
+      },
+      "ambiguity_review_accuracy": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate": 1.0
+      },
+      "h05_h06_ambiguity_review_accuracy": {
+        "numerator": 2,
+        "denominator": 2,
+        "rate": 1.0
+      },
+      "ambiguous_clean_promotions": 0,
+      "wrong_confident_sku_count": 0,
+      "wrong_confident_per_confident_proposal": {
+        "numerator": 0,
+        "denominator": 6,
+        "rate": 0.0
+      },
+      "dangerous_wrong_confident": {
+        "numerator": 0,
+        "denominator": 3,
+        "rate": 0.0
+      },
+      "evidence_grounding_rate": {
+        "numerator": 72,
+        "denominator": 80,
+        "rate": 0.9
+      },
+      "nonnull_evidence_coverage": {
+        "numerator": 68,
+        "denominator": 76,
+        "rate": 0.894737
+      },
+      "whole_order_evidence_rate": {
+        "numerator": 9,
+        "denominator": 10,
+        "rate": 0.9
+      },
+      "returned_verbatim_snippets": {
+        "numerator": 76,
+        "denominator": 76,
+        "rate": 1.0
+      },
+      "provider_failures_by_class": {},
+      "all_failures_by_class": {
+        "SCHEMA_INVALID": 1,
+        "SEMANTIC_WRONG": 1
+      },
+      "latency_all_attempts": {
+        "n": 10,
+        "min_ms": 5690.24,
+        "p50_ms": 7626.54,
+        "mean_ms": 7553.107,
+        "p90_ms": 8401.95,
+        "p95_ms": 8955.06,
+        "max_ms": 8955.06,
+        "method": "nearest rank p90/p95; median p50",
+        "p95_limitation": "With <=10 calls p95 is the observed maximum, not a reliable population tail estimate"
+      },
+      "latency_valid_core": {
+        "n": 9,
+        "min_ms": 5690.24,
+        "p50_ms": 7782.18,
+        "mean_ms": 7647.65,
+        "p90_ms": 8955.06,
+        "p95_ms": 8955.06,
+        "max_ms": 8955.06,
+        "method": "nearest rank p90/p95; median p50",
+        "p95_limitation": "With <=10 calls p95 is the observed maximum, not a reliable population tail estimate"
+      },
+      "token_usage": {
+        "input": {
+          "exposed_calls": 10,
+          "total": 14278,
+          "average_per_exposed_call": 1427.8
+        },
+        "output": {
+          "exposed_calls": 10,
+          "total": 4424,
+          "average_per_exposed_call": 442.4
+        },
+        "total": {
+          "exposed_calls": 10,
+          "total": 18702,
+          "average_per_exposed_call": 1870.2
+        },
+        "thinking": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        }
+      },
+      "hard_semantic_gates": {
+        "zero_wrong_confident_skus": true,
+        "h05_h06_h09_successful_review": true,
+        "h07_h08_correct_distinguishing_sku": true,
+        "zero_ambiguous_clean_promotions": true,
+        "every_returned_snippet_verbatim": true,
+        "all_mandatory_fields_match": false
+      },
+      "all_hard_gates_pass": false,
+      "per_fixture": {
+        "h01_paper": {
+          "http_status": 200,
+          "errors": [
+            "SCHEMA_INVALID"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 6702.22
+        },
+        "h02_large": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "GLOVE-N-L",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 7782.18
+        },
+        "h03_alias": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "GLOVE-N-M",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 7204.51
+        },
+        "h04_tape": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "TAPE-48",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 7877.94
+        },
+        "h05_no_size": {
+          "http_status": 200,
+          "errors": [
+            "SEMANTIC_WRONG"
+          ],
+          "schema_valid": true,
+          "mandatory_fields_correct": 7,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": true,
+          "review_success": true,
+          "wrong_confident_sku": false,
+          "core_status": "HUMAN_REVIEW",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 8955.06
+        },
+        "h06_no_pack": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": null,
+          "sku_correct": true,
+          "review_success": true,
+          "wrong_confident_sku": false,
+          "core_status": "HUMAN_REVIEW",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 8128.05
+        },
+        "h07_not_medium": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "GLOVE-N-L",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 7470.9
+        },
+        "h08_not_large": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "GLOVE-N-M",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "CLEAN_DRAFT",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 7318.02
+        },
+        "h09_latex": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": null,
+          "sku_correct": true,
+          "review_success": true,
+          "wrong_confident_sku": false,
+          "core_status": "HUMAN_REVIEW",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 5690.24
+        },
+        "h10_damaged": {
+          "http_status": 200,
+          "errors": [],
+          "schema_valid": true,
+          "mandatory_fields_correct": 8,
+          "whole_order_correct": true,
+          "proposed_sku": "PAPER-A4-80",
+          "sku_correct": true,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": "HUMAN_REVIEW",
+          "all_evidence_grounded": true,
+          "wall_clock_ms": 8401.95
+        }
+      },
+      "schema_valid_returned_verbatim_snippets": {
+        "numerator": 68,
+        "denominator": 68,
+        "rate": 1.0
+      }
+    },
+    {
+      "provider": "Google Gemini API",
+      "requested_model": "gemini-3.8-flash",
+      "configuration": {
+        "thinking": {
+          "thinking_level": "low"
+        },
+        "output_mode": "Gemini responseFormat.text JSON Schema",
+        "max_output_tokens": 4096,
+        "temperature": 0,
+        "stream": false,
+        "timeout_seconds": 180,
+        "automatic_retries": 0,
+        "redirects": false,
+        "tools_search_grounding": false
+      },
+      "scheduled_calls": 10,
+      "attempted_calls": 10,
+      "completed_calls": 0,
+      "finalized_attempts": 10,
+      "http_2xx_calls": 0,
+      "parsed_model_outputs": 0,
+      "schema_valid_rate": {
+        "numerator": 0,
+        "denominator": 10,
+        "rate": 0.0
+      },
+      "schema_valid_per_scheduled": {
+        "numerator": 0,
+        "denominator": 10,
+        "rate": 0.0
+      },
+      "mandatory_field_accuracy": {
+        "numerator": 0,
+        "denominator": 80,
+        "rate": 0.0
+      },
+      "whole_order_field_accuracy": {
+        "numerator": 0,
+        "denominator": 10,
+        "rate": 0.0
+      },
+      "per_field_accuracy": {
+        "customer": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "po_number": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "currency": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "declared_total": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "line.description": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "line.quantity": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "line.sale_unit": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        },
+        "line.unit_price": {
+          "numerator": 0,
+          "denominator": 10,
+          "rate": 0.0
+        }
+      },
+      "strict_description_mismatches": [],
+      "determinate_sku_accuracy": {
+        "numerator": 0,
+        "denominator": 7,
+        "rate": 0.0
+      },
+      "correct_abstention": {
+        "numerator": 0,
+        "denominator": 3,
+        "rate": 0.0
+      },
+      "ambiguity_review_accuracy": {
+        "numerator": 0,
+        "denominator": 3,
+        "rate": 0.0
+      },
+      "h05_h06_ambiguity_review_accuracy": {
+        "numerator": 0,
+        "denominator": 2,
+        "rate": 0.0
+      },
+      "ambiguous_clean_promotions": 0,
+      "wrong_confident_sku_count": 0,
+      "wrong_confident_per_confident_proposal": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "dangerous_wrong_confident": {
+        "numerator": 0,
+        "denominator": 3,
+        "rate": 0.0
+      },
+      "evidence_grounding_rate": {
+        "numerator": 0,
+        "denominator": 80,
+        "rate": 0.0
+      },
+      "nonnull_evidence_coverage": {
+        "numerator": 0,
+        "denominator": 76,
+        "rate": 0.0
+      },
+      "whole_order_evidence_rate": {
+        "numerator": 0,
+        "denominator": 10,
+        "rate": 0.0
+      },
+      "returned_verbatim_snippets": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "provider_failures_by_class": {
+        "PROVIDER_4XX": 10
+      },
+      "all_failures_by_class": {
+        "PROVIDER_4XX": 10
+      },
+      "latency_all_attempts": {
+        "n": 10,
+        "min_ms": 320.4,
+        "p50_ms": 345.83,
+        "mean_ms": 346.597,
+        "p90_ms": 359.76,
+        "p95_ms": 388.28,
+        "max_ms": 388.28,
+        "method": "nearest rank p90/p95; median p50",
+        "p95_limitation": "With <=10 calls p95 is the observed maximum, not a reliable population tail estimate"
+      },
+      "latency_valid_core": null,
+      "token_usage": {
+        "input": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        },
+        "output": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        },
+        "total": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        },
+        "thinking": {
+          "exposed_calls": 0,
+          "total": null,
+          "average_per_exposed_call": null
+        }
+      },
+      "hard_semantic_gates": {
+        "zero_wrong_confident_skus": true,
+        "h05_h06_h09_successful_review": false,
+        "h07_h08_correct_distinguishing_sku": false,
+        "zero_ambiguous_clean_promotions": true,
+        "every_returned_snippet_verbatim": null,
+        "all_mandatory_fields_match": false
+      },
+      "all_hard_gates_pass": false,
+      "per_fixture": {
+        "h01_paper": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 351.36
+        },
+        "h02_large": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 320.4
+        },
+        "h03_alias": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 343.77
+        },
+        "h04_tape": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 332.06
+        },
+        "h05_no_size": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 347.89
+        },
+        "h06_no_pack": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 359.76
+        },
+        "h07_not_medium": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 354.71
+        },
+        "h08_not_large": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 325.36
+        },
+        "h09_latex": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 388.28
+        },
+        "h10_damaged": {
+          "http_status": 400,
+          "errors": [
+            "PROVIDER_4XX"
+          ],
+          "schema_valid": false,
+          "mandatory_fields_correct": 0,
+          "whole_order_correct": false,
+          "proposed_sku": null,
+          "sku_correct": false,
+          "review_success": false,
+          "wrong_confident_sku": false,
+          "core_status": null,
+          "all_evidence_grounded": false,
+          "wall_clock_ms": 342.38
+        }
+      },
+      "schema_valid_returned_verbatim_snippets": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      }
+    }
+  ],
+  "weighted_score": null,
+  "winner": null,
+  "phase2_started": false,
+  "stop_reason": null,
+  "interpretation": {
+    "google_candidates": "Each received ten HTTP 400 rejections with no completed model outputs. This is not a model-quality or inference-latency measurement.",
+    "google_400_root_cause": "UNVERIFIED: HTTP error response bodies were not retained; rejection reason cannot be reconstructed without additional calls, which are prohibited.",
+    "qwen_h01": "JSON parses but violates the unchanged schema: extra description key and candidate scores instead of required score. No repair or semantic credit.",
+    "qwen_h05": "Correctly routes to HUMAN_REVIEW; description includes the verbatim size-blank sentence absent from frozen expected description, causing strict field mismatch.",
+    "decision": "No candidate satisfies all hard gates in this run; no winner selected and no Phase 2 started."
+  }
+}

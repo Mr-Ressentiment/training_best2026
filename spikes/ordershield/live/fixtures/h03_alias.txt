@@ -1,0 +1,6 @@
+SYNTHETIC procurement message
+Purchaser Cedar Care, reference HX-203, currency EUR.
+For our next intake please arrange this item:
+Nitrile patient-examination handwear, blue, no powder, medium; 100 gloves per box
+We require 8 selling units. Selling unit: box.
+Agreed amount per selling unit: 8.00. Net payable: 64.00.
