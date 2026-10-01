@@ -71,14 +71,9 @@ def get_verified_order(
         line_num = item["line_number"]
         draft_line = draft_lines_by_num.get(line_num)
 
-        # SKU display name from catalog lookup by exact SKU
+        # SKU display name from catalog lookup by exact immutable snapshot SKU
         prod = db.get(CatalogProduct, sku)
-        if prod is not None:
-            sku_name = prod.name
-        elif draft_line is not None and draft_line.product is not None:
-            sku_name = draft_line.product.name
-        else:
-            sku_name = None
+        sku_name = prod.name if prod is not None else None
 
         # Line provenance from associated draft line
         if draft_line is not None:
