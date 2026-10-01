@@ -4,6 +4,7 @@ Defines the RED acceptance boundary prior to T028 implementation for:
 - PriceMismatch (AC1)
 - QuantityOrPackagingBreach (AC2, AC3, AC4)
 - ArithmeticMismatch line-level (AC5)
+- ArithmeticMismatch order-level (AC6)
 - CatalogMatchingMismatch (AC7, AC8, AC9)
 - Clean draft / false-positive prevention (AC10)
 - Readiness blocker invariant: unresolved discrepancy -> Needs Review (AC11)
@@ -13,10 +14,10 @@ Defines the RED acceptance boundary prior to T028 implementation for:
 - Discrepancy re-evaluation and idempotency (no duplicate unresolved flags)
 
 NOTE on Order-Level ArithmeticMismatch:
-Order-level ArithmeticMismatch (stated order total != sum of line totals) is
-explicitly BLOCKED by Human Gate HG-P2-01 because the current canonical model
-lacks a source-backed stated order total. See test_hg_p2_01_current_model_has_no_source_backed_order_total
-and docs/gates/04_p2_order_total_arithmetic_gate.md.
+Following Human Gate HG-P2-01 ACCEPTED Option A, the canonical model represents
+an optional source-backed stated order total (extracted_order_total_cents).
+AC6 defines the genuine RED acceptance contract for order-level ArithmeticMismatch
+awaiting T028 implementation.
 """
 
 from __future__ import annotations
@@ -48,6 +49,7 @@ def _create_test_draft(
     customer_id: str = "CUST-ACME",
     customer_name: str = "Acme Industrial Supplies",
     po_number: str = "PO-10023",
+    extracted_order_total_cents: int | None = None,
     line_items: list[DraftLineItem] | None = None,
     raw_text: str = "PURCHASE ORDER\nAcme Industrial Supplies\nPO-10023\n",
 ) -> OrderDraft:
@@ -81,6 +83,7 @@ def _create_test_draft(
         customer_id=customer_id,
         customer_name_extracted=customer_name,
         po_number_extracted=po_number,
+        extracted_order_total_cents=extracted_order_total_cents,
         status="Ingested",
         is_replay_mode=False,
         line_items=line_items,
@@ -336,26 +339,189 @@ def test_line_arithmetic_mismatch_creates_arithmetic_discrepancy(db_session):
 
 
 # -----------------------------------------------------------------------------
-# Human Gate HG-P2-01 Sentinel — Order-Level Arithmetic Stated Total Gap
-# (BLOCKED: Genuine order-level ArithmeticMismatch requirement is not satisfied
-# because the canonical domain model lacks a source-backed stated order total)
+# AC6 — ArithmeticMismatch: Order-Level Arithmetic
+# (Reconciled under HG-P2-01 Option A; genuine RED acceptance contract for T028)
 # -----------------------------------------------------------------------------
 
-def test_hg_p2_01_current_model_has_no_source_backed_order_total(db_session):
-    """HG-P2-01 Sentinel: Evidence that canonical model lacks source-backed stated order total.
-
-    NOTE: This test proves the existence of a schema/contract gap.
-    Absence of the field != satisfaction of T026 order-level ArithmeticMismatch.
-    The genuine order-level ArithmeticMismatch acceptance test is BLOCKED pending
-    Human Gate HG-P2-01 decision.
-    """
+def test_order_arithmetic_mismatch_creates_blocking_order_discrepancy(db_session):
+    """AC6A: Customer stated order total != sum of customer stated line totals creates order-level ArithmeticMismatch."""
     seed_baseline(db_session)
-    draft = _create_test_draft(db_session)
+    line1 = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2500,
+        extracted_line_total_cents=25000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    line2 = DraftLineItem(
+        line_number=2,
+        customer_description="Standard pallet wrap",
+        extracted_quantity=5,
+        extracted_unit_price_cents=2000,
+        extracted_line_total_cents=10000,
+        matched_sku="SKU-WRAP-15",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    # Stated line total sum: 25000 + 10000 = 35000 cents ($350.00)
+    # Stated order total: 36000 cents ($360.00) != 35000
+    draft = _create_test_draft(
+        db_session,
+        extracted_order_total_cents=36000,
+        line_items=[line1, line2],
+    )
 
-    # Confirm model gap: neither OrderDraft nor extraction schemas provide a source-backed stated order total
-    assert not hasattr(draft, "extracted_subtotal_cents")
-    assert not hasattr(draft, "stated_subtotal_cents")
-    assert hasattr(draft, "calculated_subtotal_cents")
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    flags = _get_discrepancies(db_session, result)
+    order_arith_flags = [
+        f for f in flags
+        if f.discrepancy_type == "ArithmeticMismatch" and f.line_item_id is None
+    ]
+    assert len(order_arith_flags) == 1, (
+        f"Expected exactly 1 order-level ArithmeticMismatch flag, found {len(order_arith_flags)}"
+    )
+    flag = order_arith_flags[0]
+    assert flag.severity == "Blocking"
+    assert flag.resolution_state == "Unresolved"
+    assert flag.line_item_id is None
+    assert flag.expected_value and ("350" in flag.expected_value or "35000" in flag.expected_value)
+    assert flag.requested_value and ("360" in flag.requested_value or "36000" in flag.requested_value)
+    assert bool(flag.explanation and flag.explanation.strip())
+
+
+def test_correct_stated_order_arithmetic_produces_no_order_arithmetic_mismatch(db_session):
+    """AC6B: Stated order total == sum of customer stated line totals produces no order ArithmeticMismatch."""
+    seed_baseline(db_session)
+    line1 = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2500,
+        extracted_line_total_cents=25000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    line2 = DraftLineItem(
+        line_number=2,
+        customer_description="Standard pallet wrap",
+        extracted_quantity=5,
+        extracted_unit_price_cents=2000,
+        extracted_line_total_cents=10000,
+        matched_sku="SKU-WRAP-15",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    # Stated line sum: 25000 + 10000 = 35000 cents ($350.00)
+    # Stated order total: 35000 cents ($350.00) == 35000
+    draft = _create_test_draft(
+        db_session,
+        extracted_order_total_cents=35000,
+        line_items=[line1, line2],
+    )
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    flags = _get_discrepancies(db_session, result)
+    order_arith_flags = [
+        f for f in flags
+        if f.discrepancy_type == "ArithmeticMismatch" and f.line_item_id is None
+    ]
+    assert order_arith_flags == [], (
+        "Clean matching customer order total must produce no order-level ArithmeticMismatch"
+    )
+
+
+def test_order_arithmetic_separation_from_price_mismatch(db_session):
+    """AC6C: PriceMismatch must be flagged while ArithmeticMismatch is not, freezing Human Gate semantics."""
+    seed_baseline(db_session)
+    # SKU-WRAP-18: Q=10 contract tier price is 2500 cents ($25.00).
+    # Customer stated unit price = 2400 cents ($24.00), stated line total = 24000 cents ($240.00).
+    # Customer stated order total = 24000 cents ($240.00).
+    # Customer math: 10 * $24.00 = $240.00 == order total $240.00 -> Arithmetic is SOUND.
+    # Contract pricing: 10 * $25.00 = $250.00 -> PriceMismatch = YES.
+    line = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2400,
+        extracted_line_total_cents=24000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(
+        db_session,
+        extracted_order_total_cents=24000,
+        line_items=[line],
+    )
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status == "Needs Review"
+    flags = _get_discrepancies(db_session, result)
+    arith_flags = [f for f in flags if f.discrepancy_type == "ArithmeticMismatch"]
+    assert arith_flags == [], (
+        "Order-level arithmetic must evaluate customer stated values independently from contract pricing"
+    )
+    price_flags = [f for f in flags if f.discrepancy_type == "PriceMismatch"]
+    assert len(price_flags) == 1, (
+        f"Expected 1 PriceMismatch flag for unit price breach, found {len(price_flags)}"
+    )
+
+
+def test_incomplete_source_arithmetic_does_not_fabricate_order_arithmetic_mismatch(db_session):
+    """AC6D: Missing line total must not trigger fabricated order ArithmeticMismatch, but blocks Ready for Approval."""
+    seed_baseline(db_session)
+    line1 = DraftLineItem(
+        line_number=1,
+        customer_description="18in stretch film heavy duty",
+        extracted_quantity=10,
+        extracted_unit_price_cents=2500,
+        extracted_line_total_cents=25000,
+        matched_sku="SKU-WRAP-18",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    line2 = DraftLineItem(
+        line_number=2,
+        customer_description="Standard pallet wrap",
+        extracted_quantity=5,
+        extracted_unit_price_cents=2000,
+        extracted_line_total_cents=None,  # Missing source-stated line total evidence
+        matched_sku="SKU-WRAP-15",
+        sku_confidence="High",
+        sku_resolution_source="AI_HIGH_CONFIDENCE",
+        status="Active",
+    )
+    draft = _create_test_draft(
+        db_session,
+        extracted_order_total_cents=35000,
+        line_items=[line1, line2],
+    )
+
+    result = evaluate_clean_draft(db_session, draft)
+
+    assert result.status != "Ready for Approval"
+    flags = _get_discrepancies(db_session, result)
+    order_arith_flags = [
+        f for f in flags
+        if f.discrepancy_type == "ArithmeticMismatch" and f.line_item_id is None
+    ]
+    assert order_arith_flags == [], (
+        "Engine must not fabricate order ArithmeticMismatch when source line totals are incomplete"
+    )
 
 
 # -----------------------------------------------------------------------------
