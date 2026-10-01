@@ -124,6 +124,7 @@ Runtime configuration is read directly from environment variables via Python `os
 ```text
 LLM_PROVIDER="qwen"
 LLM_API_KEY=""
+QWEN_BASE_URL=""
 DATABASE_URL="sqlite:///ordershield.db"
 LIVE_INFERENCE_TIMEOUT=15.0
 IMMEDIATE_FAILURE_TIMEOUT=5.0
@@ -133,27 +134,53 @@ IMMEDIATE_FAILURE_TIMEOUT=5.0
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
-| `LLM_PROVIDER` | `"qwen"` | Live AI extraction provider. Supported options: `"qwen"` (primary: Alibaba Qwen 3.8 Flash) or `"gemini"` (Google Gemini 3.5 Flash-Lite). |
+| `LLM_PROVIDER` | `"qwen"` | Live AI extraction provider. Supported options: `"qwen"` (primary: Alibaba Qwen 3.8 Flash) or `"gemini"` (alternate: Google Gemini 3.5 Flash-Lite). |
 | `LLM_API_KEY` | `""` | API authentication key for the configured provider. Required for live intake. |
+| `QWEN_BASE_URL` | `""` | **Required when `LLM_PROVIDER="qwen"`.** Workspace-specific approved Singapore compatible-mode base URL of the form `https://<workspace-host>.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`. `LLM_API_KEY` alone is not sufficient for Qwen. |
 | `DATABASE_URL` | `"sqlite:///ordershield.db"` | SQLAlchemy database connection URL. |
 | `LIVE_INFERENCE_TIMEOUT` | `15.0` | Maximum client timeout in seconds for live AI inference before aborting. |
 | `IMMEDIATE_FAILURE_TIMEOUT`| `5.0` | Reference/configuration value for the immediate-failure target used by the accepted requirements/tests; LiveAIProvider does not currently enforce it as a separate timer. |
 
-### Setting Environment Variables
+### Setting Environment Variables for Live Intake
 
-#### Windows PowerShell
+#### Primary Live Provider: Alibaba Qwen 3.8 Flash
+Qwen requires both `LLM_API_KEY` and the workspace-specific Singapore `QWEN_BASE_URL`:
+
+##### Windows PowerShell
 ```powershell
 $env:LLM_PROVIDER="qwen"
-$env:LLM_API_KEY="your-api-key-here"
+$env:LLM_API_KEY="your-dashscope-api-key"
+$env:QWEN_BASE_URL="https://<workspace-host>.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
 ```
 
-#### Linux / macOS
+##### Linux / macOS
 ```bash
 export LLM_PROVIDER="qwen"
-export LLM_API_KEY="your-api-key-here"
+export LLM_API_KEY="your-dashscope-api-key"
+export QWEN_BASE_URL="https://<workspace-host>.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
 ```
 
-*Provider Semantics*: Switching providers requires setting `LLM_PROVIDER` and restarting the application. There is zero runtime failover.
+#### Alternate Live Provider: Google Gemini 3.5 Flash-Lite
+Gemini uses the canonical Google GenAI endpoint and only requires `LLM_API_KEY`:
+
+##### Windows PowerShell
+```powershell
+$env:LLM_PROVIDER="gemini"
+$env:LLM_API_KEY="your-gemini-api-key"
+```
+
+##### Linux / macOS
+```bash
+export LLM_PROVIDER="gemini"
+export LLM_API_KEY="your-gemini-api-key"
+```
+
+*Provider Governance & Semantics*:
+- **Explicit selection only**: The active provider is determined strictly by `LLM_PROVIDER`.
+- **Zero runtime failover**: The application does not perform dynamic failover between providers upon failure.
+- **Zero silent fixture fallback**: If live extraction fails or times out, the intake returns an explicit diagnostic error (`AIProviderUnavailableError` / HTTP 503); it never silently falls back to fixture data.
+- **No arbitrary endpoint substitution**: Qwen strictly validates the workspace-specific Singapore HTTPS compatible-mode base.
+- **Restart required**: Switching providers requires updating the environment and restarting the server process.
 
 ---
 
@@ -221,7 +248,7 @@ http://127.0.0.1:8000/static/index.html
 
 Live mode requires a valid API key for the configured provider (`qwen` or `gemini`).
 
-1. Configure environment variables (`LLM_PROVIDER`, `LLM_API_KEY`).
+1. Configure environment variables (`LLM_PROVIDER`, `LLM_API_KEY`, and `QWEN_BASE_URL` when using Qwen; see [Configuration](#configuration)).
 2. Initialize and seed the database (`python -m app.cli init-db --seed`).
 3. Start the server (`python -m uvicorn app.main:app`).
 4. Navigate to `http://127.0.0.1:8000/static/index.html`.

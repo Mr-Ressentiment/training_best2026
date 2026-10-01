@@ -71,18 +71,28 @@ python -m app.cli init-db --seed
 ## 3. Running the Application
 
 ### 3.1 Live Mode
-Configure environment variables for the reconciled primary training provider (Alibaba Qwen 3.8 Flash with reasoning disabled; see ADR 0001) or alternate explicitly configured provider (Google Gemini 3.5 Flash-Lite):
+Configure environment variables for the reconciled primary training provider (Alibaba Qwen 3.8 Flash with reasoning disabled; see ADR 0001) or alternate explicitly configured provider (Google Gemini 3.5 Flash-Lite).
+
+When using Qwen (`LLM_PROVIDER="qwen"`), both `LLM_API_KEY` and the workspace-specific Singapore compatible-mode base URL `QWEN_BASE_URL` are required. `LLM_API_KEY` alone is not sufficient. The base URL must follow the format `https://<workspace-host>.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`.
+
 ```bash
 # Windows PowerShell (Primary Live Provider: Alibaba Qwen 3.8 Flash):
 $env:LLM_PROVIDER="qwen" # Primary training/demo live provider (qwen3.8-flash)
 $env:LLM_API_KEY="your-dashscope-api-key"
+$env:QWEN_BASE_URL="https://<workspace-host>.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+
 # Windows PowerShell (Alternate Live Provider: Google Gemini 3.5 Flash-Lite):
 # $env:LLM_PROVIDER="gemini"
 # $env:LLM_API_KEY="your-gemini-api-key"
 
-# Linux/macOS (Primary Live Provider):
+# Linux/macOS (Primary Live Provider: Alibaba Qwen 3.8 Flash):
 export LLM_PROVIDER="qwen"
 export LLM_API_KEY="your-dashscope-api-key"
+export QWEN_BASE_URL="https://<workspace-host>.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+
+# Linux/macOS (Alternate Live Provider: Google Gemini 3.5 Flash-Lite):
+# export LLM_PROVIDER="gemini"
+# export LLM_API_KEY="your-gemini-api-key"
 
 # Launch the FastAPI server
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
