@@ -1,4 +1,4 @@
-/* OrderShield P1 workspace — committed local styles, no remote assets. */
+/* OrderShield P1/P2 workspace — committed local styles, no remote assets. */
 
 :root {
   --ink: #17212b;
@@ -343,6 +343,7 @@ h3 {
 }
 
 select,
+textarea,
 input[type="text"] {
   font: inherit;
   color: inherit;
@@ -354,6 +355,7 @@ input[type="text"] {
 }
 
 select:focus-visible,
+textarea:focus-visible,
 input:focus-visible,
 .btn:focus-visible {
   outline: 3px solid #7ab8dc;
@@ -417,6 +419,39 @@ input:focus-visible,
   color: inherit;
   font-weight: 600;
   padding: 5px 12px;
+}
+
+.btn--small {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+
+.btn--outline {
+  background: #fff;
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.btn--outline:hover:not(:disabled) {
+  background: var(--neutral-bg);
+}
+
+.btn--danger {
+  background: #fff;
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: var(--bad-bg);
+}
+
+select:disabled,
+textarea:disabled,
+input[type="text"]:disabled {
+  cursor: not-allowed;
+  background: var(--neutral-bg);
+  color: var(--muted);
 }
 
 /* ---------- Diagnostics ---------- */
@@ -623,6 +658,10 @@ input:focus-visible,
 
 .lines .is-removed td {
   color: var(--muted);
+}
+
+/* The resolution cell keeps removed-line history readable, so it is not struck through. */
+.lines .is-removed td:not(.resolution) {
   text-decoration: line-through;
 }
 
@@ -644,6 +683,120 @@ input:focus-visible,
   color: var(--warn);
   font-size: 0.78rem;
   font-weight: 600;
+}
+
+.lines td.resolution {
+  min-width: 260px;
+}
+
+/* ---------- Discrepancy flags ---------- */
+
+.flags {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.flag {
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-left-width: 4px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+.flag--open {
+  border-color: var(--warn-line);
+  border-left-color: var(--warn);
+  background: var(--warn-bg);
+  color: var(--ink);
+}
+
+.flag--resolved {
+  border-style: dashed;
+  border-left-style: solid;
+  background: transparent;
+  color: var(--muted);
+}
+
+.flag__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+.flag__type {
+  font-weight: 700;
+}
+
+.flag--open .flag__type {
+  color: var(--warn);
+}
+
+.flag--open .flag__type::before {
+  content: "⚑ ";
+}
+
+.flag__tag {
+  padding: 0 6px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.flag__values {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 8px;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.flag__values dt {
+  color: var(--muted);
+}
+
+.flag__values dd {
+  font-weight: 600;
+}
+
+.flag__explanation {
+  margin-top: 4px;
+}
+
+/* ---------- Line actions ---------- */
+
+.line-actions {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.line-actions__candidates,
+.line-actions__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.line-actions__select {
+  flex: 1 1 150px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
+.line-actions__hint {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.line-actions__hint:empty {
+  display: none;
 }
 
 .lines .placeholder,
@@ -685,6 +838,68 @@ input:focus-visible,
 .approval__hint.is-warning {
   color: var(--bad);
   font-weight: 600;
+}
+
+.btn--reject {
+  margin-left: auto;
+}
+
+/* ---------- Rejection dialog ---------- */
+
+/* z-index stays below the replay banner (10) so the dialog can never cover it. */
+.reject-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  background: rgba(23, 33, 43, 0.45);
+}
+
+.reject-modal {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 480px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-top: 4px solid var(--bad);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(23, 33, 43, 0.25);
+}
+
+.reject-modal__title {
+  color: var(--bad);
+}
+
+.reject-modal__intro {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.reject-modal__reason {
+  resize: vertical;
+  min-height: 5em;
+}
+
+.reject-modal__warning {
+  color: var(--bad);
+  font-weight: 600;
+  font-size: 0.88rem;
+  overflow-wrap: anywhere;
+}
+
+.reject-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 /* ---------- Result ---------- */
@@ -768,6 +983,15 @@ input:focus-visible,
   .approval .field,
   .approval .btn {
     flex: 1 1 100%;
+  }
+
+  .lines td.resolution {
+    min-width: 220px;
+  }
+
+  .line-actions__buttons .btn,
+  .reject-modal__actions .btn {
+    flex: 1 1 auto;
   }
 }
 

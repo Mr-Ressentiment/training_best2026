@@ -1,12 +1,16 @@
-/* OrderShield P1 workspace logic.
+/* OrderShield P1/P2 workspace logic.
  *
  * The backend is authoritative for status, pricing, totals, readiness, SKU
- * resolution and approval outcome. This file only transports requests and
- * renders response bodies; it never recomputes business rules.
+ * resolution, discrepancy resolution, rejection and approval outcome. This
+ * file only transports requests and renders response bodies; it never
+ * recomputes business rules.
  *
  * LIVE   -> POST /api/v1/orders/ingest
  * REPLAY -> POST /api/v1/fixtures/{fixture_id}/ingest
  * The two paths are never substituted for each other and nothing is retried.
+ *
+ * P2 operator mutations (SelectSKU, line removal, rejection) each replace
+ * state.draft with the server response and rerender; nothing is patched locally.
  */
 (function () {
   "use strict";
@@ -14,6 +18,10 @@
   var API = "/api/v1";
   var PLACEHOLDER = "—";
   var READY_STATUS = "Ready for Approval";
+  var TERMINAL_STATUSES = ["Approved", "Rejected"];
+  var ACTIVE_LINE_STATUS = "Active";
+  var UNRESOLVED_STATE = "Unresolved";
+  var CATALOG_MODAL_SRC = "js/components/catalog_modal.js";
   var LIVE_EXTENSIONS = [".txt", ".pdf"];
 
   var STATUS_BADGES = {
@@ -167,6 +175,121 @@
     return td;
   }
 
+  /** Terminal means exactly the server-returned Approved / Rejected statuses. */
+  function isTerminalDraft(draft) {
+    return draft !== null && TERMINAL_STATUSES.indexOf(draft.status) !== -1;
+  }
+
+  /** UX guard only; the backend 409 stays authoritative for terminal drafts. */
+  function canMutateDraft() {
+    return state.draft !== null && !isTerminalDraft(state.draft) && state.approvedOrder === null;
+  }
+
+  /** One server-returned flag, shown verbatim. Resolved flags stay visible as history. */
+  function renderDiscrepancy(flag) {
+    var resolved = !isMissing(flag.resolution_state) && flag.resolution_state !== UNRESOLVED_STATE;
+    var item = el("li", "flag " + (resolved ? "flag--resolved" : "flag--open"));
+
+    var head = el("p", "flag__head");
+    head.appendChild(el("span", "flag__type",
+      isMissing(flag.discrepancy_type) ? "Discrepancy" : String(flag.discrepancy_type)));
+    if (!isMissing(flag.severity)) {
+      head.appendChild(el("span", "flag__tag", String(flag.severity)));
+    }
+    if (!isMissing(flag.resolution_state)) {
+      head.appendChild(el("span", "flag__tag flag__tag--state", String(flag.resolution_state)));
+    }
+    item.appendChild(head);
+
+    var values = el("dl", "flag__values");
+    [["Expected", flag.expected_value], ["Requested", flag.requested_value]].forEach(function (row) {
+      if (!isMissing(row[1])) {
+        values.appendChild(el("dt", "", row[0]));
+        values.appendChild(el("dd", "", String(row[1])));
+      }
+    });
+    if (values.childNodes.length > 0) {
+      item.appendChild(values);
+    }
+    if (!isMissing(flag.explanation)) {
+      item.appendChild(el("p", "flag__explanation", String(flag.explanation)));
+    }
+    return item;
+  }
+
+  function candidateHint(candidate) {
+    var parts = [];
+    if (!isMissing(candidate.score)) {
+      parts.push("Score: " + candidate.score);
+    }
+    if (!isMissing(candidate.rationale)) {
+      parts.push(String(candidate.rationale));
+    }
+    return parts.join(" · ");
+  }
+
+  /** Operator controls for one Active line. Every control only triggers a server request. */
+  function renderLineActions(line) {
+    var actions = el("div", "line-actions");
+    var label = "line " + (isMissing(line.line_number) ? "" : line.line_number);
+
+    var candidates = (Array.isArray(line.candidate_skus) ? line.candidate_skus : []).filter(function (candidate) {
+      return candidate && typeof candidate.sku === "string" && candidate.sku !== "";
+    });
+    if (candidates.length > 0) {
+      var picker = el("div", "line-actions__candidates");
+      var select = el("select", "line-actions__select");
+      select.setAttribute("aria-label", "Candidate SKU for " + label);
+      var prompt = el("option", "", "Select candidate…");
+      prompt.value = "";
+      select.appendChild(prompt);
+      candidates.forEach(function (candidate) {
+        var option = el("option", "", candidate.sku + (isMissing(candidate.name) ? "" : " — " + candidate.name));
+        option.value = candidate.sku;
+        select.appendChild(option);
+      });
+      var apply = el("button", "btn btn--small btn--primary", "Apply SKU");
+      apply.type = "button";
+      apply.setAttribute("data-requires-candidate", "");
+      var hint = el("span", "line-actions__hint");
+      // Changing the dropdown never mutates the order; only the explicit Apply action does.
+      select.addEventListener("change", function () {
+        var chosen = candidates.find(function (candidate) {
+          return candidate.sku === select.value;
+        });
+        hint.textContent = chosen ? candidateHint(chosen) : "";
+        renderControls();
+      });
+      apply.addEventListener("click", function () {
+        if (select.value !== "") {
+          selectLineSku(line, select.value);
+        }
+      });
+      picker.appendChild(select);
+      picker.appendChild(apply);
+      actions.appendChild(picker);
+      actions.appendChild(hint);
+    }
+
+    var buttons = el("div", "line-actions__buttons");
+    var search = el("button", "btn btn--small btn--outline", "Search catalog…");
+    search.type = "button";
+    search.setAttribute("aria-label", "Search catalog for " + label);
+    search.addEventListener("click", function () {
+      openCatalogSearch(line);
+    });
+    var remove = el("button", "btn btn--small btn--danger", "Remove line");
+    remove.type = "button";
+    remove.setAttribute("aria-label", "Remove " + label);
+    remove.addEventListener("click", function () {
+      removeLine(line);
+    });
+    buttons.appendChild(search);
+    buttons.appendChild(remove);
+    actions.appendChild(buttons);
+    return actions;
+  }
+
   function renderLine(line) {
     var tr = el("tr", line.status === "Removed" ? "is-removed" : "");
     tr.appendChild(cell(line.line_number, "num"));
@@ -188,10 +311,17 @@
     tr.appendChild(cell(line.contract_price, "num"));
     tr.appendChild(cell(line.calculated_line_total, "num"));
 
-    var resolutionCell = el("td");
-    if (isMissing(line.sku_confidence) && isMissing(line.sku_resolution_source)) {
+    var resolutionCell = el("td", "resolution");
+    var discrepancies = (Array.isArray(line.discrepancies) ? line.discrepancies : []).filter(Boolean);
+    var removed = line.status === "Removed";
+    var actionable = line.status === ACTIVE_LINE_STATUS && canMutateDraft();
+    if (isMissing(line.sku_confidence) && isMissing(line.sku_resolution_source) &&
+        discrepancies.length === 0 && !removed && !actionable) {
       setText(resolutionCell, null);
     } else {
+      if (removed) {
+        resolutionCell.appendChild(badge(String(line.status), "badge--rejected", true));
+      }
       if (!isMissing(line.sku_confidence)) {
         resolutionCell.appendChild(badge(String(line.sku_confidence), "", true));
       }
@@ -199,13 +329,15 @@
         resolutionCell.appendChild(el("span", "sub", String(line.sku_resolution_source)));
       }
     }
-    // Read-only display of server-returned flags; resolution controls are P2.
-    var discrepancies = Array.isArray(line.discrepancies) ? line.discrepancies : [];
     if (discrepancies.length > 0) {
-      var types = discrepancies.map(function (flag) {
-        return flag && !isMissing(flag.discrepancy_type) ? String(flag.discrepancy_type) : "Discrepancy";
+      var flags = el("ul", "flags");
+      discrepancies.forEach(function (flag) {
+        flags.appendChild(renderDiscrepancy(flag));
       });
-      resolutionCell.appendChild(el("span", "note", "⚑ " + types.join(", ")));
+      resolutionCell.appendChild(flags);
+    }
+    if (actionable) {
+      resolutionCell.appendChild(renderLineActions(line));
     }
     tr.appendChild(resolutionCell);
     return tr;
@@ -295,6 +427,20 @@
     var ready = draft !== null && draft.status === READY_STATUS && state.approvedOrder === null;
     dom.approveSubmit.disabled = busy || !ready;
     dom.operatorId.disabled = busy || !ready;
+
+    // P2 mutation controls: availability comes from server-returned state, busy blocks duplicates.
+    Array.prototype.forEach.call(dom.lineRows.querySelectorAll(".line-actions select, .line-actions button"), function (control) {
+      var needsCandidate = control.hasAttribute("data-requires-candidate");
+      control.disabled = busy ||
+        (needsCandidate && control.parentNode.querySelector("select").value === "");
+    });
+    rejectButton.hidden = !canMutateDraft();
+    rejectButton.disabled = busy;
+    if (rejectDialog !== null) {
+      [rejectDialog.operatorId, rejectDialog.reason, rejectDialog.submit, rejectDialog.cancel].forEach(function (control) {
+        control.disabled = busy;
+      });
+    }
     if (!dom.approvalHint.classList.contains("is-warning")) {
       if (draft === null) {
         dom.approvalHint.textContent = "";
@@ -510,7 +656,314 @@
     });
   }
 
+  // ---------- P2 operator mutations ----------
+
+  function linePath(draft, line) {
+    return "/drafts/" + encodeURIComponent(draft.draft_id) + "/lines/" + encodeURIComponent(line.line_id);
+  }
+
+  /** The one authoritative flow: HTTP response -> state.draft -> rerender. No optimistic update. */
+  function mutateDraft(label, context, path, options) {
+    return runAction(label, async function () {
+      state.draft = await requestJson(context, path, options);
+      renderDraft();
+      renderControls();
+    });
+  }
+
+  function selectLineSku(line, sku) {
+    var draft = state.draft;
+    if (!canMutateDraft()) {
+      return;
+    }
+    return mutateDraft("Applying SKU…", "SKU selection failed", linePath(draft, line), {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "SelectSKU", matched_sku: sku })
+    });
+  }
+
+  function removeLine(line) {
+    var draft = state.draft;
+    if (!canMutateDraft() || state.loading !== null) {
+      return;
+    }
+    var confirmed = window.confirm(
+      "Remove line " + (isMissing(line.line_number) ? "" : line.line_number + " ") + "from this draft?\n\n" +
+      "The server will preserve discrepancy history and recalculate the draft."
+    );
+    if (!confirmed) {
+      return;
+    }
+    return mutateDraft("Removing line…", "Line removal failed", linePath(draft, line), { method: "DELETE" });
+  }
+
+  // ---------- Catalog search (accepted T033 component) ----------
+
+  var catalogModalPromise = null;
+
+  function catalogModalApi() {
+    var api = window.OrderShieldCatalogModal;
+    return api && typeof api.open === "function" && typeof api.close === "function" ? api : null;
+  }
+
+  /** Single-flight loader for the local T033 script; no remote source, no fallback UI. */
+  function loadCatalogModal() {
+    var loaded = catalogModalApi();
+    if (loaded !== null) {
+      return Promise.resolve(loaded);
+    }
+    if (catalogModalPromise === null) {
+      catalogModalPromise = new Promise(function (resolve, reject) {
+        var script = document.createElement("script");
+        function fail(message) {
+          // Drop the failed element so a later operator click cannot leave duplicates behind.
+          script.remove();
+          catalogModalPromise = null;
+          reject(new ApiError("Catalog search unavailable", null, "CatalogModalLoadError", message));
+        }
+        script.src = CATALOG_MODAL_SRC;
+        script.addEventListener("load", function () {
+          var api = catalogModalApi();
+          if (api === null) {
+            fail("The catalog search component loaded but did not provide open/close.");
+          } else {
+            resolve(api);
+          }
+        });
+        script.addEventListener("error", function () {
+          fail("The catalog search component (" + CATALOG_MODAL_SRC + ") could not be loaded.");
+        });
+        document.head.appendChild(script);
+      });
+    }
+    return catalogModalPromise;
+  }
+
+  function openCatalogSearch(line) {
+    var draft = state.draft;
+    if (!canMutateDraft()) {
+      return;
+    }
+    return runAction("Opening catalog search…", async function () {
+      var modal = await loadCatalogModal();
+      modal.open({
+        initialQuery: isMissing(line.customer_description) ? "" : String(line.customer_description),
+        selectedSku: isMissing(line.matched_sku) ? "" : String(line.matched_sku),
+        onSelect: function (product) {
+          // The modal's choice is not persisted state: only the server's PATCH response is.
+          if (state.loading !== null || state.draft !== draft || !product || isMissing(product.sku)) {
+            return;
+          }
+          Promise.resolve(selectLineSku(line, String(product.sku))).then(function () {
+            // Closed on success, and on failure too so the backend diagnostic is not hidden behind it.
+            modal.close();
+          });
+        }
+      });
+    });
+  }
+
+  // ---------- Draft rejection ----------
+
+  // index.html is frozen for T034, so the Reject action and its dialog are mounted from here.
+  var rejectButton = el("button", "btn btn--danger btn--reject", "Reject Draft");
+  rejectButton.type = "button";
+  rejectButton.hidden = true;
+  dom.approveForm.appendChild(rejectButton);
+
+  var rejectDialog = null;   // DOM references once mounted
+  var rejectReturnFocus = null;
+
+  function rejectField(labelText, control, id) {
+    var wrapper = el("label", "field");
+    wrapper.htmlFor = id;
+    control.id = id;
+    wrapper.appendChild(el("span", "field__label", labelText));
+    wrapper.appendChild(control);
+    return wrapper;
+  }
+
+  function mountRejectDialog() {
+    if (rejectDialog !== null) {
+      return;
+    }
+    var backdrop = el("div", "reject-backdrop");
+    backdrop.hidden = true;
+    backdrop.addEventListener("click", closeRejectDialog);
+
+    var modal = el("form", "reject-modal");
+    modal.hidden = true;
+    modal.noValidate = true;
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-labelledby", "reject-title");
+
+    var title = el("h2", "reject-modal__title", "Reject draft");
+    title.id = "reject-title";
+    var intro = el("p", "reject-modal__intro",
+      "Rejection is final for this draft. The server records the operator and reason.");
+    var operatorId = el("input");
+    operatorId.type = "text";
+    operatorId.autocomplete = "off";
+    operatorId.maxLength = 120;
+    var reason = el("textarea", "reject-modal__reason");
+    reason.rows = 4;
+    var warning = el("p", "reject-modal__warning");
+    warning.setAttribute("role", "alert");
+    warning.hidden = true;
+
+    var footer = el("div", "reject-modal__actions");
+    var cancel = el("button", "btn btn--outline", "Cancel");
+    cancel.type = "button";
+    cancel.addEventListener("click", closeRejectDialog);
+    var submit = el("button", "btn btn--danger", "Reject Draft");
+    submit.type = "submit";
+    footer.appendChild(cancel);
+    footer.appendChild(submit);
+
+    modal.appendChild(title);
+    modal.appendChild(intro);
+    modal.appendChild(rejectField("Operator ID", operatorId, "reject-operator-id"));
+    modal.appendChild(rejectField("Reason", reason, "reject-reason"));
+    modal.appendChild(warning);
+    modal.appendChild(footer);
+    modal.addEventListener("submit", function (event) {
+      event.preventDefault();
+      rejectCurrentDraft();
+    });
+    modal.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeRejectDialog();
+        return;
+      }
+      if (event.key !== "Tab") {
+        return;
+      }
+      // Keep focus inside the dialog so the page behind cannot be operated meanwhile.
+      var focusable = [operatorId, reason, cancel, submit].filter(function (control) {
+        return !control.disabled;
+      });
+      if (focusable.length === 0) {
+        return;
+      }
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    document.body.appendChild(backdrop);
+    document.body.appendChild(modal);
+    rejectDialog = {
+      backdrop: backdrop, modal: modal, operatorId: operatorId, reason: reason,
+      warning: warning, cancel: cancel, submit: submit,
+      draft: null   // the draft this dialog was opened for
+    };
+  }
+
+  function setRejectWarning(text) {
+    rejectDialog.warning.hidden = text === null;
+    rejectDialog.warning.textContent = text === null ? "" : text;
+  }
+
+  /** Keeps the dialog below a visible replay banner; the banner is only measured, never changed. */
+  function positionRejectDialog() {
+    var top = 12;
+    if (!dom.replayBanner.hidden) {
+      var rect = dom.replayBanner.getBoundingClientRect();
+      if (rect.bottom > 0) {
+        top = Math.round(rect.bottom) + 12;
+      }
+    }
+    rejectDialog.modal.style.top = top + "px";
+  }
+
+  function openRejectDialog() {
+    if (!canMutateDraft() || state.loading !== null) {
+      return;
+    }
+    mountRejectDialog();
+    rejectDialog.draft = state.draft;
+    rejectReturnFocus = document.activeElement;
+    // Prefill is a convenience only; the operator can edit it and nothing is invented.
+    rejectDialog.operatorId.value = dom.operatorId.value.trim();
+    rejectDialog.reason.value = "";
+    setRejectWarning(null);
+    rejectDialog.backdrop.hidden = false;
+    rejectDialog.modal.hidden = false;
+    positionRejectDialog();
+    window.addEventListener("scroll", positionRejectDialog, true);
+    window.addEventListener("resize", positionRejectDialog);
+    (rejectDialog.operatorId.value === "" ? rejectDialog.operatorId : rejectDialog.reason).focus();
+  }
+
+  function closeRejectDialog() {
+    // A pending rejection cannot be dismissed out from under its response.
+    if (rejectDialog === null || rejectDialog.modal.hidden || state.loading !== null) {
+      return;
+    }
+    rejectDialog.backdrop.hidden = true;
+    rejectDialog.modal.hidden = true;
+    window.removeEventListener("scroll", positionRejectDialog, true);
+    window.removeEventListener("resize", positionRejectDialog);
+    var target = rejectReturnFocus;
+    rejectReturnFocus = null;
+    if (target && typeof target.focus === "function" && document.contains(target) && !target.hidden) {
+      target.focus();
+    }
+  }
+
+  function rejectCurrentDraft() {
+    var draft = state.draft;
+    if (!canMutateDraft() || state.loading !== null || rejectDialog.draft !== draft) {
+      return;
+    }
+    // Presence checks only; rejection semantics are validated by the backend.
+    var operatorId = rejectDialog.operatorId.value.trim();
+    var reason = rejectDialog.reason.value.trim();
+    if (operatorId === "") {
+      setRejectWarning("Operator ID is required before the rejection can be sent.");
+      rejectDialog.operatorId.focus();
+      return;
+    }
+    if (reason === "") {
+      setRejectWarning("A rejection reason is required before the rejection can be sent.");
+      rejectDialog.reason.focus();
+      return;
+    }
+    setRejectWarning(null);
+    return mutateDraft("Rejecting draft…", "Rejection failed",
+      "/drafts/" + encodeURIComponent(draft.draft_id) + "/reject",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ operator_id: operatorId, reason: reason })
+      }
+    ).then(function () {
+      if (state.error === null) {
+        closeRejectDialog();
+      } else {
+        // The dialog covers the page diagnostics, so the same backend diagnostic is repeated here.
+        setRejectWarning([
+          state.error.context,
+          state.error.status === null ? "" : "HTTP " + state.error.status,
+          state.error.error,
+          state.error.message
+        ].filter(Boolean).join(" · "));
+      }
+    });
+  }
+
   // ---------- Event listeners ----------
+
+  rejectButton.addEventListener("click", openRejectDialog);
 
   dom.liveFile.addEventListener("change", function () {
     stageLiveFile(dom.liveFile.files.length > 0 ? dom.liveFile.files[0] : null);
