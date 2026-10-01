@@ -217,6 +217,46 @@ Uploads an incoming customer purchase order document. **Always executes via `Liv
 
 ---
 
+### 2.2.1 AI Extraction & Persistence Contract Boundary (`AIExtractionPayload`)
+
+AI providers output an untrusted extraction payload adhering to `AIExtractionPayload`. It may carry an optional source-stated order total:
+
+```json
+{
+  "customer_name": "Acme Industrial Supplies",
+  "customer_id": "CUST-ACME",
+  "po_number": "PO-99214",
+  "extracted_order_total": "350.00",
+  "header_provenance": {
+    "customer_name": {
+      "field_name": "customer_name",
+      "verbatim_snippet": "Acme Industrial Supplies",
+      "location": { "type": "txt", "line_number": 2, "char_offset": 0 }
+    },
+    "po_number": {
+      "field_name": "po_number",
+      "verbatim_snippet": "PO-99214",
+      "location": { "type": "txt", "line_number": 4, "char_offset": 0 }
+    },
+    "extracted_order_total": {
+      "field_name": "extracted_order_total",
+      "verbatim_snippet": "$350.00",
+      "location": { "type": "txt", "line_number": 15, "char_offset": 0 }
+    }
+  },
+  "line_items": []
+}
+```
+
+**Persistence Boundary Semantics**:
+- `extracted_order_total` and its provenance are optional.
+- If present, its provenance is strictly mandatory and grounded against canonical `PurchaseOrderDocument.raw_text`.
+- Upon successful grounding, `order_service` converts `extracted_order_total` to exact integer cents and persists it into `OrderDraft.extracted_order_total_cents` (`35000`) and creates a header-level `FieldProvenance` row (`field_name="extracted_order_total"`, `line_item_id=null`).
+- If omitted from the customer PO, `OrderDraft.extracted_order_total_cents` is persisted as `null` and no order-total provenance record is created.
+- The public `OrderDraftResponse` exposed by the intake API intentionally serves reconciliation workflow state, presenting the deterministic `calculated_subtotal` for pricing verification while the untrusted raw `extracted_order_total_cents` remains anchored at the internal persistence boundary for discrepancy evaluation.
+
+---
+
 ### 2.3 Replay / Fixture Intake (Dedicated Endpoint)
 `GET /api/v1/fixtures`  
 Lists pre-registered demonstration fixtures.

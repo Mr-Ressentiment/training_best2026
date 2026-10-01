@@ -126,7 +126,8 @@ This recommendation is submitted for project lead decision. Neither option is ma
 
 Choose exactly one:
 
-- [ ] A — Preserve order-level ArithmeticMismatch and extend source-backed order-total contracts.
+- [x] A — Preserve order-level ArithmeticMismatch and extend source-backed order-total contracts.
 - [ ] B — Narrow MVP ArithmeticMismatch to line-level arithmetic only and reconcile canonical specs.
 
-Status: PENDING HUMAN DECISION
+Status: ACCEPTED — OPTION A
+Decision date: 2026-10-01
