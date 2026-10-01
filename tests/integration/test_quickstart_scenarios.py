@@ -356,6 +356,16 @@ def test_quickstart_scenario_2_discrepancy_and_ambiguity_resolution(
     assert line2_updated["sku_resolution_source"] == "OPERATOR_SELECTED"
     assert line2_updated["matched_sku"] == "SKU-WRAP-15"
 
+    # Deterministic revalidation exposes genuine QuantityOrPackagingBreach (Qty 2 < MOQ 5)
+    moq_breach = next(
+        (f for f in line2_updated["discrepancies"]
+         if f["discrepancy_type"] == "QuantityOrPackagingBreach" and f["resolution_state"] == "Unresolved"),
+        None,
+    )
+    assert moq_breach is not None, "Expected unresolved QuantityOrPackagingBreach after SelectSKU"
+    assert "2" in moq_breach["requested_value"]
+    assert "5" in moq_breach["expected_value"]
+
     # 5. Operator removes non-compliant commercial violation on line 1 via DELETE
     delete_response = client.delete(
         f"/api/v1/drafts/{draft_id}/lines/{line1['line_id']}",
@@ -375,12 +385,12 @@ def test_quickstart_scenario_2_discrepancy_and_ambiguity_resolution(
     assert resolved_by_removal[0]["discrepancy_type"] == "PriceMismatch"
 
     # 6. Final State inspection via GET /api/v1/drafts/{draft_id}
+    # Remaining unresolved MOQ breach on Line 2 keeps draft in Needs Review
     get_draft_response = client.get(f"/api/v1/drafts/{draft_id}")
     assert get_draft_response.status_code == 200
     final_draft = get_draft_response.json()
-    assert final_draft["status"] == "Ready for Approval"
+    assert final_draft["status"] == "Needs Review"
 
-    # Zero unresolved discrepancy flags remaining
     active_unresolved = [
         flag
         for line in final_draft["line_items"]
@@ -388,30 +398,83 @@ def test_quickstart_scenario_2_discrepancy_and_ambiguity_resolution(
         for flag in line["discrepancies"]
         if flag["resolution_state"] == "Unresolved"
     ]
-    assert active_unresolved == []
+    assert len(active_unresolved) >= 1
+    assert any(f["discrepancy_type"] == "QuantityOrPackagingBreach" for f in active_unresolved)
 
-    # 7. Final approval committed
-    final_approval_response = client.post(
+    # 7. Approval must remain blocked
+    blocked_approval_2 = client.post(
         f"/api/v1/drafts/{draft_id}/approve",
         json={"operator_id": "quickstart-op"},
     )
-    assert final_approval_response.status_code == 200, final_approval_response.text
-    order = final_approval_response.json()
-    assert order["order_number"] == "VO-2026-0001"
-    assert order["approved_by"] == "quickstart-op"
+    assert blocked_approval_2.status_code == 409
+    err_approval_2 = ErrorResponse.model_validate(blocked_approval_2.json())
+    assert err_approval_2.error == "DraftNotReadyForApprovalError"
 
-    # Audit history includes full lifecycle sequence
-    order_record_resp = client.get(f"/api/v1/orders/{order['order_id']}")
-    assert order_record_resp.status_code == 200
-    audit_event_types = [e["event_type"] for e in order_record_resp.json()["audit_trail"]]
-    for required_event in (
-        "DocumentIngested",
-        "AIExtractionCompleted",
-        "SKUSelected",
-        "LineRemoved",
-        "OrderApproved",
-    ):
-        assert required_event in audit_event_types, f"Missing audit event {required_event}"
+    # 8. Operator rejects draft with mandatory operator identity and reason
+    rejection_reason = "Valid MOQ breach cannot be resolved without changing the source order."
+    reject_response = client.post(
+        f"/api/v1/drafts/{draft_id}/reject",
+        json={
+            "operator_id": "quickstart-op",
+            "reason": rejection_reason,
+        },
+    )
+    assert reject_response.status_code == 200, reject_response.text
+    rejected_draft = reject_response.json()
+    assert rejected_draft["status"] == "Rejected"
+    assert rejected_draft["rejection_reason"] == rejection_reason
+
+    # Verify DraftRejected audit event persistence
+    with _isolated_session(db_session) as obs:
+        reject_event = obs.scalar(
+            select(AuditEvent).where(
+                AuditEvent.draft_id == draft_id,
+                AuditEvent.event_type == "DraftRejected",
+            )
+        )
+        assert reject_event is not None
+        assert reject_event.actor == "Operator"
+        details = json.loads(reject_event.details_json)
+        assert details["operator_id"] == "quickstart-op"
+        assert details["reason"] == rejection_reason
+
+    # 9. Terminal protection: rejected draft cannot be approved or modified
+    post_reject_approval = client.post(
+        f"/api/v1/drafts/{draft_id}/approve",
+        json={"operator_id": "quickstart-op"},
+    )
+    assert post_reject_approval.status_code == 409
+    err_post_reject_app = ErrorResponse.model_validate(post_reject_approval.json())
+    assert err_post_reject_app.error == "TerminalDraftConflictError"
+
+    post_reject_patch = client.patch(
+        f"/api/v1/drafts/{draft_id}/lines/{line2['line_id']}",
+        json={"action": "SelectSKU", "matched_sku": "SKU-WRAP-15"},
+    )
+    assert post_reject_patch.status_code == 409
+    err_post_reject_patch = ErrorResponse.model_validate(post_reject_patch.json())
+    assert err_post_reject_patch.error == "TerminalDraftConflictError"
+
+    # 10. Verify zero VerifiedOrderRecord created and audit trail completeness
+    with _isolated_session(db_session) as obs:
+        verified_records = obs.scalars(
+            select(VerifiedOrderRecord).where(VerifiedOrderRecord.draft_id == draft_id)
+        ).all()
+        assert verified_records == [], "No VerifiedOrderRecord must exist for rejected draft"
+
+        audit_events = obs.scalars(
+            select(AuditEvent).where(AuditEvent.draft_id == draft_id).order_by(AuditEvent.timestamp.asc(), AuditEvent.id.asc())
+        ).all()
+        event_types = [e.event_type for e in audit_events]
+        assert "OrderApproved" not in event_types
+        for required_event in (
+            "DocumentIngested",
+            "AIExtractionCompleted",
+            "SKUSelected",
+            "LineRemoved",
+            "DraftRejected",
+        ):
+            assert required_event in event_types, f"Missing audit event {required_event}"
 
 
 # -----------------------------------------------------------------------------
