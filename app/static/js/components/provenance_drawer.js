@@ -105,8 +105,13 @@
     return "";
   }
 
-  function isOffset(value) {
-    return typeof value === "number" && isFinite(value);
+  // Mirror the committed backend location schema; malformed values fail closed, never coerced.
+  function isNonNegativeInteger(value) {
+    return Number.isInteger(value) && value >= 0;
+  }
+
+  function isPositiveInteger(value) {
+    return Number.isInteger(value) && value > 0;
   }
 
   function valueNode(tag, value, className) {
@@ -148,15 +153,17 @@
     if (!isObject(location)) {
       return null;
     }
-    if (location.type === "txt" && isOffset(location.line_number) && isOffset(location.char_offset)) {
+    if (location.type === "txt" && isPositiveInteger(location.line_number) &&
+        isNonNegativeInteger(location.char_offset)) {
       return [
         ["Source type", "TXT source"],
         ["Line", location.line_number],
         ["Character offset", location.char_offset]
       ];
     }
-    if (location.type === "pdf" && isOffset(location.page_number) &&
-        isOffset(location.char_start) && isOffset(location.char_end)) {
+    if (location.type === "pdf" && isPositiveInteger(location.page_number) &&
+        isNonNegativeInteger(location.char_start) && isNonNegativeInteger(location.char_end) &&
+        location.char_end > location.char_start) {
       return [
         ["Source type", "PDF source"],
         ["Page", location.page_number],
