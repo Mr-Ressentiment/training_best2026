@@ -98,6 +98,7 @@ def test_draft_to_facts_clean_acme(db_session: Session, po_clean_acme_path):
     assert facts["line.1.extracted_line_total_cents"] == 25000
     assert facts["line.1.price_deviation_pct"] == 0.0
     assert facts["line.1.moq_gap"] == 0  # MOQ 5 <= 10
+    assert facts["line.1.package_increment"] == 1
     assert facts["line.1.arith_delta_cents"] == 0  # 25000 - (10 * 2500) == 0
 
     # Line 2: SKU-WRAP-15, Qty 5, stated unit 2000c, contract 2000c
@@ -112,6 +113,7 @@ def test_draft_to_facts_clean_acme(db_session: Session, po_clean_acme_path):
     assert facts["line.2.extracted_line_total_cents"] == 10000
     assert facts["line.2.price_deviation_pct"] == 0.0
     assert facts["line.2.moq_gap"] == 0  # MOQ 5 <= 5
+    assert facts["line.2.package_increment"] == 1
     assert facts["line.2.arith_delta_cents"] == 0  # 10000 - (5 * 2000) == 0
 
 
@@ -152,6 +154,7 @@ def test_draft_to_facts_discrepancy_apex(db_session: Session, po_discrepancy_ape
     # 100 * (1800 - 2200) / 2200 == -18.181818...
     assert facts["line.1.price_deviation_pct"] == pytest.approx(-18.181818, rel=1e-4)
     assert facts["line.1.moq_gap"] == 0  # MOQ 5 <= 10
+    assert facts["line.1.package_increment"] == 1
     assert facts["line.1.arith_delta_cents"] == 0  # 18000 - (10 * 1800) == 0
 
     # Line 2: Ambiguous, Qty 2, stated unit 2000c, total 4000c, no resolved SKU
@@ -167,6 +170,7 @@ def test_draft_to_facts_discrepancy_apex(db_session: Session, po_discrepancy_ape
     # SKU unresolved -> price_deviation_pct and moq_gap MUST be None (never guessed from candidates)
     assert facts["line.2.price_deviation_pct"] is None
     assert facts["line.2.moq_gap"] is None
+    assert facts["line.2.package_increment"] is None
     # Stated line arithmetic can still be evaluated: 4000 - (2 * 2000) == 0
     assert facts["line.2.arith_delta_cents"] == 0
 
@@ -204,6 +208,7 @@ def test_draft_to_facts_discrepancy_apex_positive_moq_gap(db_session: Session, p
     assert facts["line.2.extracted_quantity"] == 2
     # MOQ 5 - Qty 2 = 3
     assert facts["line.2.moq_gap"] == 3
+    assert facts["line.2.package_increment"] == 1
 
 
 # -----------------------------------------------------------------------------

@@ -122,6 +122,37 @@ def _calculate_moq_gap(line: Any) -> int | None:
     return max(0, moq - qty)
 
 
+def _get_package_increment(line: Any) -> int | None:
+    """Retrieve package_increment from preloaded CatalogProduct for resolved line item.
+
+    Returns:
+        - int: package_increment from loaded product (>= 1).
+        - None: SKU is unresolved, ambiguous without operator selection,
+          product is unloaded/missing, or package_increment is invalid.
+    """
+    matched_sku = getattr(line, "matched_sku", None)
+    if not matched_sku or not isinstance(matched_sku, str) or not matched_sku.strip():
+        return None
+
+    sku_conf = getattr(line, "sku_confidence", None)
+    sku_src = getattr(line, "sku_resolution_source", None)
+    if sku_conf in ("Ambiguous", "Unrecognized") and sku_src != "OPERATOR_SELECTED":
+        return None
+
+    if _is_unloaded(line, "product"):
+        return None
+
+    product = getattr(line, "product", None)
+    if product is None:
+        return None
+
+    pkg = getattr(product, "package_increment", None)
+    if isinstance(pkg, bool) or not isinstance(pkg, int) or pkg < 1:
+        return None
+
+    return pkg
+
+
 def _calculate_line_arith_delta_cents(line: Any) -> int | None:
     """Calculate the arithmetic discrepancy for an individual line item.
 
@@ -233,6 +264,7 @@ def draft_to_facts(draft: OrderDraft) -> dict[str, FactValue]:
         facts[f"line.{idx}.extracted_line_total_cents"] = _as_scalar_int(getattr(line, "extracted_line_total_cents", None))
         facts[f"line.{idx}.price_deviation_pct"] = _calculate_price_deviation_pct(line)
         facts[f"line.{idx}.moq_gap"] = _calculate_moq_gap(line)
+        facts[f"line.{idx}.package_increment"] = _get_package_increment(line)
         facts[f"line.{idx}.arith_delta_cents"] = _calculate_line_arith_delta_cents(line)
 
     return facts
