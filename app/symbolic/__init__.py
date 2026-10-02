@@ -25,20 +25,30 @@ from app.symbolic.fuzzy import (
     trap,
     tri,
 )
+from app.symbolic.sku_confidence import (
+    EvaluatedCandidate,
+    SKUCandidate,
+    SKUMatchConfidenceResult,
+    evaluate_sku_match_confidence,
+)
 
 __all__ = [
+    "EvaluatedCandidate",
     "FactValue",
     "Facts",
     "FuzzyRule",
     "FuzzyVar",
     "Rule",
     "SCHEMA_VERSION",
+    "SKUCandidate",
+    "SKUMatchConfidenceResult",
     "State",
     "TraceStep",
     "compose",
     "counterfactual",
     "default_verdict",
     "draft_to_facts",
+    "evaluate_sku_match_confidence",
     "fuzzy_stage",
     "log",
     "rules_stage",
@@ -48,3 +58,4 @@ __all__ = [
     "tri",
     "validate",
 ]
+
