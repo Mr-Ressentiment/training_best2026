@@ -25,6 +25,13 @@ from app.symbolic.fuzzy import (
     trap,
     tri,
 )
+from app.symbolic.review_priority import (
+    DiscrepancyItem,
+    OrderReviewInput,
+    ReviewPriorityResult,
+    evaluate_review_priority,
+    review_priority_stage,
+)
 from app.symbolic.sku_confidence import (
     EvaluatedCandidate,
     SKUCandidate,
@@ -33,11 +40,14 @@ from app.symbolic.sku_confidence import (
 )
 
 __all__ = [
+    "DiscrepancyItem",
     "EvaluatedCandidate",
     "FactValue",
     "Facts",
     "FuzzyRule",
     "FuzzyVar",
+    "OrderReviewInput",
+    "ReviewPriorityResult",
     "Rule",
     "SCHEMA_VERSION",
     "SKUCandidate",
@@ -48,9 +58,11 @@ __all__ = [
     "counterfactual",
     "default_verdict",
     "draft_to_facts",
+    "evaluate_review_priority",
     "evaluate_sku_match_confidence",
     "fuzzy_stage",
     "log",
+    "review_priority_stage",
     "rules_stage",
     "run_pipeline",
     "to_dict",
@@ -58,4 +70,5 @@ __all__ = [
     "tri",
     "validate",
 ]
+
 
