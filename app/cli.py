@@ -471,6 +471,25 @@ def build_parser() -> argparse.ArgumentParser:
         help="Seed deterministic baseline catalog, contracts, and pricing tiers.",
     )
 
+    evaluate_parser = subparsers.add_parser(
+        "evaluate",
+        help="Run the OrderShield reproducible evaluation suite (VLD-EVAL-02).",
+    )
+    evaluate_parser.add_argument(
+        "--mode",
+        required=True,
+        choices=["DETERMINISTIC", "REPLAY", "LIVE", "HISTORICAL_BAKEOFF", "ALL"],
+        help=(
+            "Evaluation mode. DETERMINISTIC and REPLAY make zero network calls. "
+            "LIVE requires LIVE_EVALUATION_ENABLED=true env var."
+        ),
+    )
+    evaluate_parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Print per-case results during evaluation.",
+    )
+
     return parser
 
 
@@ -514,6 +533,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             print("Initialized database schema successfully.")
 
         return 0
+
+    if args.command == "evaluate":
+        from app.evaluation.runner import run_evaluation  # lazy import
+        return run_evaluation(args.mode, verbose=getattr(args, "verbose", False))
 
     return 0
 

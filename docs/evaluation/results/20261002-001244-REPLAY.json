@@ -1,0 +1,148 @@
+{
+  "run_id": "f6500803-f48c-446f-9f6d-4749d0857361",
+  "mode": "REPLAY",
+  "timestamp_utc": "2026-10-02T00:12:43.016054Z",
+  "git_commit": "f5c6149da6f52ec80f54c10176edcbdfcac67ca3",
+  "deterministic_metrics": {
+    "discrepancy_catch_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "rate_percentage": 0.0
+    },
+    "false_positive_discrepancy_count": 0,
+    "commercial_rule_enforcement_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "rate_percentage": 0.0
+    },
+    "gate_blocking_rate": {
+      "numerator": 1,
+      "denominator": 1,
+      "rate_percentage": 100.0
+    },
+    "terminal_state_enforcement_rate": {
+      "numerator": 1,
+      "denominator": 1,
+      "rate_percentage": 100.0
+    }
+  },
+  "e2e_metrics": {
+    "average_reconciliation_duration_ms": 85.52,
+    "operator_actions_recorded": 5,
+    "terminal_status_counts": {
+      "Approved": 2,
+      "Rejected": 1
+    },
+    "visible_replay_mode_badge_rate": 1.0
+  },
+  "sc_traceability": {
+    "SC_001": {
+      "status": "PARTIALLY_MEASURED",
+      "metric_name": "operator_e2e_completion_seconds",
+      "value": null,
+      "unit": null,
+      "automated_system_path_duration_ms": null,
+      "assisted_operator_completion_duration_seconds": null,
+      "notes": "clean_acme 2-line ingestion and reconciliation completed in 85.52 ms (diagnostic). Per SC-001 specification, automated_system_path_duration_ms remains null because no accepted application replay extraction asset exists for canonical sc001_prepared_5line. PASS/FAIL is strictly reserved for VLD-EVAL-03 assisted human timing."
+    },
+    "SC_002": {
+      "status": "PASS",
+      "metric_name": "discrepancy_detection_accuracy",
+      "value": "100.0",
+      "unit": "percent",
+      "notes": "Current-app reconciliation: discrepancy_apex stateful lifecycle verified. State A detected PriceMismatch (line 1) and CatalogMatchingMismatch (line 2) with Blocking severity. State B revealed latent QuantityOrPackagingBreach (line 2) upon operator SelectSKU. State C recorded rejection with mandatory reason."
+    },
+    "SC_003": {
+      "status": "PARTIALLY_MEASURED",
+      "metric_name": "operator_sku_resolution_completion",
+      "value": null,
+      "unit": null,
+      "notes": "Current-app reconciliation: ambiguous_apex caught ambiguous SKU, routed to Needs Review, and successfully resolved to Ready for Approval upon operator SelectSKU. Marked PARTIALLY_MEASURED: full SC-003 requires combining with AI-5 review-routing rate and AI-6 wrong-confident count across trap corpus evidence."
+    },
+    "SC_004": {
+      "status": "PASS",
+      "metric_name": "provenance_citation_coverage",
+      "value": 100.0,
+      "unit": "percent",
+      "notes": "Provenance citation coverage: 8/8 (100.0%) fields verified against raw source text. Verified verbatim snippet exists in source document, location resolves to exact snippet, and null fields conform to AI-3 semantics."
+    },
+    "SC_005": {
+      "status": "PASS",
+      "metric_name": "approval_gate_enforcement_http",
+      "value": "100.0",
+      "unit": "percent",
+      "notes": "DET-4: Unresolved-discrepancy approval attempt returned HTTP 409 DraftNotReadyForApprovalError, created 0 VerifiedOrder records, and preserved Needs Review status. DET-5: Mutation/re-transition attempts on Approved and Rejected drafts returned HTTP 409 TerminalDraftConflictError across distinct draft IDs (Approved: 013cb8a8-0212-4a7a-ad69-ae7642ab8319, Rejected: de359e83-b536-44fb-80ab-fe20f36b5445)."
+    },
+    "SC_006": {
+      "status": "PARTIALLY_MEASURED",
+      "metric_name": "unextractable_pdf_explicit_error",
+      "value": null,
+      "unit": null,
+      "notes": "Offline REPLAY verified: unreadable document failure returned HTTP 400 UnextractableTextError; provider invocation count == 0; draft count unchanged (3 == 3); no provider invocation / no fixture substitution on unreadable document path. Marked PARTIALLY_MEASURED: live provider failure latency (<=5s), stalled timeout (<=15s), UI replay badge, and full live provider failover behavior cannot be empirically measured offline."
+    }
+  },
+  "case_results": [
+    {
+      "case_id": "clean_acme",
+      "status": "PASS",
+      "latency_seconds": 0.0855,
+      "details": {
+        "initial_status": "Ready for Approval",
+        "is_replay_mode": true,
+        "provenance_valid": "8/8 (100.0%)",
+        "approved": true,
+        "clean_acme_reconciliation_duration_ms": 85.52
+      }
+    },
+    {
+      "case_id": "discrepancy_apex",
+      "status": "PASS",
+      "latency_seconds": 0.0973,
+      "details": {
+        "discrepancy_draft_id": "de359e83-b536-44fb-80ab-fe20f36b5445",
+        "state_a_verified": true,
+        "state_b_verified": true,
+        "state_c_verified": true,
+        "det4_gate_blocking_verified": true
+      }
+    },
+    {
+      "case_id": "ambiguous_apex",
+      "status": "PASS",
+      "latency_seconds": 0.0642,
+      "details": {
+        "approved_draft_id": "013cb8a8-0212-4a7a-ad69-ae7642ab8319",
+        "state_a_needs_review": true,
+        "state_b_ready_for_approval": true,
+        "state_c_approved": true
+      }
+    },
+    {
+      "case_id": "det5_terminal_immutability",
+      "status": "PASS",
+      "latency_seconds": null,
+      "details": {
+        "approved_draft_id": "013cb8a8-0212-4a7a-ad69-ae7642ab8319",
+        "rejected_draft_id": "de359e83-b536-44fb-80ab-fe20f36b5445",
+        "distinct_draft_ids_verified": true,
+        "approved_draft_rejections_verified": true,
+        "rejected_draft_rejections_verified": true,
+        "canonical_error": "TerminalDraftConflictError",
+        "canonical_status_code": 409
+      }
+    },
+    {
+      "case_id": "unextractable_pdf",
+      "status": "PASS",
+      "latency_seconds": null,
+      "details": {
+        "http_status_code": 400,
+        "error": "UnextractableTextError",
+        "message": "PDF document contains no extractable textual content",
+        "provider_invocation_count": 0,
+        "draft_count_unchanged": true,
+        "no_provider_invocation_and_no_fixture_substitution": true
+      }
+    }
+  ]
+}

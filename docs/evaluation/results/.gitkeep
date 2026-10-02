@@ -1,0 +1,13 @@
+# This directory stores evaluation run result artifacts produced by:
+#   python -m app.cli evaluate --mode=<MODE>
+#
+# Result files follow the naming convention:
+#   YYYYMMDD-HHMMSS-<MODE>.json
+#
+# latest.json always points to the most recent run result.
+#
+# All result files must validate against:
+#   docs/evaluation/results.schema.json
+#
+# Do NOT commit live provider result files without review.
+# Deterministic/Replay/Historical results may be committed as evidence.

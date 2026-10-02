@@ -1,0 +1,497 @@
+{
+  "run_id": "1c0edc44-a088-450f-b110-3801e91ddea2",
+  "mode": "ALL",
+  "timestamp_utc": "2026-10-02T00:12:56.819654Z",
+  "git_commit": "f5c6149da6f52ec80f54c10176edcbdfcac67ca3",
+  "deterministic_metrics": {
+    "discrepancy_catch_rate": {
+      "numerator": 5,
+      "denominator": 5,
+      "rate_percentage": 100.0
+    },
+    "false_positive_discrepancy_count": 0,
+    "false_positive_rate": 0.0,
+    "commercial_rule_enforcement_rate": {
+      "numerator": 4,
+      "denominator": 4,
+      "rate_percentage": 100.0
+    },
+    "gate_blocking_rate": {
+      "numerator": 1,
+      "denominator": 1,
+      "rate_percentage": 100.0
+    },
+    "terminal_state_enforcement_rate": {
+      "numerator": 1,
+      "denominator": 1,
+      "rate_percentage": 100.0
+    }
+  },
+  "e2e_metrics": {
+    "average_reconciliation_duration_ms": 80.26,
+    "operator_actions_recorded": 5,
+    "terminal_status_counts": {
+      "Approved": 2,
+      "Rejected": 1
+    },
+    "visible_replay_mode_badge_rate": 1.0
+  },
+  "sc_traceability": {
+    "SC_001": {
+      "status": "PARTIALLY_MEASURED",
+      "metric_name": "operator_e2e_completion_seconds",
+      "value": null,
+      "unit": null,
+      "automated_system_path_duration_ms": null,
+      "assisted_operator_completion_duration_seconds": null,
+      "notes": "clean_acme 2-line ingestion and reconciliation completed in 80.26 ms (diagnostic). Per SC-001 specification, automated_system_path_duration_ms remains null because no accepted application replay extraction asset exists for canonical sc001_prepared_5line. PASS/FAIL is strictly reserved for VLD-EVAL-03 assisted human timing."
+    },
+    "SC_002": {
+      "status": "PASS",
+      "metric_name": "discrepancy_detection_accuracy",
+      "value": "5/5",
+      "unit": "categories_detected",
+      "notes": "Current-app reconciliation: discrepancy_apex stateful lifecycle verified. State A detected PriceMismatch (line 1) and CatalogMatchingMismatch (line 2) with Blocking severity. State B revealed latent QuantityOrPackagingBreach (line 2) upon operator SelectSKU. State C recorded rejection with mandatory reason."
+    },
+    "SC_003": {
+      "status": "PASS",
+      "metric_name": "operator_sku_resolution_completion",
+      "value": 100.0,
+      "unit": "percent",
+      "notes": "Combined evidence with explicit attribution: [Historical AI boundary - Alibaba Model Studio (Singapore) qwen3.8-flash]: AI-5 review-routing rate = 3/3 (100.0%), AI-6 wrong-confident SKU count = 0 across approved trap corpus. [Current-app reconciliation]: ambiguous_apex correctly generated CatalogMatchingMismatch, routed to Needs Review, and successfully transitioned to Ready for Approval upon operator SelectSKU."
+    },
+    "SC_004": {
+      "status": "PASS",
+      "metric_name": "provenance_citation_coverage",
+      "value": 100.0,
+      "unit": "percent",
+      "notes": "Provenance citation coverage: 8/8 (100.0%) fields verified against raw source text. Verified verbatim snippet exists in source document, location resolves to exact snippet, and null fields conform to AI-3 semantics."
+    },
+    "SC_005": {
+      "status": "PASS",
+      "metric_name": "approval_gate_enforcement_http",
+      "value": "100.0",
+      "unit": "percent",
+      "notes": "DET-4: Unresolved-discrepancy approval attempt returned HTTP 409 DraftNotReadyForApprovalError, created 0 VerifiedOrder records, and preserved Needs Review status. DET-5: Mutation/re-transition attempts on Approved and Rejected drafts returned HTTP 409 TerminalDraftConflictError across distinct draft IDs (Approved: 4794e757-8153-41be-9a48-0a26e3be6baa, Rejected: 41901778-1893-4198-a858-6bf27699a7be)."
+    },
+    "SC_006": {
+      "status": "PARTIALLY_MEASURED",
+      "metric_name": "unextractable_pdf_explicit_error",
+      "value": null,
+      "unit": null,
+      "notes": "Offline REPLAY verified: unreadable document failure returned HTTP 400 UnextractableTextError; provider invocation count == 0; draft count unchanged (3 == 3); no provider invocation / no fixture substitution on unreadable document path. Marked PARTIALLY_MEASURED: live provider failure latency (<=5s), stalled timeout (<=15s), UI replay badge, and full live provider failover behavior cannot be empirically measured offline."
+    }
+  },
+  "case_results": [
+    {
+      "case_id": "arithmetic_line_error",
+      "status": "PASS",
+      "latency_seconds": 0.0126,
+      "details": {
+        "unresolved_count": 1,
+        "verified_exact_match": true
+      },
+      "mode": "DETERMINISTIC"
+    },
+    {
+      "case_id": "arithmetic_order_total_error",
+      "status": "PASS",
+      "latency_seconds": 0.0154,
+      "details": {
+        "unresolved_count": 1,
+        "verified_exact_match": true
+      },
+      "mode": "DETERMINISTIC"
+    },
+    {
+      "case_id": "package_increment_breach",
+      "status": "PASS",
+      "latency_seconds": 0.012,
+      "details": {
+        "unresolved_count": 1,
+        "verified_exact_match": true
+      },
+      "mode": "DETERMINISTIC"
+    },
+    {
+      "case_id": "unrecognized_sku_rejection",
+      "status": "PASS",
+      "latency_seconds": 0.008,
+      "details": {
+        "unresolved_count": 1,
+        "verified_exact_match": true
+      },
+      "mode": "DETERMINISTIC"
+    },
+    {
+      "case_id": "price_mismatch_detection",
+      "status": "PASS",
+      "latency_seconds": 0.0117,
+      "details": {
+        "unresolved_count": 1,
+        "verified_exact_match": true
+      },
+      "mode": "DETERMINISTIC"
+    },
+    {
+      "case_id": "clean_draft_no_false_positives",
+      "status": "PASS",
+      "latency_seconds": 0.0092,
+      "details": {
+        "draft_status": "Ready for Approval",
+        "unresolved_flags": 0
+      },
+      "mode": "DETERMINISTIC"
+    },
+    {
+      "case_id": "commercial_rule_enforcement_suite",
+      "status": "PASS",
+      "latency_seconds": null,
+      "details": {
+        "tier_price_selection_exact": true,
+        "moq_gating_enforced": true,
+        "packaging_increment_enforced": true,
+        "direct_override_prohibited": true,
+        "passed_rules": "4/4"
+      },
+      "mode": "DETERMINISTIC"
+    },
+    {
+      "case_id": "service_layer_approval_gate",
+      "status": "PASS",
+      "latency_seconds": null,
+      "details": {
+        "status_is_needs_review": true,
+        "note": "HTTP 409 verified in REPLAY."
+      },
+      "mode": "DETERMINISTIC"
+    },
+    {
+      "case_id": "service_layer_terminal_immutability",
+      "status": "PASS",
+      "latency_seconds": null,
+      "details": {
+        "value_error_raised": true,
+        "note": "HTTP 409 verified in REPLAY."
+      },
+      "mode": "DETERMINISTIC"
+    },
+    {
+      "case_id": "clean_acme",
+      "status": "PASS",
+      "latency_seconds": 0.0803,
+      "details": {
+        "initial_status": "Ready for Approval",
+        "is_replay_mode": true,
+        "provenance_valid": "8/8 (100.0%)",
+        "approved": true,
+        "clean_acme_reconciliation_duration_ms": 80.26
+      },
+      "mode": "REPLAY"
+    },
+    {
+      "case_id": "discrepancy_apex",
+      "status": "PASS",
+      "latency_seconds": 0.0993,
+      "details": {
+        "discrepancy_draft_id": "41901778-1893-4198-a858-6bf27699a7be",
+        "state_a_verified": true,
+        "state_b_verified": true,
+        "state_c_verified": true,
+        "det4_gate_blocking_verified": true
+      },
+      "mode": "REPLAY"
+    },
+    {
+      "case_id": "ambiguous_apex",
+      "status": "PASS",
+      "latency_seconds": 0.0654,
+      "details": {
+        "approved_draft_id": "4794e757-8153-41be-9a48-0a26e3be6baa",
+        "state_a_needs_review": true,
+        "state_b_ready_for_approval": true,
+        "state_c_approved": true
+      },
+      "mode": "REPLAY"
+    },
+    {
+      "case_id": "det5_terminal_immutability",
+      "status": "PASS",
+      "latency_seconds": null,
+      "details": {
+        "approved_draft_id": "4794e757-8153-41be-9a48-0a26e3be6baa",
+        "rejected_draft_id": "41901778-1893-4198-a858-6bf27699a7be",
+        "distinct_draft_ids_verified": true,
+        "approved_draft_rejections_verified": true,
+        "rejected_draft_rejections_verified": true,
+        "canonical_error": "TerminalDraftConflictError",
+        "canonical_status_code": 409
+      },
+      "mode": "REPLAY"
+    },
+    {
+      "case_id": "unextractable_pdf",
+      "status": "PASS",
+      "latency_seconds": null,
+      "details": {
+        "http_status_code": 400,
+        "error": "UnextractableTextError",
+        "message": "PDF document contains no extractable textual content",
+        "provider_invocation_count": 0,
+        "draft_count_unchanged": true,
+        "no_provider_invocation_and_no_fixture_substitution": true
+      },
+      "mode": "REPLAY"
+    },
+    {
+      "case_id": "h05_no_size::Alibaba Model Studio (Singapor",
+      "status": "FAIL",
+      "latency_seconds": 8.9551,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {
+          "SEMANTIC_WRONG": 1
+        },
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        },
+        "note": "core_status=HUMAN_REVIEW matches expected but error_classes=['SEMANTIC_WRONG'] present."
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h06_no_pack::Alibaba Model Studio (Singapor",
+      "status": "PASS",
+      "latency_seconds": 8.128,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        },
+        "note": "core_status=HUMAN_REVIEW matches expected, no errors."
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h07_not_medium::Alibaba Model Studio (Singapor",
+      "status": "PASS",
+      "latency_seconds": 7.4709,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "CLEAN_DRAFT",
+        "expected_core_status": "CLEAN_DRAFT",
+        "all_error_classes": {},
+        "outcomes": {
+          "CLEAN_DRAFT": 1
+        },
+        "note": "core_status=CLEAN_DRAFT matches expected, no errors."
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h08_not_large::Alibaba Model Studio (Singapor",
+      "status": "PASS",
+      "latency_seconds": 7.318,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "CLEAN_DRAFT",
+        "expected_core_status": "CLEAN_DRAFT",
+        "all_error_classes": {},
+        "outcomes": {
+          "CLEAN_DRAFT": 1
+        },
+        "note": "core_status=CLEAN_DRAFT matches expected, no errors."
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h09_latex::Alibaba Model Studio (Singapor",
+      "status": "PASS",
+      "latency_seconds": 5.6902,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        },
+        "note": "core_status=HUMAN_REVIEW matches expected, no errors."
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h10_damaged::Alibaba Model Studio (Singapor",
+      "status": "PASS",
+      "latency_seconds": 8.402,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        },
+        "note": "core_status=HUMAN_REVIEW matches expected, no errors."
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h05_no_size::Google Gemini API[secondary]",
+      "status": "PASS",
+      "latency_seconds": 1.8999,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        }
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h06_no_pack::Google Gemini API[secondary]",
+      "status": "PASS",
+      "latency_seconds": 1.823,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        }
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h07_not_medium::Google Gemini API[secondary]",
+      "status": "PASS",
+      "latency_seconds": 1.7764,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": "CLEAN_DRAFT",
+        "expected_core_status": "CLEAN_DRAFT",
+        "all_error_classes": {},
+        "outcomes": {
+          "CLEAN_DRAFT": 1
+        }
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h08_not_large::Google Gemini API[secondary]",
+      "status": "FAIL",
+      "latency_seconds": 1.79,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": "CLEAN_DRAFT",
+        "expected_core_status": "CLEAN_DRAFT",
+        "all_error_classes": {
+          "SEMANTIC_WRONG": 1
+        },
+        "outcomes": {
+          "CLEAN_DRAFT": 1
+        }
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h09_latex::Google Gemini API[secondary]",
+      "status": "PASS",
+      "latency_seconds": 1.8986,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        }
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    },
+    {
+      "case_id": "h10_damaged::Google Gemini API[secondary]",
+      "status": "FAIL",
+      "latency_seconds": 1.7926,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": null,
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {
+          "LOCAL_VALIDATION_FAILURE": 1,
+          "SEMANTIC_WRONG": 1
+        },
+        "outcomes": {
+          "LOCAL_VALIDATION_FAILURE": 1
+        }
+      },
+      "mode": "HISTORICAL_BAKEOFF"
+    }
+  ],
+  "ai_metrics": {
+    "historical_bakeoff_metrics": {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "model": "qwen3.8-flash",
+      "schema_valid_rate": {
+        "numerator": 6,
+        "denominator": 6,
+        "rate_percentage": 100.0
+      },
+      "mandatory_field_exactness": {
+        "numerator": 47,
+        "denominator": 48,
+        "rate_percentage": 97.9167
+      },
+      "determinate_sku_accuracy": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate_percentage": 100.0,
+        "abstentions": 3
+      },
+      "review_trap_catch_rate": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate_percentage": 100.0
+      },
+      "wrong_confident_skus": {
+        "count": 0,
+        "rate_percentage": 0.0
+      },
+      "latency_profile_seconds": {
+        "min": 5.69024,
+        "p50": 7.799475,
+        "mean": 7.660703333333333,
+        "p90": 8.95506,
+        "p95": 8.95506,
+        "max": 8.95506
+      }
+    }
+  }
+}

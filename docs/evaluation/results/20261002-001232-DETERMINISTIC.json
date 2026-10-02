@@ -1,0 +1,171 @@
+{
+  "run_id": "cffb3167-e032-4296-91a0-76420dcb7d1a",
+  "mode": "DETERMINISTIC",
+  "timestamp_utc": "2026-10-02T00:12:31.619961Z",
+  "git_commit": "f5c6149da6f52ec80f54c10176edcbdfcac67ca3",
+  "deterministic_metrics": {
+    "discrepancy_catch_rate": {
+      "numerator": 5,
+      "denominator": 5,
+      "rate_percentage": 100.0
+    },
+    "false_positive_discrepancy_count": 0,
+    "false_positive_rate": 0.0,
+    "commercial_rule_enforcement_rate": {
+      "numerator": 4,
+      "denominator": 4,
+      "rate_percentage": 100.0
+    },
+    "gate_blocking_rate": {
+      "numerator": 1,
+      "denominator": 1,
+      "rate_percentage": 100.0
+    },
+    "terminal_state_enforcement_rate": {
+      "numerator": 1,
+      "denominator": 1,
+      "rate_percentage": 100.0
+    }
+  },
+  "e2e_metrics": {
+    "average_reconciliation_duration_ms": 10.9,
+    "operator_actions_recorded": 0,
+    "terminal_status_counts": {
+      "Approved": 0,
+      "Rejected": 0
+    },
+    "visible_replay_mode_badge_rate": 0.0
+  },
+  "sc_traceability": {
+    "SC_001": {
+      "status": "PARTIALLY_MEASURED",
+      "metric_name": "operator_e2e_completion_seconds",
+      "value": null,
+      "unit": null,
+      "automated_system_path_duration_ms": null,
+      "assisted_operator_completion_duration_seconds": null,
+      "notes": "DETERMINISTIC mode rules evaluation is not an end-to-end system path. automated_system_path_duration_ms left null until canonical sc001_prepared_5line application intake path is available. PASS/FAIL strictly reserved for VLD-EVAL-03 human timing."
+    },
+    "SC_002": {
+      "status": "PASS",
+      "metric_name": "discrepancy_detection_accuracy",
+      "value": "5/5",
+      "unit": "categories_detected",
+      "notes": "DETERMINISTIC rules engine: detected 5/5 seeded discrepancies. Verified exact discrepancy type, line attribution, Blocking severity, and Unresolved state. Detected == seeded (100.0%). Current-app stateful lifecycle verified in REPLAY."
+    },
+    "SC_003": {
+      "status": "NOT_YET_MEASURED",
+      "metric_name": "operator_sku_resolution_completion",
+      "value": null,
+      "unit": null,
+      "notes": "SC-003 requires operator SKU resolution and trap review-routing measured in REPLAY/HISTORICAL_BAKEOFF."
+    },
+    "SC_004": {
+      "status": "NOT_YET_MEASURED",
+      "metric_name": "provenance_citation_coverage",
+      "value": null,
+      "unit": null,
+      "notes": "SC-004 requires HTTP-level provenance citation verification against source text, measured in REPLAY."
+    },
+    "SC_005": {
+      "status": "NOT_YET_MEASURED",
+      "metric_name": "approval_gate_enforcement_http",
+      "value": null,
+      "unit": null,
+      "notes": "SC-005 DET-4/DET-5 require HTTP 409 verification, measured in REPLAY mode."
+    },
+    "SC_006": {
+      "status": "NOT_YET_MEASURED",
+      "metric_name": "unextractable_pdf_explicit_error",
+      "value": null,
+      "unit": null,
+      "notes": "SC-006 requires HTTP-level unextractable PDF ingestion, measured in REPLAY mode."
+    }
+  },
+  "case_results": [
+    {
+      "case_id": "arithmetic_line_error",
+      "status": "PASS",
+      "latency_seconds": 0.0131,
+      "details": {
+        "unresolved_count": 1,
+        "verified_exact_match": true
+      }
+    },
+    {
+      "case_id": "arithmetic_order_total_error",
+      "status": "PASS",
+      "latency_seconds": 0.0119,
+      "details": {
+        "unresolved_count": 1,
+        "verified_exact_match": true
+      }
+    },
+    {
+      "case_id": "package_increment_breach",
+      "status": "PASS",
+      "latency_seconds": 0.0101,
+      "details": {
+        "unresolved_count": 1,
+        "verified_exact_match": true
+      }
+    },
+    {
+      "case_id": "unrecognized_sku_rejection",
+      "status": "PASS",
+      "latency_seconds": 0.0082,
+      "details": {
+        "unresolved_count": 1,
+        "verified_exact_match": true
+      }
+    },
+    {
+      "case_id": "price_mismatch_detection",
+      "status": "PASS",
+      "latency_seconds": 0.0121,
+      "details": {
+        "unresolved_count": 1,
+        "verified_exact_match": true
+      }
+    },
+    {
+      "case_id": "clean_draft_no_false_positives",
+      "status": "PASS",
+      "latency_seconds": 0.01,
+      "details": {
+        "draft_status": "Ready for Approval",
+        "unresolved_flags": 0
+      }
+    },
+    {
+      "case_id": "commercial_rule_enforcement_suite",
+      "status": "PASS",
+      "latency_seconds": null,
+      "details": {
+        "tier_price_selection_exact": true,
+        "moq_gating_enforced": true,
+        "packaging_increment_enforced": true,
+        "direct_override_prohibited": true,
+        "passed_rules": "4/4"
+      }
+    },
+    {
+      "case_id": "service_layer_approval_gate",
+      "status": "PASS",
+      "latency_seconds": null,
+      "details": {
+        "status_is_needs_review": true,
+        "note": "HTTP 409 verified in REPLAY."
+      }
+    },
+    {
+      "case_id": "service_layer_terminal_immutability",
+      "status": "PASS",
+      "latency_seconds": null,
+      "details": {
+        "value_error_raised": true,
+        "note": "HTTP 409 verified in REPLAY."
+      }
+    }
+  ]
+}

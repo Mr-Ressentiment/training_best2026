@@ -1,0 +1,326 @@
+{
+  "run_id": "18a93a75-5750-4c0f-b241-91c2da877a0c",
+  "mode": "HISTORICAL_BAKEOFF",
+  "timestamp_utc": "2026-10-02T00:12:52.331047Z",
+  "git_commit": "f5c6149da6f52ec80f54c10176edcbdfcac67ca3",
+  "deterministic_metrics": {
+    "discrepancy_catch_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "rate_percentage": 0.0
+    },
+    "false_positive_discrepancy_count": 0,
+    "commercial_rule_enforcement_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "rate_percentage": 0.0
+    },
+    "gate_blocking_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "rate_percentage": 0.0
+    },
+    "terminal_state_enforcement_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "rate_percentage": 0.0
+    }
+  },
+  "e2e_metrics": {
+    "average_reconciliation_duration_ms": 7660.7,
+    "operator_actions_recorded": 0,
+    "terminal_status_counts": {
+      "Approved": 0,
+      "Rejected": 0
+    },
+    "visible_replay_mode_badge_rate": 0.0
+  },
+  "sc_traceability": {
+    "SC_001": {
+      "status": "PARTIALLY_MEASURED",
+      "metric_name": "operator_e2e_completion_seconds",
+      "value": null,
+      "unit": null,
+      "automated_system_path_duration_ms": null,
+      "assisted_operator_completion_duration_seconds": null,
+      "notes": "HISTORICAL_BAKEOFF does not exercise current-app SC-001 path."
+    },
+    "SC_002": {
+      "status": "NOT_YET_MEASURED",
+      "metric_name": "discrepancy_detection_accuracy",
+      "value": null,
+      "unit": null,
+      "notes": "HISTORICAL_BAKEOFF: review_trap_catch_rate is historical AI evidence, NOT SC-002. SC-002 is discrepancy_detection_accuracy measured using current-app E2E in REPLAY mode."
+    },
+    "SC_003": {
+      "status": "PARTIALLY_MEASURED",
+      "metric_name": "operator_sku_resolution_completion",
+      "value": "3/3",
+      "unit": "review_traps_routed",
+      "automated_system_path_duration_ms": null,
+      "assisted_operator_completion_duration_seconds": null,
+      "notes": "Historical AI boundary (Alibaba Qwen qwen3.8-flash): AI-5 review-routing rate = 3/3 (100.0%), AI-6 wrong-confident SKU count = 0. Marked PARTIALLY_MEASURED: historical AI metrics do not evaluate current application reconciliation lifecycle."
+    },
+    "SC_004": {
+      "status": "NOT_YET_MEASURED",
+      "metric_name": "provenance_citation_coverage",
+      "value": null,
+      "unit": null,
+      "notes": "HISTORICAL_BAKEOFF does not exercise current-app provenance path. SC-004 in REPLAY."
+    },
+    "SC_005": {
+      "status": "NOT_YET_MEASURED",
+      "metric_name": "approval_gate_enforcement_http",
+      "value": null,
+      "unit": null,
+      "notes": "HISTORICAL_BAKEOFF does not exercise current-app HTTP approval gate. SC-005 in REPLAY."
+    },
+    "SC_006": {
+      "status": "NOT_YET_MEASURED",
+      "metric_name": "unextractable_pdf_explicit_error",
+      "value": null,
+      "unit": null,
+      "notes": "HISTORICAL_BAKEOFF validates historical text fixtures. SC-006 measured in REPLAY."
+    }
+  },
+  "case_results": [
+    {
+      "case_id": "h05_no_size::Alibaba Model Studio (Singapor",
+      "status": "FAIL",
+      "latency_seconds": 8.9551,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {
+          "SEMANTIC_WRONG": 1
+        },
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        },
+        "note": "core_status=HUMAN_REVIEW matches expected but error_classes=['SEMANTIC_WRONG'] present."
+      }
+    },
+    {
+      "case_id": "h06_no_pack::Alibaba Model Studio (Singapor",
+      "status": "PASS",
+      "latency_seconds": 8.128,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        },
+        "note": "core_status=HUMAN_REVIEW matches expected, no errors."
+      }
+    },
+    {
+      "case_id": "h07_not_medium::Alibaba Model Studio (Singapor",
+      "status": "PASS",
+      "latency_seconds": 7.4709,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "CLEAN_DRAFT",
+        "expected_core_status": "CLEAN_DRAFT",
+        "all_error_classes": {},
+        "outcomes": {
+          "CLEAN_DRAFT": 1
+        },
+        "note": "core_status=CLEAN_DRAFT matches expected, no errors."
+      }
+    },
+    {
+      "case_id": "h08_not_large::Alibaba Model Studio (Singapor",
+      "status": "PASS",
+      "latency_seconds": 7.318,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "CLEAN_DRAFT",
+        "expected_core_status": "CLEAN_DRAFT",
+        "all_error_classes": {},
+        "outcomes": {
+          "CLEAN_DRAFT": 1
+        },
+        "note": "core_status=CLEAN_DRAFT matches expected, no errors."
+      }
+    },
+    {
+      "case_id": "h09_latex::Alibaba Model Studio (Singapor",
+      "status": "PASS",
+      "latency_seconds": 5.6902,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        },
+        "note": "core_status=HUMAN_REVIEW matches expected, no errors."
+      }
+    },
+    {
+      "case_id": "h10_damaged::Alibaba Model Studio (Singapor",
+      "status": "PASS",
+      "latency_seconds": 8.402,
+      "details": {
+        "provider": "Alibaba Model Studio (Singapore)",
+        "model": "qwen3.8-flash",
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        },
+        "note": "core_status=HUMAN_REVIEW matches expected, no errors."
+      }
+    },
+    {
+      "case_id": "h05_no_size::Google Gemini API[secondary]",
+      "status": "PASS",
+      "latency_seconds": 1.8999,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        }
+      }
+    },
+    {
+      "case_id": "h06_no_pack::Google Gemini API[secondary]",
+      "status": "PASS",
+      "latency_seconds": 1.823,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        }
+      }
+    },
+    {
+      "case_id": "h07_not_medium::Google Gemini API[secondary]",
+      "status": "PASS",
+      "latency_seconds": 1.7764,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": "CLEAN_DRAFT",
+        "expected_core_status": "CLEAN_DRAFT",
+        "all_error_classes": {},
+        "outcomes": {
+          "CLEAN_DRAFT": 1
+        }
+      }
+    },
+    {
+      "case_id": "h08_not_large::Google Gemini API[secondary]",
+      "status": "FAIL",
+      "latency_seconds": 1.79,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": "CLEAN_DRAFT",
+        "expected_core_status": "CLEAN_DRAFT",
+        "all_error_classes": {
+          "SEMANTIC_WRONG": 1
+        },
+        "outcomes": {
+          "CLEAN_DRAFT": 1
+        }
+      }
+    },
+    {
+      "case_id": "h09_latex::Google Gemini API[secondary]",
+      "status": "PASS",
+      "latency_seconds": 1.8986,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": "HUMAN_REVIEW",
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {},
+        "outcomes": {
+          "HUMAN_REVIEW": 1
+        }
+      }
+    },
+    {
+      "case_id": "h10_damaged::Google Gemini API[secondary]",
+      "status": "FAIL",
+      "latency_seconds": 1.7926,
+      "details": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.5-flash-lite",
+        "secondary_evidence_only": true,
+        "actual_core_status": null,
+        "expected_core_status": "HUMAN_REVIEW",
+        "all_error_classes": {
+          "LOCAL_VALIDATION_FAILURE": 1,
+          "SEMANTIC_WRONG": 1
+        },
+        "outcomes": {
+          "LOCAL_VALIDATION_FAILURE": 1
+        }
+      }
+    }
+  ],
+  "ai_metrics": {
+    "historical_bakeoff_metrics": {
+      "provider": "Alibaba Model Studio (Singapore)",
+      "model": "qwen3.8-flash",
+      "schema_valid_rate": {
+        "numerator": 6,
+        "denominator": 6,
+        "rate_percentage": 100.0
+      },
+      "mandatory_field_exactness": {
+        "numerator": 47,
+        "denominator": 48,
+        "rate_percentage": 97.9167
+      },
+      "determinate_sku_accuracy": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate_percentage": 100.0,
+        "abstentions": 3
+      },
+      "review_trap_catch_rate": {
+        "numerator": 3,
+        "denominator": 3,
+        "rate_percentage": 100.0
+      },
+      "wrong_confident_skus": {
+        "count": 0,
+        "rate_percentage": 0.0
+      },
+      "latency_profile_seconds": {
+        "min": 5.69024,
+        "p50": 7.799475,
+        "mean": 7.660703333333333,
+        "p90": 8.95506,
+        "p95": 8.95506,
+        "max": 8.95506
+      }
+    }
+  }
+}

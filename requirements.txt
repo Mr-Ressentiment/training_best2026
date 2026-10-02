@@ -5,3 +5,4 @@ pypdf
 sqlalchemy
 pytest
 httpx
+jsonschema>=4.0
