@@ -25,6 +25,19 @@ from app.symbolic.fuzzy import (
     trap,
     tri,
 )
+from app.symbolic.counterfactuals import (
+    CounterfactualAnalysisResult,
+    LineItemSummary,
+    OperatorAction,
+    PlanEvaluationResult,
+    RemainingBlocker,
+    RemoveLineAction,
+    RequestCorrectedPOAction,
+    SearchCoverageInfo,
+    SelectSKUAction,
+    evaluate_action_plan,
+    search_counterfactual_plans,
+)
 from app.symbolic.review_priority import (
     DiscrepancyItem,
     OrderReviewInput,
@@ -40,24 +53,34 @@ from app.symbolic.sku_confidence import (
 )
 
 __all__ = [
+    "CounterfactualAnalysisResult",
     "DiscrepancyItem",
     "EvaluatedCandidate",
     "FactValue",
     "Facts",
     "FuzzyRule",
     "FuzzyVar",
+    "LineItemSummary",
+    "OperatorAction",
     "OrderReviewInput",
+    "PlanEvaluationResult",
+    "RemainingBlocker",
+    "RemoveLineAction",
+    "RequestCorrectedPOAction",
     "ReviewPriorityResult",
     "Rule",
     "SCHEMA_VERSION",
     "SKUCandidate",
     "SKUMatchConfidenceResult",
+    "SearchCoverageInfo",
+    "SelectSKUAction",
     "State",
     "TraceStep",
     "compose",
     "counterfactual",
     "default_verdict",
     "draft_to_facts",
+    "evaluate_action_plan",
     "evaluate_review_priority",
     "evaluate_sku_match_confidence",
     "fuzzy_stage",
@@ -65,10 +88,12 @@ __all__ = [
     "review_priority_stage",
     "rules_stage",
     "run_pipeline",
+    "search_counterfactual_plans",
     "to_dict",
     "trap",
     "tri",
     "validate",
 ]
+
 
 
