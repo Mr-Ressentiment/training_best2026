@@ -3,14 +3,18 @@
 import json
 from typing import Annotated, Any, Literal
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query, Response
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session
 
 from app.api.serialization import _money, serialize_draft, serialize_verified_order
 from app.database import get_db
+from app.models.advisory import DraftAdvisoryResponse
 from app.models.entities import AuditEvent, DraftLineItem, OrderDraft
-from app.models.schemas import LocationDataSchema, NonEmptyText
+from app.models.schemas import ErrorResponse, LocationDataSchema, NonEmptyText
+from app.services.advisory import CANONICAL_SECTIONS, build_draft_advisory
 from app.services.order_service import (
     DraftNotFoundError, approve_order, reject_order,
 )
@@ -69,6 +73,79 @@ def get_draft(draft_id: str, db: Session = Depends(get_db)) -> dict:
     if draft is None:
         raise DraftNotFoundError("Draft does not exist")
     return serialize_draft(draft)
+
+
+@router.get(
+    "/{draft_id}/advisory",
+    response_model=DraftAdvisoryResponse,
+    response_model_exclude_none=False,
+)
+def get_draft_advisory(
+    draft_id: str,
+    response: Response,
+    sections: list[str] | None = Query(
+        default=None,
+        description="Subset of sections to compute and return (baseline, counterfactuals, review_priority, sku_confidence, trace). Supports repeated parameter or comma-separated values.",
+    ),
+    max_depth: int = Query(
+        default=2,
+        ge=1,
+        le=3,
+        description="Maximum depth of operator action sequence search (1..3).",
+    ),
+    max_scenarios: int = Query(
+        default=24,
+        ge=1,
+        le=50,
+        description="Maximum number of candidate action plans to simulate (1..50).",
+    ),
+    db: Session = Depends(get_db),
+) -> Any:
+    response.headers["Cache-Control"] = "no-store"
+
+    if sections is None:
+        effective_sections = list(CANONICAL_SECTIONS)
+    else:
+        parsed_tokens: list[str] = []
+        for item in sections:
+            for part in item.split(","):
+                cleaned = part.strip()
+                if cleaned:
+                    parsed_tokens.append(cleaned)
+        if not parsed_tokens or any(s not in CANONICAL_SECTIONS for s in parsed_tokens):
+            raise RequestValidationError(
+                errors=[
+                    {
+                        "type": "value_error",
+                        "loc": ("query", "sections"),
+                        "msg": f"sections must be a non-empty subset of {list(CANONICAL_SECTIONS)}",
+                        "input": sections,
+                    }
+                ]
+            )
+        norm_set = set(parsed_tokens)
+        effective_sections = [s for s in CANONICAL_SECTIONS if s in norm_set]
+
+    try:
+        return build_draft_advisory(
+            db,
+            draft_id,
+            sections=effective_sections,
+            max_depth=max_depth,
+            max_scenarios=max_scenarios,
+        )
+    except DraftNotFoundError:
+        raise
+    except Exception:
+        return JSONResponse(
+            status_code=500,
+            content=ErrorResponse(
+                error="InternalSimulationError",
+                message="Internal error during advisory evaluation",
+            ).model_dump(),
+            headers={"Cache-Control": "no-store"},
+        )
+
 
 
 @router.post("/{draft_id}/approve")
