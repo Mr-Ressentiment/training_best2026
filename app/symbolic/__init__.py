@@ -14,6 +14,10 @@ from app.symbolic.engine import (
     to_dict,
     validate,
 )
+from app.symbolic.facts import (
+    FactValue,
+    draft_to_facts,
+)
 from app.symbolic.fuzzy import (
     FuzzyRule,
     FuzzyVar,
@@ -23,6 +27,7 @@ from app.symbolic.fuzzy import (
 )
 
 __all__ = [
+    "FactValue",
     "Facts",
     "FuzzyRule",
     "FuzzyVar",
@@ -33,6 +38,7 @@ __all__ = [
     "compose",
     "counterfactual",
     "default_verdict",
+    "draft_to_facts",
     "fuzzy_stage",
     "log",
     "rules_stage",
