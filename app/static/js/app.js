@@ -29,6 +29,7 @@
   var UNRESOLVED_STATE = "Unresolved";
   var CATALOG_MODAL_SRC = "js/components/catalog_modal.js";
   var LIVE_EXTENSIONS = [".txt", ".pdf"];
+  var SUPPORTED_ADVISORY_SCHEMA_VERSION = "1.0.0";
 
   var STATUS_BADGES = {
     "Ready for Approval": "badge--ready",
@@ -77,6 +78,7 @@
     draft: null,           // current draft (its draft_id and is_replay_mode are the current id / mode)
     approvedOrder: null,   // verified-order response for the current draft
     audit: null,           // null | {orderId, events: null | [], failed} for the current verified order only
+    advisory: null,        // null | {draftId, payload: null | object, failed: boolean, stale: boolean} for the current draft
     fixtures: [],
     selectedFixtureId: "",
     liveFile: null,
@@ -139,7 +141,17 @@
     auditHint: $("audit-hint"),
     auditSection: $("audit-section"),
     auditCount: $("audit-count"),
-    auditEvents: $("audit-events")
+    auditEvents: $("audit-events"),
+    advisorySection: $("advisory-section"),
+    advisoryBadge: $("advisory-badge"),
+    advisoryDisclaimer: $("advisory-disclaimer"),
+    advisoryLoad: $("advisory-load"),
+    advisoryHint: $("advisory-hint"),
+    advisoryMeta: $("advisory-meta"),
+    advisoryPriority: $("advisory-priority"),
+    advisoryHints: $("advisory-hints"),
+    advisoryConfidence: $("advisory-confidence"),
+    advisoryTrace: $("advisory-trace")
   };
 
   // ---------- Render helpers ----------
@@ -425,6 +437,7 @@
     dom.draftEmpty.hidden = draft !== null;
     dom.draftSection.hidden = draft === null;
     if (draft === null) {
+      renderAdvisory();
       return;
     }
 
@@ -447,6 +460,7 @@
     } else {
       dom.lineRows.replaceChildren.apply(dom.lineRows, lines.map(renderLine));
     }
+    renderAdvisory();
   }
 
   function renderVerifiedOrder() {
@@ -587,6 +601,126 @@
     });
   }
 
+  // ---------- Advisory panel (read-only inspection of GET /api/v1/drafts/{draft_id}/advisory) ----------
+
+  function focusDraftLine(lineNumber) {
+    if (lineNumber === null || lineNumber === undefined) {
+      return;
+    }
+    var numStr = String(lineNumber);
+    var rows = dom.lineRows.querySelectorAll("tr");
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var firstCell = row.querySelector("td");
+      if (firstCell && firstCell.textContent.trim() === numStr) {
+        row.scrollIntoView({ behavior: "smooth", block: "center" });
+        row.classList.add("line-row--highlight");
+        setTimeout(function () {
+          row.classList.remove("line-row--highlight");
+        }, 2000);
+        break;
+      }
+    }
+  }
+
+  function openAdvisoryEvidence(data) {
+    if (window.OrderShieldProvenanceDrawer && typeof window.OrderShieldProvenanceDrawer.open === "function") {
+      window.OrderShieldProvenanceDrawer.open(data);
+    }
+  }
+
+  function renderAdvisory() {
+    var draft = state.draft;
+    if (draft === null) {
+      dom.advisorySection.hidden = true;
+      if (window.OrderShieldAdvisoryPanel) {
+        window.OrderShieldAdvisoryPanel.clear(dom.advisorySection);
+      }
+      return;
+    }
+
+    dom.advisorySection.hidden = false;
+
+    // Only advisory data computed for the draft currently on screen may be displayed.
+    var advisory = state.advisory !== null && state.advisory.draftId === draft.draft_id
+      ? state.advisory
+      : null;
+
+    if (advisory === null) {
+      dom.advisoryLoad.textContent = "Load advisory";
+      dom.advisoryHint.textContent = "Load advisory analysis (priority, hints, trace) for this draft.";
+      dom.advisoryHint.classList.remove("is-warning");
+      if (window.OrderShieldAdvisoryPanel) {
+        window.OrderShieldAdvisoryPanel.clear(dom.advisorySection);
+      }
+      return;
+    }
+
+    if (advisory.failed) {
+      dom.advisoryLoad.textContent = "Load advisory";
+      dom.advisoryHint.textContent = "The advisory analysis could not be loaded; click to retry.";
+      dom.advisoryHint.classList.add("is-warning");
+      if (window.OrderShieldAdvisoryPanel) {
+        window.OrderShieldAdvisoryPanel.clear(dom.advisorySection);
+      }
+      return;
+    }
+
+    dom.advisoryHint.classList.toggle("is-warning", advisory.stale === true);
+    if (advisory.stale === true) {
+      dom.advisoryLoad.textContent = "Reload advisory";
+      dom.advisoryHint.textContent = "Computed before the last change — reload advisory for updated analysis.";
+    } else {
+      dom.advisoryLoad.textContent = "Reload advisory";
+      dom.advisoryHint.textContent = "Advisory analysis loaded from the server.";
+    }
+
+    if (window.OrderShieldAdvisoryPanel) {
+      window.OrderShieldAdvisoryPanel.render({
+        container: dom.advisorySection,
+        payload: advisory.payload,
+        supportedSchemaVersion: SUPPORTED_ADVISORY_SCHEMA_VERSION,
+        onFocusLine: focusDraftLine,
+        onOpenEvidence: openAdvisoryEvidence,
+        isStale: advisory.stale === true
+      });
+    }
+  }
+
+  function loadAdvisory() {
+    var draft = state.draft;
+    if (draft === null || state.loading !== null) {
+      return;
+    }
+
+    var advisoryRecord = {
+      draftId: draft.draft_id,
+      payload: null,
+      failed: false,
+      stale: false
+    };
+    state.advisory = advisoryRecord;
+
+    return runAction("Loading advisory…", async function () {
+      try {
+        var query = "?sections=baseline,counterfactuals,review_priority,sku_confidence,trace";
+        var payload = await requestJson(
+          "Advisory could not be loaded",
+          "/drafts/" + encodeURIComponent(draft.draft_id) + "/advisory" + query
+        );
+        advisoryRecord.payload = payload;
+        advisoryRecord.failed = false;
+        advisoryRecord.stale = false;
+      } catch (error) {
+        advisoryRecord.failed = true;
+        advisoryRecord.payload = null;
+        throw error;
+      } finally {
+        renderAdvisory();
+      }
+    });
+  }
+
   function renderError() {
     var error = state.error;
     dom.diagnostics.hidden = error === null;
@@ -629,6 +763,7 @@
     rejectButton.hidden = !canMutateDraft();
     rejectButton.disabled = busy;
     dom.auditLoad.disabled = busy;
+    dom.advisoryLoad.disabled = busy;
     if (rejectDialog !== null) {
       [rejectDialog.operatorId, rejectDialog.reason, rejectDialog.submit, rejectDialog.cancel].forEach(function (control) {
         control.disabled = busy;
@@ -700,6 +835,7 @@
     state.draft = draft;
     state.approvedOrder = null;
     state.audit = null;
+    state.advisory = null;
     // Evidence of the previous draft must never stay on screen for the new one.
     closeFieldProvenance();
     dom.operatorId.value = "";
@@ -850,6 +986,9 @@
           body: JSON.stringify({ operator_id: operatorId })
         }
       );
+      if (state.advisory !== null && state.draft !== null && state.advisory.draftId === state.draft.draft_id) {
+        state.advisory.stale = true;
+      }
       renderVerifiedOrder();
       // canMutateDraft() is now false: rerender so stale P2 mutation controls
       // disappear even if the following draft refresh fails.
@@ -858,6 +997,9 @@
       dom.resultSection.scrollIntoView({ block: "nearest" });
       // Re-read the draft so the displayed status is the server's post-approval state.
       state.draft = await requestJson("Draft refresh failed", "/drafts/" + encodeURIComponent(draft.draft_id));
+      if (state.advisory !== null && state.draft !== null && state.advisory.draftId === state.draft.draft_id) {
+        state.advisory.stale = true;
+      }
       renderDraft();
     });
   }
@@ -872,6 +1014,9 @@
   function mutateDraft(label, context, path, options) {
     return runAction(label, async function () {
       state.draft = await requestJson(context, path, options);
+      if (state.advisory !== null && state.draft !== null && state.advisory.draftId === state.draft.draft_id) {
+        state.advisory.stale = true;
+      }
       renderDraft();
       renderControls();
     });
@@ -1237,6 +1382,7 @@
   dom.diagnosticDismiss.addEventListener("click", clearError);
 
   dom.auditLoad.addEventListener("click", loadAuditTrail);
+  dom.advisoryLoad.addEventListener("click", loadAdvisory);
 
   // Header evidence is read from state.draft at click time, so it always matches the rendered draft.
   dom.summaryCustomerSource.addEventListener("click", function () {

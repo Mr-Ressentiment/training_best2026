@@ -135,6 +135,21 @@
         </table>
       </div>
 
+      <section id="advisory-section" class="advisory" aria-label="Advisory (non-authoritative)" hidden>
+        <div class="section-head">
+          <h3>Advisory</h3>
+          <span id="advisory-badge" class="badge badge--advisory">ADVISORY ONLY</span>
+        </div>
+        <p id="advisory-disclaimer" class="advisory__disclaimer">Advisory heuristic evaluation computed in-memory on demand; non-authoritative. Does not alter draft state, approve the order, or override server validation rules and blockers. Limited search depth does not prove impossibility of alternative resolution paths.</p>
+        <button id="advisory-load" type="button" class="btn btn--outline">Load advisory</button>
+        <p id="advisory-hint" class="approval__hint" role="status" aria-live="polite"></p>
+        <div id="advisory-meta" class="advisory__meta"></div>          <!-- schema_version, advisory_status, included/omitted sections, limits, coverage -->
+        <div id="advisory-priority" class="advisory__priority"></div>
+        <div id="advisory-hints" class="advisory__hints"></div>
+        <div id="advisory-confidence" class="advisory__confidence"></div>
+        <div id="advisory-trace" class="advisory__trace"></div>
+      </section>
+
       <form id="approve-form" class="approval" novalidate>
         <label class="field" for="operator-id">
           <span class="field__label">Operator ID</span>
@@ -183,6 +198,7 @@
   </footer>
 
   <script src="js/components/provenance_drawer.js"></script>
+  <script src="js/components/advisory_panel.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
