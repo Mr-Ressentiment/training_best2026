@@ -1,0 +1,270 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OrderShield Manual Baseline Study Results Schema",
+  "description": "Formal contract schema for human participant manual reconciliation baseline and SC-001 assisted study results (VLD-EVAL-03). Cognitive burden is not operationalized and is excluded from quantitative reporting.",
+  "type": "object",
+  "required": [
+    "study_id",
+    "status",
+    "git_commit",
+    "created_at_utc",
+    "participants",
+    "sessions",
+    "case_aggregations",
+    "overall_manual_batch",
+    "sc001_assisted_run"
+  ],
+  "properties": {
+    "study_id": {
+      "type": "string",
+      "description": "Unique identifier for this manual study batch, e.g., 'MANUAL-STUDY-20261002'"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PREPARATION_READY", "IN_PROGRESS", "COMPLETED"],
+      "description": "Status of the study packet and measurement execution"
+    },
+    "git_commit": {
+      "type": "string",
+      "description": "Git commit SHA on which the study was prepared or executed"
+    },
+    "created_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of study packet creation or completion"
+    },
+    "participants": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 3,
+      "description": "List of independent participants in the study cohort",
+      "items": {
+        "type": "object",
+        "required": ["participant_id", "background_category", "pre_study_integrity_confirmed"],
+        "properties": {
+          "participant_id": {
+            "type": "string",
+            "pattern": "^P[0-9]{2}$",
+            "description": "Non-identifying participant identifier, e.g., 'P01', 'P02', 'P03'"
+          },
+          "background_category": {
+            "type": "string",
+            "description": "Neutral professional or academic background category (no PII)"
+          },
+          "pre_study_integrity_confirmed": {
+            "type": "boolean",
+            "description": "Confirmation that participant has no prior knowledge of test fixtures or answer keys"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "sessions": {
+      "type": "array",
+      "description": "Session records per participant and case. Case A has 0 primary seeded discrepancies; Case B has 2 primary seeded discrepancies (Line 1 PriceMismatch, Line 2 Ambiguity); Case C has 1 primary seeded discrepancy (Line 1 Ambiguity).",
+      "items": {
+        "type": "object",
+        "required": [
+          "participant_id",
+          "case_id",
+          "start_timestamp_utc",
+          "stop_timestamp_utc",
+          "duration_seconds",
+          "participant_decision",
+          "expected_decision",
+          "expected_discrepancy_count",
+          "correctly_identified_discrepancy_count",
+          "missed_discrepancies",
+          "incorrect_sku_assignment_count"
+        ],
+        "properties": {
+          "participant_id": {
+            "type": "string",
+            "pattern": "^P[0-9]{2}$"
+          },
+          "case_id": {
+            "type": "string",
+            "enum": ["sc001_prepared_5line", "discrepancy_apex", "ambiguous_apex"]
+          },
+          "start_timestamp_utc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "stop_timestamp_utc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration_seconds": {
+            "type": "number",
+            "minimum": 0.0
+          },
+          "participant_decision": {
+            "type": "string",
+            "enum": ["APPROVE", "REJECT", "NEEDS_REVIEW"]
+          },
+          "expected_decision": {
+            "type": "string",
+            "enum": ["APPROVE", "REJECT", "NEEDS_REVIEW"]
+          },
+          "expected_discrepancy_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Primary scored seeded discrepancy count: 0 for Case A, 2 for Case B, 1 for Case C"
+          },
+          "correctly_identified_discrepancy_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "missed_discrepancies": {
+            "type": "object",
+            "required": [
+              "missed_price_mismatch",
+              "missed_moq_violation",
+              "missed_packaging_violation",
+              "missed_arithmetic_error",
+              "missed_ambiguous_sku_review"
+            ],
+            "properties": {
+              "missed_price_mismatch": { "type": "integer", "minimum": 0 },
+              "missed_moq_violation": { "type": "integer", "minimum": 0 },
+              "missed_packaging_violation": { "type": "integer", "minimum": 0 },
+              "missed_arithmetic_error": { "type": "integer", "minimum": 0 },
+              "missed_ambiguous_sku_review": { "type": "integer", "minimum": 0 }
+            },
+            "additionalProperties": false
+          },
+          "incorrect_sku_assignment_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "secondary_latent_moq_observed": {
+            "type": ["boolean", "null"],
+            "description": "Documentary observation: whether participant noted latent MOQ breach upon considering SKU options in Case B; not scored as a miss"
+          },
+          "procedural_deviations": {
+            "type": ["string", "null"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "case_aggregations": {
+      "type": "object",
+      "required": ["sc001_prepared_5line", "discrepancy_apex", "ambiguous_apex"],
+      "properties": {
+        "sc001_prepared_5line": { "$ref": "#/definitions/CaseAggregation" },
+        "discrepancy_apex": { "$ref": "#/definitions/CaseAggregation" },
+        "ambiguous_apex": { "$ref": "#/definitions/CaseAggregation" }
+      },
+      "additionalProperties": false
+    },
+    "overall_manual_batch": {
+      "type": "object",
+      "required": [
+        "sample_size",
+        "participant_total_durations_seconds",
+        "median_total_duration_seconds",
+        "total_seeded_discrepancies",
+        "total_caught_discrepancies",
+        "overall_catch_rate_percentage",
+        "total_errors"
+      ],
+      "properties": {
+        "sample_size": { "type": "integer", "minimum": 2, "maximum": 3 },
+        "participant_total_durations_seconds": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0.0 }
+        },
+        "median_total_duration_seconds": { "type": "number", "minimum": 0.0 },
+        "total_seeded_discrepancies": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 9,
+          "description": "Total primary seeded discrepancies across cohort: exactly 3 * sample_size (6 for N=2, 9 for N=3)"
+        },
+        "total_caught_discrepancies": { "type": "integer", "minimum": 0 },
+        "overall_catch_rate_percentage": { "type": "number", "minimum": 0.0, "maximum": 100.0 },
+        "total_errors": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "sc001_assisted_run": {
+      "type": "object",
+      "required": [
+        "status",
+        "canonical_fixture",
+        "threshold_seconds",
+        "outcome"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["NOT_YET_MEASURED", "PARTIALLY_MEASURED", "MEASURED"]
+        },
+        "canonical_fixture": {
+          "type": "string"
+        },
+        "operator_id": {
+          "type": ["string", "null"]
+        },
+        "assisted_operator_completion_duration_seconds": {
+          "type": ["number", "null"],
+          "minimum": 0.0
+        },
+        "threshold_seconds": {
+          "type": "number",
+          "enum": [60.0]
+        },
+        "outcome": {
+          "type": "string",
+          "enum": ["PASS", "FAIL", "NOT_YET_MEASURED"]
+        },
+        "timer_semantics": {
+          "type": "object",
+          "properties": {
+            "start_event": { "type": "string" },
+            "stop_event": { "type": "string" }
+          },
+          "required": ["start_event", "stop_event"]
+        },
+        "intake_path_notes": {
+          "type": ["string", "null"]
+        },
+        "operator_familiarity_notes": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "definitions": {
+    "CaseAggregation": {
+      "type": "object",
+      "required": [
+        "durations_seconds",
+        "median_duration_seconds",
+        "total_errors",
+        "seeded_discrepancies_total",
+        "caught_discrepancies_total",
+        "catch_rate_percentage"
+      ],
+      "properties": {
+        "durations_seconds": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0.0 }
+        },
+        "median_duration_seconds": { "type": "number", "minimum": 0.0 },
+        "total_errors": { "type": "integer", "minimum": 0 },
+        "seeded_discrepancies_total": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total primary seeded discrepancies for this case across cohort: 0*N for Case A, 2*N for Case B, 1*N for Case C"
+        },
+        "caught_discrepancies_total": { "type": "integer", "minimum": 0 },
+        "catch_rate_percentage": { "type": ["number", "null"], "minimum": 0.0, "maximum": 100.0 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
